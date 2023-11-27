@@ -1,0 +1,15 @@
+Plants_VS_Zombies/proj.android/
+Plants_VS_Zombies/proj.ios_mac/
+Plants_VS_Zombies/proj.linux/
+Plants_VS_Zombies/cocos2d/
+*.json
+*.sln
+*.vcxproj
+*.user
+*.ico
+*.png
+*.filters
+*.ttf
+Plants_VS_Zombies/Resources/res/.gitkeep
+*.rc
+Plants_VS_Zombies/CMakeLists.txt
