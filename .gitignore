@@ -7,10 +7,7 @@ Plants_VS_Zombies/cocos2d/
 *.vcxproj
 *.user
 *.ico
-*.png
 *.filters
-*.ttf
-Plants_VS_Zombies/Resources/res/.gitkeep
 *.rc
 Plants_VS_Zombies/CMakeLists.txt
 *.vsidx
@@ -33,3 +30,6 @@ Plants_VS_Zombies/proj.win32/Debug.win32/Resources/res/.gitkeep
 *.bin
 Plants_VS_Zombies/proj.win32/Debug.win32/Plants_VS_Zombies.vcxproj.FileListAbsolute.txt
 *.ipch
+!Plants_VS_Zombies/Resources/
+Plants_VS_Zombies/proj.win32/
+!Plants_VS_Zombies/proj.win32/*.cpp
