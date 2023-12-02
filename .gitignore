@@ -32,3 +32,4 @@ Plants_VS_Zombies/proj.win32/Debug.win32/Resources/res/.gitkeep
 *.res
 *.bin
 Plants_VS_Zombies/proj.win32/Debug.win32/Plants_VS_Zombies.vcxproj.FileListAbsolute.txt
+*.ipch
