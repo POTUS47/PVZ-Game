@@ -24,6 +24,7 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "ui/CocosGUI.h"
 
 USING_NS_CC;
 
@@ -58,8 +59,8 @@ bool HelloWorld::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
     auto startButton = MenuItemImage::create(
-                                           "/helloWorld/startbutton.png",
-                                           "CloseSelected.png",
+                                           "/helloWorld/startbar.png",
+                                           "/helloWorld/startbar2.png",
                                            CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
 
     if (startButton == nullptr ||
@@ -71,9 +72,11 @@ bool HelloWorld::init()
     else
     {
         float x = origin.x + visibleSize.width/2 ;
-        float y = origin.y + startButton->getContentSize().height/2;
+        float y = origin.y + startButton->getContentSize().height*2;
         startButton->setPosition(Vec2(x,y));
     }
+    startButton->setScale(2.0);
+
 
     // create menu, it's an autorelease object
     auto menu = Menu::create(startButton, NULL);
@@ -89,7 +92,7 @@ bool HelloWorld::init()
     {
         // position the sprite on the center of the screen
         sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
+        sprite->setScale(1.07);
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
     }
@@ -100,8 +103,8 @@ bool HelloWorld::init()
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
-
+    //Director::getInstance()->end();
+    //Director::getInstance()->replaceScene(Mainmenuscene::createscene());
     /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
 
     //EventCustom customEndEvent("game_scene_close_event");
