@@ -1,30 +1,6 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "ui/CocosGUI.h"
+#include "Main_menu.h"
 
 USING_NS_CC;
 
@@ -33,35 +9,32 @@ Scene* HelloWorld::createScene()
     return HelloWorld::create();
 }
 
-// Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-// on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
+
     if ( !Scene::init() )
     {
         return false;
     }
 
+    //获取可视区域范围
     auto visibleSize = Director::getInstance()->getVisibleSize();
+    //获取可视区域原点
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
+    
+    //场景要素-------------------------------------------------------------------------------------
+    //1.1.开始游戏按钮---------待改进为进度条显示
     auto startButton = MenuItemImage::create(
                                            "/helloWorld/startbar.png",
                                            "/helloWorld/startbar2.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+                                           CC_CALLBACK_1(HelloWorld::replaceSceneCallback, this));
 
     if (startButton == nullptr ||
         startButton->getContentSize().width <= 0 ||
@@ -77,12 +50,12 @@ bool HelloWorld::init()
     }
     startButton->setScale(2.0);
 
-
-    // create menu, it's an autorelease object
+    //1.2.菜单-------------是否可以只用图片按钮？   
     auto menu = Menu::create(startButton, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
+    //2.背景图
     auto sprite = Sprite::create("/helloWorld/background.jpg");
     if (sprite == nullptr)
     {
@@ -90,25 +63,16 @@ bool HelloWorld::init()
     }
     else
     {
-        // position the sprite on the center of the screen
         sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
         sprite->setScale(1.07);
-        // add the sprite as a child to this layer
         this->addChild(sprite, 0);
     }
     return true;
 }
 
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void HelloWorld::replaceSceneCallback(Ref* pSender)
 {
-    //Close the cocos2d-x game scene and quit the application
-    //Director::getInstance()->end();
-    //Director::getInstance()->replaceScene(Mainmenuscene::createscene());
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
-
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-
-
+    //按下开始游戏后转入菜单场景
+    Director::getInstance()->replaceScene(Main_menu::createScene());
 }

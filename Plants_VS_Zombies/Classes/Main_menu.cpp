@@ -25,9 +25,9 @@ bool Main_menu::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     //1：结束按钮
-    auto closeItem = MenuItemImage::create(
-        "CloseNormal.png",
-        "CloseSelected.png",
+   /* auto closeItem = MenuItemImage::create(
+        "zombietest.png",
+        "zombietest.png",
         CC_CALLBACK_1(Main_menu::menuCloseCallback, this));
     ////////////////修改退出框按钮图片
     if (closeItem == nullptr ||
@@ -47,9 +47,9 @@ bool Main_menu::init()
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
-
+    */
     // 添加主界面图片（以精灵形式）
-    auto sprite = Sprite::create("Main_menu.png");
+    auto sprite = Sprite::create("/main_menu/background.png");
     ////////修改主菜单界面的图片
     if (sprite == nullptr)
     {
@@ -60,13 +60,14 @@ bool Main_menu::init()
         //把精灵放在正中间
         sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
         //把精灵作为孩子添加至layer中
+        sprite->setScale(2.3);
         this->addChild(sprite, 0);///////数字越小越先被渲染。注意后面的顺序大于0
     }
 
     //2.冒险模式按钮
     auto adventure_mode = MenuItemImage::create(
-        "CloseNormal.png",
-        "CloseSelected.png", CC_CALLBACK_1(Main_menu::startGameCallback, this)
+        "/main_menu/adventure1.png",
+        "/main_menu/adventure2.png", CC_CALLBACK_1(Main_menu::menuCloseCallback, this)
         );////////////////////////////此处需要调用一个进入冒险模式最新关卡的函数，记得修改按钮图片
     ///////我们假定使用了UserDefault::getInstance()->setIntegerForKey("LatestLevel", 5);形式存储进度
     if (adventure_mode == nullptr ||
@@ -77,14 +78,17 @@ bool Main_menu::init()
     }
     else
     {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
-        float y = origin.y + closeItem->getContentSize().height / 2;
+        float x = origin.x + visibleSize.width /2*3;
+        float y = origin.y + visibleSize.height / 2;
         adventure_mode->setPosition(Vec2(x, y));
         ////////////修改冒险模式按钮的相对位置
     }
+    auto menu1 = Menu::create(adventure_mode, NULL);
+    menu1->setPosition(Vec2::ZERO);
+    this->addChild(menu1, 1);
 
     //3.玩玩小游戏按钮
-    auto mini_game_mode = MenuItemImage::create(
+   /* auto mini_game_mode = MenuItemImage::create(
         "CloseNormal.png",
         "CloseSelected.png",
         [](cocos2d::Ref* sender) {
@@ -106,9 +110,9 @@ bool Main_menu::init()
         mini_game_mode->setPosition(Vec2(x, y));
         ////////////修改小游戏模式按钮的相对位置
     }
-
+    */
     //4.商店按钮
-    auto market = MenuItemImage::create(
+    /*auto market = MenuItemImage::create(
         "CloseNormal.png",
         "CloseSelected.png",
         [](cocos2d::Ref* sender) {
@@ -130,10 +134,10 @@ bool Main_menu::init()
         market->setPosition(Vec2(x, y));
         ////////////修改小游戏模式按钮的相对位置
     }
-
+    */
 
     // 按钮回调函数
-    void startGameCallback(Ref * pSender)
+    /*void startGameCallback(Ref * pSender)
     {
         // 获取最新关卡进度，这里假设使用UserDefault保存了关卡进度
         int latestLevel = UserDefault::getInstance()->getIntegerForKey("LatestLevel", 1);
@@ -145,7 +149,7 @@ bool Main_menu::init()
         Director::getInstance()->replaceScene(gameScene);
     }
     return true;
-
+    */
 }
 
 //菜单按钮1：结束按钮的回调函数

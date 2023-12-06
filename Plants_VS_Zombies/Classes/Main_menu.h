@@ -12,6 +12,7 @@ public:
 
     //回调函数
     void menuCloseCallback(cocos2d::Ref* pSender);
+    //void startGameCallback(Ref* pSender);
 
     // implement the "static create()" method manually
     CREATE_FUNC(Main_menu);//带参宏，用于创建Main_menu类的一个实例
