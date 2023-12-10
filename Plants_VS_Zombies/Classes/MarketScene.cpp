@@ -8,12 +8,6 @@ Scene* Market::createScene()
     return Market::create();
 }
 
-static void problemLoading(const char* filename)
-{
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
-}
-
 bool Market::init()
 {
 
@@ -31,18 +25,14 @@ bool Market::init()
     //场景要素-------------------------------------------------------------------------------------
     //戴夫
     auto sprite = Sprite::create("/market/dave.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-        sprite->setScale(1.07);
+   
+        sprite->setPosition(Vec2(visibleSize.width / 5 + origin.x, visibleSize.height/3+  origin.y));
+        sprite->setScale(2.5);
         this->addChild(sprite, 0);
-    }
+ 
     //---------------------------------------------------------------------------------
-    
+    //返回菜单的按钮
+
     return true;
 }
 

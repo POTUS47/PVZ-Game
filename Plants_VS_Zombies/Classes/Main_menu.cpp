@@ -1,5 +1,7 @@
 #include "Main_menu.h"
 #include "SimpleAudioEngine.h"
+#include "HelloWorldScene.h"
+#include "MarketScene.h"
 //图片比例3:2
 ///////多条斜线是提醒修改的意思
 USING_NS_CC;
@@ -78,23 +80,20 @@ bool Main_menu::init()
     }
     else
     {
-        float x = origin.x + visibleSize.width /2*3;
-        float y = origin.y + visibleSize.height / 2;
+        float x = origin.x + visibleSize.width /4*3-100;
+        float y = origin.y + visibleSize.height / 4*3+50;
         adventure_mode->setPosition(Vec2(x, y));
+        adventure_mode->setScale(2.0);
         ////////////修改冒险模式按钮的相对位置
     }
-    auto menu1 = Menu::create(adventure_mode, NULL);
-    menu1->setPosition(Vec2::ZERO);
-    this->addChild(menu1, 1);
+    
 
     //3.玩玩小游戏按钮
-   /* auto mini_game_mode = MenuItemImage::create(
-        "CloseNormal.png",
-        "CloseSelected.png",
-        [](cocos2d::Ref* sender) {
-            auto mini_game_menu = mini_game_menu::create();
-            cocos2d::Director::getInstance()->replaceScene(mini_game_menu);
-        }
+   
+    auto mini_game_mode = MenuItemImage::create(
+        "/main_menu/minigame1.png",
+        "/main_menu/minigame2.png",
+        CC_CALLBACK_1(Main_menu::menuCloseCallback, this)
         );////////////////此处需要调用一个进入小游戏模式场景的函数，记得修改按钮图片
 
     if (mini_game_mode == nullptr ||
@@ -105,36 +104,30 @@ bool Main_menu::init()
     }
     else
     {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
-        float y = origin.y + closeItem->getContentSize().height / 2;
+        float x = origin.x + visibleSize.width /4*3-100;
+        float y = origin.y + visibleSize.height / 5*3;
         mini_game_mode->setPosition(Vec2(x, y));
+        mini_game_mode->setScale(2.0);
         ////////////修改小游戏模式按钮的相对位置
     }
-    */
+ 
+    
     //4.商店按钮
-    /*auto market = MenuItemImage::create(
-        "CloseNormal.png",
-        "CloseSelected.png",
-        [](cocos2d::Ref* sender) {
-            auto Market = Market::create();
-            cocos2d::Director::getInstance()->replaceScene(Market);
-        }
+    auto market = MenuItemImage::create(
+        "/main_menu/shopbutton1.png", "/main_menu/shopbutton2.png",
+        CC_CALLBACK_1(Main_menu::gotoMarket, this)
         );////////////////////////////此处需要调用一个进入商店场景的函数，记得修改按钮图片
 
-    if (market == nullptr ||
-        market->getContentSize().width <= 0 ||
-        market->getContentSize().height <= 0)
-    {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    }
-    else
-    {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
-        float y = origin.y + closeItem->getContentSize().height / 2;
+        float x = origin.x + visibleSize.width / 3*2;
+        float y = origin.y + visibleSize.height / 4-50;
         market->setPosition(Vec2(x, y));
-        ////////////修改小游戏模式按钮的相对位置
-    }
-    */
+        market->setScale(2.0);
+ 
+
+
+        auto menu = Menu::create(adventure_mode, mini_game_mode,market, NULL);
+        menu->setPosition(Vec2::ZERO);
+        this->addChild(menu, 0);
 
     // 按钮回调函数
     /*void startGameCallback(Ref * pSender)
@@ -159,3 +152,8 @@ void Main_menu::menuCloseCallback(Ref* pSender)
     Director::getInstance()->end();
 }
 //其他按钮的回调函数并没有单独给出，而是直接用匿名函数嵌套到了creat的参数列表中。
+void Main_menu::gotoMarket(Ref* pSender)
+{
+    //按下开始游戏后转入菜单场景
+    Director::getInstance()->replaceScene(Market::createScene());
+}

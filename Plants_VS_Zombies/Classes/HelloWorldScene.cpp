@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "Main_menu.h"
+#include "MarketScene.h"
 
 USING_NS_CC;
 
@@ -36,18 +37,9 @@ bool HelloWorld::init()
                                            "/helloWorld/startbar2.png",
                                            CC_CALLBACK_1(HelloWorld::replaceSceneCallback, this));
 
-    if (startButton == nullptr ||
-        startButton->getContentSize().width <= 0 ||
-        startButton->getContentSize().height <= 0)
-    {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    }
-    else
-    {
-        float x = origin.x + visibleSize.width/2 ;
-        float y = origin.y + startButton->getContentSize().height*2;
-        startButton->setPosition(Vec2(x,y));
-    }
+    float x = origin.x + visibleSize.width / 2;
+    float y = origin.y + startButton->getContentSize().height * 2;
+    startButton->setPosition(Vec2(x, y));
     startButton->setScale(2.0);
 
     //1.2.菜单-------------是否可以只用图片按钮？   
@@ -57,16 +49,9 @@ bool HelloWorld::init()
 
     //2.背景图
     auto sprite = Sprite::create("/helloWorld/background.jpg");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-        sprite->setScale(1.07);
-        this->addChild(sprite, 0);
-    }
+    sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    sprite->setScale(1.07);
+    this->addChild(sprite, 0);
     return true;
 }
 
@@ -76,3 +61,4 @@ void HelloWorld::replaceSceneCallback(Ref* pSender)
     //按下开始游戏后转入菜单场景
     Director::getInstance()->replaceScene(Main_menu::createScene());
 }
+
