@@ -2,6 +2,7 @@
 #include "SimpleAudioEngine.h"
 #include "HelloWorldScene.h"
 #include "MarketScene.h"
+#include "Level1.h"
 //图片比例3:2
 ///////多条斜线是提醒修改的意思
 USING_NS_CC;
@@ -69,7 +70,7 @@ bool Main_menu::init()
     //2.冒险模式按钮
     auto adventure_mode = MenuItemImage::create(
         "/main_menu/adventure1.png",
-        "/main_menu/adventure2.png", CC_CALLBACK_1(Main_menu::menuCloseCallback, this)
+        "/main_menu/adventure2.png", CC_CALLBACK_1(Main_menu::gotoLevel1, this)
         );////////////////////////////此处需要调用一个进入冒险模式最新关卡的函数，记得修改按钮图片
     ///////我们假定使用了UserDefault::getInstance()->setIntegerForKey("LatestLevel", 5);形式存储进度
     if (adventure_mode == nullptr ||
@@ -156,4 +157,9 @@ void Main_menu::gotoMarket(Ref* pSender)
 {
     //按下开始游戏后转入菜单场景
     Director::getInstance()->replaceScene(Market::createScene());
+}
+
+void Main_menu::gotoLevel1(Ref* pSender)
+{
+    Director::getInstance()->replaceScene(Level1::createScene());
 }

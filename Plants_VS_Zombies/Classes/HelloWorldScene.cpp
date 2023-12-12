@@ -63,6 +63,7 @@ bool HelloWorld::init()
 void HelloWorld::replaceSceneCallback(Ref* pSender)
 {
     //按下开始游戏后转入菜单场景
+    
     Director::getInstance()->replaceScene(Main_menu::createScene());
     
 }
