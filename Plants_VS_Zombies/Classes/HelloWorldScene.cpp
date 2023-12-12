@@ -2,6 +2,7 @@
 #include "SimpleAudioEngine.h"
 #include "Main_menu.h"
 #include "MarketScene.h"
+#include <string>
 
 USING_NS_CC;
 
@@ -48,7 +49,8 @@ bool HelloWorld::init()
     this->addChild(menu, 1);
 
     //2.背景图
-    auto sprite = Sprite::create("/helloWorld/background.jpg");
+    std::string tt = "/helloWorld/background.jpg";
+    auto sprite = Sprite::create(tt);
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     sprite->setScale(1.07);
     this->addChild(sprite, 0);
@@ -56,9 +58,12 @@ bool HelloWorld::init()
 }
 
 
+
+
 void HelloWorld::replaceSceneCallback(Ref* pSender)
 {
     //按下开始游戏后转入菜单场景
     Director::getInstance()->replaceScene(Main_menu::createScene());
+    
 }
 

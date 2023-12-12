@@ -9,7 +9,7 @@ public:
     virtual bool init();
 
     // a selector callback
-    void replaceSceneCallback(cocos2d::Ref* pSender);
+    void goBackMain(cocos2d::Ref* pSender);
 
     // implement the "static create()" method manually
     CREATE_FUNC(Market);

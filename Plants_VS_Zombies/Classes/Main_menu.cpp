@@ -121,7 +121,7 @@ bool Main_menu::init()
         float x = origin.x + visibleSize.width / 3*2;
         float y = origin.y + visibleSize.height / 4-50;
         market->setPosition(Vec2(x, y));
-        market->setScale(2.0);
+        market->setScale(2.5);
  
 
 
