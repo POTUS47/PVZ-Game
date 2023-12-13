@@ -53,7 +53,6 @@ bool Main_menu::init()
     */
     // 添加主界面图片（以精灵形式）
     auto sprite = Sprite::create("/main_menu/background.png");
-    ////////修改主菜单界面的图片
     if (sprite == nullptr)
     {
         problemLoading("'Main_menu.png'");
@@ -95,7 +94,7 @@ bool Main_menu::init()
         "/main_menu/minigame1.png",
         "/main_menu/minigame2.png",
         CC_CALLBACK_1(Main_menu::menuCloseCallback, this)
-        );////////////////此处需要调用一个进入小游戏模式场景的函数，记得修改按钮图片
+        );////////////////此处需要调用一个进入小游戏模式场景的函数
 
     if (mini_game_mode == nullptr ||
         mini_game_mode->getContentSize().width <= 0 ||
@@ -109,7 +108,6 @@ bool Main_menu::init()
         float y = origin.y + visibleSize.height / 5*3;
         mini_game_mode->setPosition(Vec2(x, y));
         mini_game_mode->setScale(2.0);
-        ////////////修改小游戏模式按钮的相对位置
     }
  
     
@@ -130,20 +128,7 @@ bool Main_menu::init()
         menu->setPosition(Vec2::ZERO);
         this->addChild(menu, 0);
 
-    // 按钮回调函数
-    /*void startGameCallback(Ref * pSender)
-    {
-        // 获取最新关卡进度，这里假设使用UserDefault保存了关卡进度
-        int latestLevel = UserDefault::getInstance()->getIntegerForKey("LatestLevel", 1);
-
-        // 创建对应的游戏场景
-        auto gameScene = GameScene::createScene(latestLevel);
-
-        // 切换场景
-        Director::getInstance()->replaceScene(gameScene);
-    }
-    return true;
-    */
+        return true;
 }
 
 //菜单按钮1：结束按钮的回调函数
@@ -153,6 +138,33 @@ void Main_menu::menuCloseCallback(Ref* pSender)
     Director::getInstance()->end();
 }
 //其他按钮的回调函数并没有单独给出，而是直接用匿名函数嵌套到了creat的参数列表中。
+
+//
+void Main_menu::startGameCallback(Ref* pSender)
+{
+    // 获取最新关卡进度，这里假设使用UserDefault保存了关卡进度
+    int latestLevel = UserDefault::getInstance()->getIntegerForKey("LatestLevel", 1);
+
+    // 进入对应的最新游戏场景
+    GoToWhichScene(latestLevel);
+
+}
+
+void Main_menu::GoToWhichScene(int latestLevel) {
+    switch (latestLevel) {
+        case 1: {
+            Scene* aaa = Level1::createScene();
+            Director::getInstance()->replaceScene(aaa);
+            break;
+        }
+    case 2:
+
+    default:
+            break;
+    }
+}
+
+
 void Main_menu::gotoMarket(Ref* pSender)
 {
     //按下开始游戏后转入菜单场景

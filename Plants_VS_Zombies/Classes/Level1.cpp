@@ -1,7 +1,7 @@
 #include "Level1.h"
 #include "SimpleAudioEngine.h"
 #include "Main_menu.h"
-
+#include"Zombie.h"
 #include <string>
 
 USING_NS_CC;
@@ -40,6 +40,9 @@ bool Level1::init()
     this->addChild(sprite, 0);
     auto moveBy = MoveBy::create(2, Vec2(-870, 0));
     sprite->runAction(moveBy);
+
+    zombie::test();
+
     return true;
 }
 
