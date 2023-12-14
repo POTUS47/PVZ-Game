@@ -10,7 +10,7 @@ public:
 
     // a selector callback
     void goBackMain(cocos2d::Ref* pSender);
-
+    void onMoveByFinished();
     // implement the "static create()" method manually
     CREATE_FUNC(Level1);
 };
