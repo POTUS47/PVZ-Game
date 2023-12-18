@@ -8,6 +8,10 @@ void Zombie::setHP(int hp)
 	HP = hp;//传入自定义血量
 }
 
+int Zombie::getHP() {
+	return HP;
+}
+
 void Zombie::setSpeed(int speed)
 {
 	walkSpeed = speed;//传入自定义速度

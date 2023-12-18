@@ -11,6 +11,7 @@ public:
     // a selector callback
     void goBackMain(cocos2d::Ref* pSender);
     void onMoveByFinished();
+    void update(float dt);
     // implement the "static create()" method manually
     CREATE_FUNC(Level1);
 };

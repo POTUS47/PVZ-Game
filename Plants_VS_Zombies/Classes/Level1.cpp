@@ -21,7 +21,7 @@ static void problemLoading(const char* filename)
 
 bool Level1::init()
 {
-
+    srand(static_cast<unsigned>(time(0)));
     if (!Scene::init())
     {
         return false;
@@ -63,18 +63,29 @@ bool Level1::init()
 // 在你的类中定义一个成员函数，用于在MoveBy动作完成时执行的回调
 void Level1::onMoveByFinished() {
     // 在这里处理MoveBy动作完成后的逻辑
-    normalZombie b;
+    /*normalZombie b;
     b.generateOne(this);
     normalZombie a;
     Sprite* test = a.generateOne(this);//返回一个指向精灵a的指针
     a.setIdv(test);
     a.getIdv()->setPosition(1500, 500);
-    a.moveForward(a.getIdv());
-    //schedule((God::testt), 5.0f);
+    a.moveForward(a.getIdv());*/
+    //schedule(SEL_SCHEDULE(&Level1::update));
+    this->schedule(schedule_selector(Level1::update), 5.9f);
 }
 
 
+void Level1::update(float dt)
+{
+    // 创建God类对象
+    God* god = new God();
 
+    // 调用God类的函数
+    god->testt(1.0,this);
+
+    // 释放God类对象
+    delete god;
+}
 
 
 void Level1::goBackMain(Ref* pSender)
