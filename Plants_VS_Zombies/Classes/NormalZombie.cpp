@@ -3,6 +3,18 @@
 #include"NormalZombie.h"
 USING_NS_CC;
 
+//普通僵尸的构造函数
+//传入起始位置 缩放大小
+normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
+{
+    auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");
+    normalzombie->setPosition(x, y);
+    normalzombie->setScale(scale);
+    //添加到当前层
+    scene->addChild(normalzombie, 0);
+}
+
+
 Sprite* normalZombie:: generateOne(Scene* scene) 
 {
 	auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");

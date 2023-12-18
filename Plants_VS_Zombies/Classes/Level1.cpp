@@ -4,6 +4,7 @@
 #include"Zombie.h"
 #include"NormalZombie.h"
 #include <string>
+#include"God.h"
 
 USING_NS_CC;
 
@@ -69,7 +70,9 @@ void Level1::onMoveByFinished() {
     a.setIdv(test);
     a.getIdv()->setPosition(1500, 500);
     a.moveForward(a.getIdv());
+    //schedule((God::testt), 5.0f);
 }
+
 
 
 

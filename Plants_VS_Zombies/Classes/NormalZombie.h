@@ -4,6 +4,7 @@
 class normalZombie :public Zombie {
 private:
 public:
+	normalZombie(int x, int y, double scale, Scene* scene);
 	virtual Sprite* generateOne(Scene* scene);
 	virtual void moveForward(Sprite* who);
 	void moveWithoutArm(Sprite* who);
