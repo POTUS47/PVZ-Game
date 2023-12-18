@@ -70,7 +70,9 @@ void Level1::onMoveByFinished() {
     a.setIdv(test);
     a.getIdv()->setPosition(1500, 500);
     a.moveForward(a.getIdv());
-    //schedule((God::testt), 5.0f);
+    //schedule(std::bind(&God::testt, this), 5.0f);
+    //this->schedule(schedule_selector(God::testt), 1.0f);
+
 }
 
 

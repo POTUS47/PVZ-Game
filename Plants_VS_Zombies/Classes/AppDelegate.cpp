@@ -118,6 +118,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
+    /*进入第一个场景：helloworld*/
     auto scene = HelloWorld::createScene();
 
     // run
