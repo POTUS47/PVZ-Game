@@ -15,14 +15,8 @@ normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
     setIdv(normalzombie);//将精灵指针存入idv
 }
 
-
-Sprite* normalZombie:: generateOne(Scene* scene) 
+void normalZombie::standBy(Sprite* who)
 {
-	auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");
-	normalzombie->setPosition(1200, 500);
-    normalzombie->setScale(2.0);
-    //添加到当前层
-    scene->addChild(normalzombie, 0);
     auto animation = Animation::create();
     char nameSize[30] = { 0 };
     for (int i = 1; i < 21; i++)
@@ -34,8 +28,24 @@ Sprite* normalZombie:: generateOne(Scene* scene)
     animation->setLoops(-1);
     animation->setRestoreOriginalFrame(true);
     auto animate = Animate::create(animation);
-    normalzombie->runAction(animate);
-    return normalzombie;
+    who->runAction(animate);
+}
+
+void normalZombie::healthyEating(Sprite* who) 
+{
+    auto animation = Animation::create();
+    char healthyattackarray[40] = { 0 };
+    /*僵尸吃植物*/
+    for (int i = 1; i < 22; i++)
+    {
+        sprintf(healthyattackarray, "/normalzombie/healthyattack/%d.png", i);
+        animation->addSpriteFrameWithFile(healthyattackarray);
+    }
+    animation->setDelayPerUnit(0.15f);
+    animation->setLoops(-1);//循环播放
+    animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
+    auto anim = Animate::create(animation);
+    who->runAction(anim);
 }
 
 /**
@@ -44,22 +54,7 @@ Sprite* normalZombie:: generateOne(Scene* scene)
 */
 void normalZombie::moveForward(Sprite* who)
 {
-    auto ani2 = Animation::create();
-    char nameSize1[40] = { 0 };
-    /*diergedongzuof*/
-    for (int i = 1; i < 21; i++)
-    {
-        sprintf(nameSize1, "/normalzombie/standgif/%d.png", i);
-        ani2->addSpriteFrameWithFile(nameSize1);
-    }
-    ani2->setDelayPerUnit(0.15f);
-    ani2->setLoops(1);
-    ani2->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
-    auto anim2 = Animate::create(ani2);
-    who->runAction(anim2);
-
-    who->stopAllActions();
-
+    //who->stopAllActions();
     auto moveBy = MoveBy::create(2000 / this->getSpeed(), Vec2(-2000, 0));
     who->runAction(moveBy);
     auto animation = Animation::create();
@@ -77,6 +72,7 @@ void normalZombie::moveForward(Sprite* who)
     who->runAction(animate);
 }
 
+
 void normalZombie::moveWithoutArm(Sprite* who)
 {
     auto animation = Animation::create();
@@ -93,7 +89,8 @@ void normalZombie::moveWithoutArm(Sprite* who)
     auto anim2 = Animate::create(animation);
 }
 
-void normalZombie::die(Sprite* who)
+
+void normalZombie::dieAndlay(Sprite* who)
 {
     auto animation = Animation::create();
     char diearray[40] = { 0 };
@@ -110,23 +107,10 @@ void normalZombie::die(Sprite* who)
     who->runAction(anim);/////////////////////考虑变成返回anim指针？
 }
 
-void normalZombie::healthyAttack(Sprite* who)
-{
-    auto animation = Animation::create();
-    char healthyattackarray[40] = { 0 };
-    /*僵尸吃植物*/
-    for (int i = 1; i < 22; i++)
-    {
-        sprintf(healthyattackarray, "/normalzombie/healthyattack/%d.png", i);
-        animation->addSpriteFrameWithFile(healthyattackarray);
-    }
-    animation->setDelayPerUnit(0.15f);
-    animation->setLoops(-1);//只播放一次
-    animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
-    auto anim = Animate::create(animation);
-    who->runAction(anim);
-}
 
+
+
+//头掉动画
 void normalZombie::loseHead(Sprite* who)
 {
     auto animation = Animation::create();

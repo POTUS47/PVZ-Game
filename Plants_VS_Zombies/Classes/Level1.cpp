@@ -4,7 +4,10 @@
 #include"Zombie.h"
 #include"NormalZombie.h"
 #include <string>
+#include<vector>
 #include"God.h"
+
+extern std::vector<Zombie*>waiting;
 
 USING_NS_CC;
 
@@ -26,7 +29,7 @@ bool Level1::init()
     {
         return false;
     }
-
+    god = new God();
     //获取可视区域范围
     const auto visibleSize = Director::getInstance()->getVisibleSize();
     //获取可视区域原点
@@ -35,64 +38,83 @@ bool Level1::init()
 
     //场景要素-------------------------------------------------------------------------------------
     
-    //2.背景图
+    //背景图
     auto sprite = Sprite::create("/level1/bg.jpg");
     sprite->setPosition(Vec2(visibleSize.width *0.73 + origin.x, visibleSize.height / 2 + origin.y));
-    sprite->setScale(2.13);
+    sprite->setScale(2.47,2.13);
     this->addChild(sprite, 0);
-    // 创建MoveBy动作
+    background = sprite;
+
+
     auto moveBy = MoveBy::create(2, Vec2(-870, 0));
+    background->runAction(moveBy);
 
     // 创建一个CallFunc动作，用于执行回调函数,即在moveby执行完成后执行什么
     auto moveByFinishedCallback = CallFunc::create(CC_CALLBACK_0(Level1::onMoveByFinished, this));
-
-    // 将MoveBy和CallFunc组合成一个序列动作
-    auto sequence = Sequence::create(moveBy, moveByFinishedCallback, nullptr);
-
-    // 运行动作
+    auto moveTotheRight = CallFunc::create(CC_CALLBACK_0(Level1::moveRight, this));
+    auto sequence = Sequence::create(moveBy, moveByFinishedCallback,moveTotheRight, nullptr);
     sprite->runAction(sequence);
+    
+
     //-------------test
-
+    //this->scheduleOnce(schedule_selector(Level1::update), 5.0f);
   
-
-
-    //-------------------
     return true;
 }
 
 // 在你的类中定义一个成员函数，用于在MoveBy动作完成时执行的回调
-void Level1::onMoveByFinished() {
-    // 在这里处理MoveBy动作完成后的逻辑
-    /*normalZombie b;
-    b.generateOne(this);
-    normalZombie a;
-    Sprite* test = a.generateOne(this);//返回一个指向精灵a的指针
-    a.setIdv(test);
-    a.getIdv()->setPosition(1500, 500);
-    a.moveForward(a.getIdv());*/
-    //schedule(SEL_SCHEDULE(&Level1::update));
-    this->schedule(schedule_selector(Level1::update), 5.9f);
+void Level1::onMoveByFinished() 
+{
+    god->updateZombies(1, this);
 }
 
 
 void Level1::update(float dt)
 {
-    // 创建God类对象
-    God* god = new God();
-
-    // 调用God类的函数
-    god->testt(1.0,this);
-
-    // 释放God类对象
-    delete god;
+    god->updateZombies(1,this);
 }
 
 
+
+//按下开始游戏后转入菜单场景
 void Level1::goBackMain(Ref* pSender)
 {
-    //按下开始游戏后转入菜单场景
-
     Director::getInstance()->replaceScene(Main_menu::createScene());
+}
 
+void Level1::moveLeft()
+{
+    auto moveBy = MoveBy::create(2, Vec2(-870, 0));
+    background->runAction(moveBy);
+}
+
+void Level1::moveRight()
+{
+    
+    // 创建按钮
+    /*auto closeButton = MenuItemImage::create(
+        "close_button_normal.png",
+        "close_button_selected.png",
+        this->removeFromParentAndCleanup(true));
+
+    closeButton->setPosition(300,500);
+
+    auto menu = Menu::create(closeButton, nullptr);
+    menu->setPosition(Vec2::ZERO);
+    transparentLayer->addChild(menu);*/
+    int a = 0;
+    //弹出选择开始按钮，按下再moveBy
+    while (a == 0) {
+
+    }
+    auto moveBack = MoveBy::create(2, Vec2(620, 0));
+
+    // 移动场景
+    background->runAction(moveBack->clone());
+
+    // 移动每个僵尸
+    for (int i = 0; i < waiting.size(); i++) {
+        (waiting[i]->getIdv())->runAction(moveBack->clone());
+    }
 }
 
