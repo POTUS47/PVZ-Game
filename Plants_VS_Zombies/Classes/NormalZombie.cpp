@@ -54,7 +54,7 @@ void normalZombie::healthyEating(Sprite* who)
 */
 void normalZombie::moveForward(Sprite* who)
 {
-    //who->stopAllActions();
+    who->stopAllActions();
     auto moveBy = MoveBy::create(2000 / this->getSpeed(), Vec2(-2000, 0));
     who->runAction(moveBy);
     auto animation = Animation::create();

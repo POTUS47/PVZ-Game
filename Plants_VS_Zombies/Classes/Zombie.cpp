@@ -27,12 +27,12 @@ bool Zombie::getHeadCondition()
 	return lostHead;
 }
 
-void Zombie::setStartTime(int time)
+void Zombie::setStartTime(float time)
 {
 	startTime = time;
 }
 
-int Zombie::getStartTime()
+float Zombie::getStartTime()
 {
 	return startTime;
 }

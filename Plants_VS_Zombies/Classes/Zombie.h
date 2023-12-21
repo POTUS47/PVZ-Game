@@ -4,8 +4,8 @@
 class Zombie :public Entity {
 private:
 	int HP;//僵尸血量
-	int walkSpeed=20;//前进速度
-	int startTime;//出发时间
+	int walkSpeed=70;//前进速度
+	float startTime;//出发时间
 	bool lostHead = false;//有没有丢掉头，初设为没有
 	float eatPlantTime;//吃植物的时间间隔
 	float attackDegree;//攻击给植物扣多少血
@@ -16,8 +16,8 @@ public:
 	void setSpeed(int speed);//设置前进速度
 	int getSpeed();//获取僵尸行走速度
 
-	void setStartTime(int time);//设置出发时间
-	int getStartTime();//获取出发时间
+	void setStartTime(float time);//设置出发时间
+	float getStartTime();//获取出发时间
 
 	bool getHeadCondition();//获取头还在不在
 	virtual void moveForward(Sprite* who) = 0;//向前走的动作
