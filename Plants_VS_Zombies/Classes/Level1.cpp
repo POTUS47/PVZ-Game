@@ -17,7 +17,7 @@ static void problemLoading(const char* filename)
 bool Level1::init()
 {
     srand(static_cast<unsigned>(time(0)));
-    god = new God(0);
+    god = new God(0,this);
     if (!Scene::init())
     {
         return false;

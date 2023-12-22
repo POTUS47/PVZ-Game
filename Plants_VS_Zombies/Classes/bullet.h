@@ -1,17 +1,19 @@
 #pragma once
 #include "cocos2d.h"
-
-class Bullet : public cocos2d::Sprite {
+#include "Entity.h"
+class Bullet : public Entity{
 public:
-    Bullet();
-    virtual ~Bullet();
-
-    static Bullet* create(const std::string& bulletImage);
-
-    void shootBullet(cocos2d::Vec2 startPosition, float speed);
+    Bullet(int startX, int startY, int bulletDamage, Scene* scene);
+    void explodeAnimation();
+    void onAnimationFinished(Node* sender);//子弹需要销毁时调用，给god传递“该子弹可以退出vector”的信号
+    bool NeedRemove(){return needDestroy;}
 
 private:
-    void update(float dt);
+    int start_x;//子弹发射位置
+    int start_y;
+    int damage;//子弹伤害
+    Scene* currentScene;//记录子弹所在场景的指针
+    int needDestroy;//当子弹飞出屏幕 或者子弹击中僵尸后，会被置为1
 
-    float bulletSpeed;
+    float bulletSpeed;//子弹速度
 };

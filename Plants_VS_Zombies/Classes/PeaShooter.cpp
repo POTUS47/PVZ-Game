@@ -2,6 +2,7 @@
 #include "PeaShooter.h"
 
 PeaShooter::PeaShooter(int x,int y, double scale,Scene* scene) {
+    setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
     auto nut = cocos2d::Sprite::create("/plant/peashooter/Peashooter1.png");
     nut->setPosition(x, y);
     nut->setScale(scale);
@@ -48,6 +49,7 @@ void PeaShooter::attackAnimation() {
     //animation->setRestoreOriginalFrame(true);动画播放完后定格在第一帧
     auto animate = Animate::create(animation);//创建动画动作
     this->getIdv()->runAction(animate);//将动画动作应用到精灵上，并运行动画
+    
 }
 
 //植物死亡：消失

@@ -1,4 +1,6 @@
 #include"God.h"
+#include<algorithm>
+
 /*小推车*/
 std::vector<Car*>littleCar;
 /*正在等待的僵尸*/
@@ -11,13 +13,16 @@ std::vector<Zombie*>dead;
 /*当前关卡的所有植物*/
 std::vector<Plant*>plants;
 
+std::vector<Bullet*>bullets;//子弹的数组
+bool isIntersecting(Sprite* spriteA, Sprite* spriteB);//函数声明
+
 /*数组储存出场时间*/
 float Statime[2][2][10] = {5,15,20,23,25,29,45,47,50,55};//level type number
 
 int sunNumber = 0;
 
 //God的构造函数
-God::God(int isNight):dayOrNight(isNight) {
+God::God(int isNight, Scene* CurrentScene):dayOrNight(isNight),currentScene(CurrentScene) {
 	sunNumber = 0;
 }
 
@@ -33,10 +38,10 @@ void God::gameEnd()
 		}
 	}
 }
-////////////////////记得0.1s调用其他状态检查函数
 
 
-void God::updateZombies(int level, Scene* scene)
+
+void God::updateZombies(int level)
 {
 	int normZ = 0;
 	int coneZ = 0;
@@ -49,21 +54,37 @@ void God::updateZombies(int level, Scene* scene)
 
 	}
 
+
+	///////////////////////////////////////以下测试区域
+	plants.push_back(new PeaShooter(215, 350, 2.2, currentScene));
+	plants.push_back(new PeaShooter(405, 160, 2.2, currentScene));
+	plants.push_back(new PeaShooter(595, 540, 2.2, currentScene));
+	plants.push_back(new PeaShooter(785, 730, 2.2, currentScene));
+	plants.push_back(new PeaShooter(975, 920, 2.2, currentScene));
+	plants.push_back(new PeaShooter(1165, 920, 2.2, currentScene));
+	plants.push_back(new PeaShooter(1335, 920, 2.2, currentScene));
+	plants.push_back(new PeaShooter(1545, 920, 2.2, currentScene));
+	plants.push_back(new PeaShooter(1735, 920, 2.2, currentScene));
+	new Bullet(300, 300, 5, currentScene);
+
+	//检查发现，横向总共1920
+	/* 植物的位置 纵坐标分别是160 350 540 730 920比较好（等差190）
+	* 横坐标分别是 215 405...（等差190）
+	* 植物的col=(x-160)/190+1
+	*/
+
 	//开始生成僵尸,放入等待容器中
 	//普通僵尸
 	for (int i = 0; i < normZ; i++) {
 		int x = rand() % 300 + 1400;
 		int y = rand() % 800 + 100;
-		waiting.push_back(new normalZombie(x, y, 2.0, scene));
-		plants.push_back(new PeaShooter(x-30, y-30, 2.2, scene));
-		plants.push_back(new Nut(x -300, y - 80, 2.2, scene));
-		plants.push_back(new DoubleShooter(x +40, y +80, 2.2, scene));
+		waiting.push_back(new normalZombie(x, y, 2.0, currentScene));
 	}
 	//圆锥僵尸---
 	for (int i = 0; i < coneZ; i++) {
 		int x = rand() % 300 + 1400;
 		int y = rand() % 800 + 100;
-		waiting.push_back(new coneHeadZombie(x, y, 2.0, scene));
+		waiting.push_back(new coneHeadZombie(x, y, 2.0, currentScene));
 	}
 	//让所有等待区的僵尸进入等待状态，并设置出发时间，设置出发赛道
 	for (int i = 0; i < waiting.size(); i++) {
@@ -140,6 +161,7 @@ void God::createSun(Scene* scene)
 			// 阳光被点击，执行消失逻辑
 			sunNumber++;
 			this->updateSun();
+
 			sun->stopAllActions();
 			auto moveTo = MoveTo::create(0.5, Vec2(120, 1130));
 			sun->runAction(moveTo);
@@ -220,6 +242,63 @@ void God::hitByCar()
 				car->runAction(sequence);
 			}
 
+		}
+	}
+}
+
+//检查僵尸和子弹有没有相撞
+void God::checkCrush() {
+	for (int i = 0; i < bullets.size(); i++) {
+		for (int j = 0; waiting.size(); j++) {
+			if (isIntersecting(bullets[i]->getIdv(), waiting[j]->getIdv())) {
+				bullets[i]->explodeAnimation();
+				////////////需要写僵尸受伤
+			}
+		}
+	}
+}
+
+//检查僵尸和植物有没有相撞（相撞意味着要吃植物）
+void God::checkCrush() {
+	for (int i = 0; i < plants.size(); i++) {
+		for (int j = 0; waiting.size(); j++) {
+			if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv())) {
+				bullets[i]->explodeAnimation();
+				////////////需要写僵尸吃植物 植物被吃
+			}
+		}
+	}
+}
+
+//用于检测两精灵有无相遇的辅助函数
+bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
+	Rect rectA = spriteA->getBoundingBox();
+	Rect rectB = spriteB->getBoundingBox();
+
+	return rectA.intersectsRect(rectB);
+}
+
+//检查植物需不需要发射子弹
+void God::checkAttack() {
+	for (int i = 0; i < plants.size(); i++) {
+		if (plants[i]->getAttackDamage() != 0) {//筛出攻击性植物
+			int plantRow = plants[i]->getRow();
+			for (int j = 0; waiting.size(); j++) {
+				int zombieRow = waiting[j]->getCol();
+				if (zombieRow == plantRow) {//该植物启动攻击行为
+					bullets.push_back(new Bullet(300, 300, 5, currentScene));////////该处需要修改至植物的x y
+				}
+			}
+		}
+	}
+}
+
+//检查bullet vector中有没有需要删除的子弹
+void God::checkBulletToDelete() {
+	for (int i = 0; i < bullets.size(); i++) {
+		if (bullets[i]->NeedRemove()) {
+			std::vector<Bullet*>::iterator it = std::find(bullets.begin(), bullets.end(), bullets[i]);
+			bullets.erase(it);//选用erase而不用remove是是为了减少vector容量，节省空间
 		}
 	}
 }

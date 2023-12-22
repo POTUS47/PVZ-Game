@@ -1,6 +1,7 @@
 #include "DoubleShooter.h"
 
 DoubleShooter::DoubleShooter(int x, int y, double scale, Scene* scene) {
+    setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
     auto doubleShooter = cocos2d::Sprite::create("/plant/doubleshooter/Repeater1.png");
     doubleShooter->setPosition(x, y);
     doubleShooter->setScale(scale);

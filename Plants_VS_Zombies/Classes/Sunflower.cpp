@@ -3,7 +3,8 @@ extern int sunNumber;
 
 
 Sunflower::Sunflower(int x, int y, double scale, Scene* scene,int isNight, Label* sunLightLabel):currentLevelSunLabel(sunLightLabel), theScencePlantIn(scene) {
-    auto sunflower = cocos2d::Sprite::create("/plant/sunflower/SunFlower1.png");
+	setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
+	auto sunflower = cocos2d::Sprite::create("/plant/sunflower/SunFlower1.png");
     sunflower->setPosition(x, y);
     sunflower->setScale(scale);
     //添加到当前层

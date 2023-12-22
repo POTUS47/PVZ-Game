@@ -2,37 +2,44 @@
 
 USING_NS_CC;
 
-Bullet::Bullet() : bulletSpeed(0.0f) {
+Bullet::Bullet(int startX,int startY,int bulletDamage,Scene* scene) 
+    : start_x(startX), start_y(startY),damage(bulletDamage),currentScene(scene), needDestroy(0){
+    
+    auto bullet = cocos2d::Sprite::create("/plant/bullet/0.png");
+    bullet->setPosition(start_x, start_y);///////////////////
+    bullet->setScale(2);
+    //添加到当前层
+    scene->addChild(bullet, 6);
+    setIdv(bullet);//将精灵指针存入idv
+
+    //子弹运动动画
+    auto moveBy = MoveBy::create(2.0f, Vec2(1920, 0)); // 1秒内向右水平移动1000个像素
+    auto callFunc = CallFuncN::create(CC_CALLBACK_1(Bullet::onAnimationFinished, this));
+    auto sequence = Sequence::create(moveBy,CallFunc::create([=]() {
+        bullet->removeFromParent(); // 移动完成后移除子弹
+        }), callFunc, nullptr);
+    bullet->runAction(sequence);
 }
 
-Bullet::~Bullet() {
+//子弹播放爆炸特效并消失
+void Bullet::explodeAnimation() {
+
+    Sprite* bullet = this->getIdv();
+    bullet->stopAllActions();//停止动作
+    bullet->setTexture("/plant/bullet/1.png");
+    auto delay = DelayTime::create(0.4f);//子弹暂留零点四秒
+    auto removeAction = CallFunc::create([bullet]() {
+        bullet->removeFromParent();
+        });
+    auto callFunc = CallFuncN::create(CC_CALLBACK_1(Bullet::onAnimationFinished, this));
+    auto sequence = Sequence::create( delay, removeAction,callFunc,nullptr);
+
+    // 执行动作序列
+    bullet->runAction(sequence);
+    //注意Cocos2d-x 的动作是异步执行的 这个构造函数并不会等待动作播放完成就能执行完毕
 }
 
-Bullet* Bullet::create(const std::string& bulletImage) {
-    Bullet* bullet = new (std::nothrow) Bullet();
-    if (bullet && bullet->initWithFile(bulletImage)) {
-        bullet->autorelease();
-        return bullet;
-    }
-    else {
-        delete bullet;
-        return nullptr;
-    }
-}
-
-void Bullet::shootBullet(Vec2 startPosition, float speed) {
-    this->setPosition(startPosition);
-    this->bulletSpeed = speed;
-
-    this->schedule(CC_SCHEDULE_SELECTOR(Bullet::update));
-}
-
-void Bullet::update(float dt) {
-    Vec2 currentPosition = this->getPosition();
-    currentPosition.x += bulletSpeed * dt;
-    this->setPosition(currentPosition);
-
-    // TODO: 碰撞检测逻辑，检测是否击中僵尸等
-
-    // TODO: 根据需要添加其他逻辑，比如超出屏幕后销毁子弹
+//通知GOD需要移除子弹
+void Bullet::onAnimationFinished(Node* sender) {
+    needDestroy = 1;
 }

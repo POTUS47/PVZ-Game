@@ -34,7 +34,7 @@ public:
 
 private:
     int health;   //生命值      
-    int attackDamage;//伤害值
+    int attackDamage=0;//伤害值
     int isSleeping;//植物是否在睡觉
     int row;//行
     int col;//列

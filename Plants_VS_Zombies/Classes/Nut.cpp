@@ -1,6 +1,7 @@
 #include "Nut.h"
 
 Nut::Nut(int x, int y, double scale, Scene* scene) {
+    setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
     auto nut = cocos2d::Sprite::create("/plant/nut/zz1.png");
     nut->setPosition(x, y);
     nut->setScale(scale);
