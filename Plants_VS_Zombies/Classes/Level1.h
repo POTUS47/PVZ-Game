@@ -26,10 +26,8 @@ public:
     void goBackMain(cocos2d::Ref* pSender);
     void onMoveByFinished();
     void update(float dt);
-    void moveLeft();//场景向左移动
     void moveRight(Ref* sender);//场景和僵尸向右移动
     void startChoose();
 
-    // implement the "static create()" method manually
     CREATE_FUNC(Level1);
 };

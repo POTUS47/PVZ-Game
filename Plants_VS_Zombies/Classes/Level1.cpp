@@ -28,12 +28,6 @@ bool Level1::init()
     //开始生成阳光
     //僵尸准备出发
     
-    
-    //-------------test
-    this->schedule(schedule_selector(Level1::update), 5.0f);
-    //this->scheduleOnce(schedule_selector(Level1::update), 5.0f);
-    
-  
     return true;
 }
 
@@ -47,6 +41,11 @@ void Level1::startChoose()
     seedbank->setPosition(Vec2(visibleSize.width * 0.3, visibleSize.height * 0.92));
     seedbank->setScale(2.64,2.4);
     this->addChild(seedbank, 1);
+    //铲子背景
+    Sprite* shovelback = Sprite::create("/level1/shovelback.png");
+    shovelback->setPosition(Vec2(visibleSize.width * 0.62, visibleSize.height * 0.92));
+    shovelback->setScale(2.2);
+    this->addChild(shovelback,1);
     //阳光值
     sunlightLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 30);
     sunlightLabel->setPosition(Vec2(115, 1038));  // 设置Label的位置
@@ -71,39 +70,37 @@ void Level1::startChoose()
 // 在你的类中定义一个成员函数，用于在MoveBy动作完成时执行的回调
 void Level1::onMoveByFinished() 
 {
+    const auto visibleSize = Director::getInstance()->getVisibleSize();
     //生成僵尸
     god->updateZombies(1, this);
     //生成层
     auto transparentLayer = LayerColor::create(Color4B(0, 0, 0, 128));
     this->addChild(transparentLayer);
     choose = transparentLayer;
-    // 创建精灵
-    auto sprite = Sprite::create("zombietest.png");
-    sprite->setPosition(500, 500);
-    choose->addChild(sprite);
+    //创建种子选择器
+    auto seedchooser = Sprite::create("/level1/seedchooser.png");
+    seedchooser->setPosition(Vec2(visibleSize.width * 0.3, visibleSize.height * 0.43));
+    seedchooser->setScale(0.9,0.77);
+    choose->addChild(seedchooser);
+    
 
     // 创建按钮
     auto closeButton = MenuItemImage::create(
-        "1.png",
-        "2.png",
+        "/level1/menu.png",
+        "/level1/menu.png",
         CC_CALLBACK_1(Level1::moveRight, this));
 
-    closeButton->setPosition(400, 400);
-
+    closeButton->setPosition(Vec2(visibleSize.width*0.3,visibleSize.height*0.1));
+    closeButton->setScale(2.0);
     auto menu = Menu::create(closeButton, nullptr);
     menu->setPosition(Vec2::ZERO);
     choose->addChild(menu);
 }
 
-
 void Level1::update(float dt)
 {
-    //god->updateZombies(1,this);
     god->createSun(this,sunlightLabel);
-   
 }
-
-
 
 //按下游戏后转回菜单场景
 void Level1::goBackMain(Ref* pSender)
@@ -111,17 +108,12 @@ void Level1::goBackMain(Ref* pSender)
     Director::getInstance()->replaceScene(Main_menu::createScene());
 }
 
-void Level1::moveLeft()
-{
-    auto moveBy = MoveBy::create(2, Vec2(-870, 0));
-    background->runAction(moveBy);
-}
 
 void Level1::moveRight(Ref* sender) 
 {
     this->removeChild(choose);
     
-    auto moveBack = MoveBy::create(2, Vec2(620, 0));
+    auto moveBack = MoveBy::create(1, Vec2(620, 0));
     // 移动场景
     background->runAction(moveBack->clone());
     // 移动每个僵尸
@@ -130,6 +122,8 @@ void Level1::moveRight(Ref* sender)
     }
     GameStart = true;
     god->setZombieStartTime();
+    update(0);//先手动调用一次
+    this->schedule(schedule_selector(Level1::update), 15.0f);
 }
 
 

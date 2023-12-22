@@ -1,5 +1,3 @@
-//作为所有不同类型的僵尸类的父类
-#include"cocos2d.h"
 #include"Zombie.h"
 USING_NS_CC;
 
@@ -35,4 +33,14 @@ void Zombie::setStartTime(float time)
 float Zombie::getStartTime()
 {
 	return startTime;
+}
+
+void Zombie::setCol(int Col)
+{
+	col = Col;
+}
+
+int Zombie::getCol()
+{
+	return col;
 }

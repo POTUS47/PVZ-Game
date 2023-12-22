@@ -25,7 +25,6 @@ public:
 	void setZombieStartTime();
 	//生成阳光
 	void createSun(cocos2d::Scene* scene, Label* sunLightLabel);
-	void onMouseDownSun();
 	//阳光多少的显示
 	void updateSun(Label* sunlightLabel);
 };

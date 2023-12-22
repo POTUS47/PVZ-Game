@@ -1,5 +1,6 @@
 #pragma once
 #include"Zombie.h"
+#include"cocos2d.h"
 
 class normalZombie :public Zombie {
 private:

@@ -1,5 +1,3 @@
-#include"cocos2d.h"
-#include"Zombie.h"
 #include"NormalZombie.h"
 USING_NS_CC;
 
@@ -7,11 +5,12 @@ USING_NS_CC;
 //传入起始位置 缩放大小
 normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
 {
+    setSpeed(30);
     auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");
     normalzombie->setPosition(x, y);
     normalzombie->setScale(scale);
     //添加到当前层
-    scene->addChild(normalzombie, 0);
+    scene->addChild(normalzombie, 2);
     setIdv(normalzombie);//将精灵指针存入idv
 }
 
@@ -54,8 +53,10 @@ void normalZombie::healthyEating(Sprite* who)
 */
 void normalZombie::moveForward(Sprite* who)
 {
+    int starty = getCol();
     who->stopAllActions();
-    auto moveBy = MoveBy::create(2000 / this->getSpeed(), Vec2(-2000, 0));
+    who->setPosition(1950, starty*200-10);
+    auto moveBy = MoveBy::create(2100 / this->getSpeed(), Vec2(-2100, 0));
     who->runAction(moveBy);
     auto animation = Animation::create();
     char nameSize[40] = { 0 };

@@ -7,7 +7,7 @@ std::vector<Zombie*>walking;
 /*死了的僵尸*/
 std::vector<Zombie*>dead;
 /*数组储存出场时间*/
-float Statime[2][2][10] = {1,25,50,60,70,40,45,47,50,55 };//level type number
+float Statime[2][2][10] = {5,15,20,23,25,29,45,47,50,55};//level type number
 
 int sunNumber = 0;
 
@@ -41,16 +41,22 @@ void God::updateZombies(int level, Scene* scene)
 	}
 
 	//开始生成僵尸,放入等待容器中
+	//普通僵尸
 	for (int i = 0; i < normZ; i++) {
-		int x = rand() % 400 + 1300;
-		int y = rand() % 800 + 1;
+		int x = rand() % 300 + 1400;
+		int y = rand() % 800 + 100;
 		waiting.push_back(new normalZombie(x, y, 2.0, scene));
 	}
+	//圆锥僵尸---
+
+	//让所有等待区的僵尸进入等待状态，并设置出发时间，设置出发赛道
 	for (int i = 0; i < waiting.size(); i++) {
+		int col = rand() % 5 + 1;
 		waiting[i]->standBy(waiting[i]->getIdv());
-		waiting[i]->setStartTime(Statime[level-1][1-1][i]);
+		waiting[i]->setStartTime(Statime[level-1][1-1][i]);//设置出发时间
+		waiting[i]->setCol(col);//设置出发赛道
 	}
-	//waiting[2]->loseHead(waiting[2]->getIdv());
+	
 }
 
 void God::dead()
@@ -74,10 +80,10 @@ void God::updateSun(Label* sunlightLabel)
 void God::createSun(Scene* scene,Label*sunLightLabel)
 {
 	int x = rand() % 1200 + 100;
-	int y = rand() % 800 + 1;
+	int y = rand() % 900 + 100;
 
 	auto sun = Sprite::create("1.png");
-	sun->setPosition(x,1000);
+	sun->setPosition(x,1400);
 	sun->setScale(2.0);
 	scene->addChild(sun,2);
 
@@ -93,7 +99,8 @@ void God::createSun(Scene* scene,Label*sunLightLabel)
 	auto animate = Animate::create(animation);
 
 	sun->runAction(animate);
-	auto moveBy = MoveBy::create(5, Vec2(0, -1000));
+	int speed = 150;
+	auto moveBy = MoveBy::create((1400-y)/speed, Vec2(0, -(1400-y)));
 	sun->runAction(moveBy);
 
 	
@@ -127,7 +134,8 @@ void God::createSun(Scene* scene,Label*sunLightLabel)
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, sun);
 
 	// 启动一个定时器，在五秒后检查是否有鼠标点击阳光，若无则自动消失
-	auto delayAction = DelayTime::create(10.0f);
+	float t = (1400 - y) / speed+5;
+	auto delayAction = DelayTime::create(t);
 	auto checkClickCallback = CallFunc::create([sun, scene]() {
 		if (sun && sun->getParent()) {
 			// 阳光还存在且没有被点击，则自动让阳光消失
