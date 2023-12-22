@@ -45,9 +45,11 @@ public:
 	//检测是否有僵尸和植物相撞
 	void checkCrush();
 	//检查植物需不需要发射子弹
-	void God::checkAttack();
+	void checkAttack();
 	//删除在vector中不需要的子弹
-	void God::checkBulletToDelete();
+	void checkBulletToDelete();
+	//检查僵尸要不要吃植物
+	void checkEat();
 	
 	Label* getSunLightLabel() { return sunLightLabel; }
 	void changeSunLabel(Label* sunlabel) { sunLightLabel = sunlabel; }

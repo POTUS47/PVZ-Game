@@ -247,7 +247,7 @@ void God::hitByCar()
 }
 
 //检查僵尸和子弹有没有相撞
-void God::checkCrush() {
+void God::checkEat() {
 	for (int i = 0; i < bullets.size(); i++) {
 		for (int j = 0; waiting.size(); j++) {
 			if (isIntersecting(bullets[i]->getIdv(), waiting[j]->getIdv())) {

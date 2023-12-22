@@ -73,7 +73,7 @@ void Level1::onMoveByFinished()
 {
     const auto visibleSize = Director::getInstance()->getVisibleSize();
     //生成僵尸
-    god->updateZombies(1, this);
+    god->updateZombies(1);
     //生成层
     auto transparentLayer = LayerColor::create(Color4B(0, 0, 0, 128));
     this->addChild(transparentLayer);
