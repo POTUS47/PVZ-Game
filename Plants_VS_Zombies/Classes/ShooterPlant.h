@@ -13,10 +13,7 @@ public:
     virtual bool init() override;
 
     // 重写攻击行为
-    virtual void performAction() override;
-
-    // 获取射手植物的类型
-    virtual std::string getType() override;
+    virtual void working() override;
 
     // 射手植物特有的射击函数
     void shoot();

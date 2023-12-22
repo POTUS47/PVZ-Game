@@ -6,7 +6,7 @@
 
 class PeaShooter : public ShooterPlant {
 public:
-    PeaShooter();
+    PeaShooter(int row, int col, cocos2d::Scene* scene);
     virtual ~PeaShooter();
 
     // 初始化射手植物
