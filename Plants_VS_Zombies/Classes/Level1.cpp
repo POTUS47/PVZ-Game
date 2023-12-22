@@ -48,6 +48,7 @@ void Level1::startChoose()
     this->addChild(shovelback,1);
     //阳光值
     sunlightLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 30);
+    god->changeSunLabel( sunlightLabel);
     sunlightLabel->setPosition(Vec2(115, 1038));  // 设置Label的位置
     sunlightLabel->setTextColor(Color4B::BLACK);  // 设置字体颜色为黑色
     this->addChild(sunlightLabel,2);  // 将Label添加到场景中
