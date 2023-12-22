@@ -1,26 +1,26 @@
-#include"NormalZombie.h"
+#include"ConeHeadZombie.h"
 USING_NS_CC;
 
-//普通僵尸的构造函数
+//圆锥僵尸的构造函数
 //传入起始位置 缩放大小
-normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
+coneHeadZombie::coneHeadZombie(int x, int y, double scale, Scene* scene)
 {
-    setSpeed(100);
-    auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");
-    normalzombie->setPosition(x, y);
-    normalzombie->setScale(scale);
+    setSpeed(30);
+    auto conezombie = cocos2d::Sprite::create("/conehead/standby/1.png");
+    conezombie->setPosition(x, y);
+    conezombie->setScale(scale);
     //添加到当前层
-    scene->addChild(normalzombie, 2);
-    setIdv(normalzombie);//将精灵指针存入idv
+    scene->addChild(conezombie, 2);
+    setIdv(conezombie);//将精灵指针存入idv
 }
 
-void normalZombie::standBy(Sprite* who)
+void coneHeadZombie::standBy(Sprite* who)
 {
     auto animation = Animation::create();
     char nameSize[30] = { 0 };
-    for (int i = 1; i < 21; i++)
+    for (int i = 1; i < 9; i++)
     {
-        sprintf(nameSize, "/normalzombie/standgif/%d.png", i);
+        sprintf(nameSize, "/conehead/standby/%d.png", i);
         animation->addSpriteFrameWithFile(nameSize);
     }
     animation->setDelayPerUnit(0.15f);
@@ -30,14 +30,14 @@ void normalZombie::standBy(Sprite* who)
     who->runAction(animate);
 }
 
-void normalZombie::healthyEating(Sprite* who) 
+void coneHeadZombie::healthyEating(Sprite* who)
 {
     auto animation = Animation::create();
     char healthyattackarray[40] = { 0 };
     /*僵尸吃植物*/
-    for (int i = 1; i < 22; i++)
+    for (int i = 1; i < 12; i++)
     {
-        sprintf(healthyattackarray, "/normalzombie/healthyattack/%d.png", i);
+        sprintf(healthyattackarray, "/conehead/healthyeating/%d.png", i);
         animation->addSpriteFrameWithFile(healthyattackarray);
     }
     animation->setDelayPerUnit(0.15f);
@@ -51,19 +51,19 @@ void normalZombie::healthyEating(Sprite* who)
 * @param 传入是哪个精灵要向前走
 * @return void
 */
-void normalZombie::moveForward(Sprite* who)
+void coneHeadZombie::moveForward(Sprite* who)
 {
     int starty = getCol();
     who->stopAllActions();
-    who->setPosition(1950, starty*200-10);
+    who->setPosition(1950, starty * 200 - 10);
     auto moveBy = MoveBy::create(2100 / this->getSpeed(), Vec2(-2100, 0));
     who->runAction(moveBy);
     auto animation = Animation::create();
     char nameSize[40] = { 0 };
     /*走路前进gif*/
-    for (int i = 1; i < 30; i++)
+    for (int i = 1; i < 22; i++)
     {
-        sprintf(nameSize, "/normalzombie/moveforwardgif/%d.png", i);
+        sprintf(nameSize, "/conehead/walking/%d.png", i);
         animation->addSpriteFrameWithFile(nameSize);
     }
     animation->setDelayPerUnit(0.15f);//设置动画帧频率
@@ -74,11 +74,11 @@ void normalZombie::moveForward(Sprite* who)
 }
 
 
-void normalZombie::moveWithoutArm(Sprite* who)
+/*void coneHeadZombie::moveWithoutArm(Sprite* who)
 {
     auto animation = Animation::create();
     char nameSize1[40] = { 0 };
-    /*断胳膊向前走*/
+    /*断胳膊向前走
     for (int i = 1; i < 21; i++)
     {
         sprintf(nameSize1, "/normalzombie/standgif/%d.png", i);
@@ -89,9 +89,9 @@ void normalZombie::moveWithoutArm(Sprite* who)
     animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
     auto anim2 = Animate::create(animation);
 }
+*/
 
-
-void normalZombie::dieAndlay(Sprite* who)
+void coneHeadZombie::dieAndlay(Sprite* who)
 {
     auto animation = Animation::create();
     char diearray[40] = { 0 };
@@ -112,7 +112,7 @@ void normalZombie::dieAndlay(Sprite* who)
 
 
 //头掉动画
-void normalZombie::loseHead(Sprite* who)
+void coneHeadZombie::loseHead(Sprite* who)
 {
     auto animation = Animation::create();
     char loseheadarray[40] = { 0 };

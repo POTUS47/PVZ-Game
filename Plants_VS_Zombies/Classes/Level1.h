@@ -28,6 +28,7 @@ public:
     void update(float dt);
     void moveRight(Ref* sender);//场景和僵尸向右移动
     void startChoose();
+    void CheckEveryMin(float dt);
 
     CREATE_FUNC(Level1);
 };

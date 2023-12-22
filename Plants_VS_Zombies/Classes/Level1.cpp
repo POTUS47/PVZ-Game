@@ -82,7 +82,7 @@ void Level1::onMoveByFinished()
     seedchooser->setPosition(Vec2(visibleSize.width * 0.3, visibleSize.height * 0.43));
     seedchooser->setScale(0.9,0.77);
     choose->addChild(seedchooser);
-    
+    god->showCardinSeedBank(this);
 
     // 创建按钮
     auto closeButton = MenuItemImage::create(
@@ -122,11 +122,17 @@ void Level1::moveRight(Ref* sender)
     }
     GameStart = true;
     god->setZombieStartTime();
+    god->initCar(this);
     update(0);//先手动调用一次
     this->schedule(schedule_selector(Level1::update), 15.0f);
+    this->schedule(schedule_selector(Level1::CheckEveryMin), 0.1f);
 }
 
-
+void Level1::CheckEveryMin(float dt)
+{
+    //god->gameEnd();
+    god->hitByCar();
+}
 
 //先移过去随后立刻弹出layer，此处可用sequence
 //layer的指针设成类成员
