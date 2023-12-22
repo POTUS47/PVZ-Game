@@ -17,7 +17,7 @@ static void problemLoading(const char* filename)
 bool Level1::init()
 {
     srand(static_cast<unsigned>(time(0)));
-    god = new God();
+    god = new God(0);
     if (!Scene::init())
     {
         return false;
@@ -99,7 +99,7 @@ void Level1::onMoveByFinished()
 
 void Level1::update(float dt)
 {
-    god->createSun(this,sunlightLabel);
+    god->createSun(this);
 }
 
 //按下游戏后转回菜单场景

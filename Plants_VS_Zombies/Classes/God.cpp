@@ -1,5 +1,6 @@
 #include"God.h"
-
+/*小推车*/
+std::vector<Car*>littleCar;
 /*正在等待的僵尸*/
 std::vector<Zombie*>waiting;
 /*出场的僵尸*/
@@ -38,9 +39,11 @@ void God::gameEnd()
 void God::updateZombies(int level, Scene* scene)
 {
 	int normZ = 0;
+	int coneZ = 0;
 	//根据关卡的不同设置不同数量的僵尸
 	if (level == 1) {
-		normZ = 5;
+		normZ = 6;
+		coneZ = 3;
 	}
 	else {
 
@@ -57,7 +60,11 @@ void God::updateZombies(int level, Scene* scene)
 		plants.push_back(new DoubleShooter(x +40, y +80, 2.2, scene));
 	}
 	//圆锥僵尸---
-
+	for (int i = 0; i < coneZ; i++) {
+		int x = rand() % 300 + 1400;
+		int y = rand() % 800 + 100;
+		waiting.push_back(new coneHeadZombie(x, y, 2.0, scene));
+	}
 	//让所有等待区的僵尸进入等待状态，并设置出发时间，设置出发赛道
 	for (int i = 0; i < waiting.size(); i++) {
 		int col = rand() % 5 + 1;
@@ -178,3 +185,41 @@ void God::setZombieStartTime()
 	}
 }
 
+void God::showCardinSeedBank(Scene* scene)
+{
+	Card peashooter(268, 1108, 1.95, "/card/peashooter.png", scene);
+	Card sunflower(380, 1108, 1.95, "/card/sunflower.png", scene);
+	Card nut(492, 1108, 1.95, "/card/nut.png", scene);
+	Card repeatershooter(604, 1108, 1.95, "/card/repeatershooter.png", scene);
+	Card sunshroom(716, 1108, 1.95, "/card/sunshroom.png", scene);
+	Card jalapeno(828, 1108, 1.95, "/card/jalapeno.png", scene);
+	Card card_3(940, 1108, 1.95, "/card/card_3.png", scene);
+	Card card_4(1052, 1108, 1.95, "/card/card_4.png", scene);
+}
+
+void God::initCar(Scene* scene)
+{
+	for (int i = 1; i < 6; i++) {
+		littleCar.push_back(new Car(i, scene));
+	}
+}
+
+void God::hitByCar()
+{
+	for (int j = 0; j < waiting.size(); j++) {//遍历每一只僵尸
+		Sprite* current = waiting[j]->getIdv();
+		if (current->getBoundingBox().containsPoint(Vec2(80, current->getPosition().y))) {
+			Sprite* car = littleCar[waiting[j]->getCol() - 1]->getIdv();
+			if (car != nullptr) {
+				auto delayAction = DelayTime::create(2);
+				auto checkClickCallback = CallFunc::create([=]() {
+					car->removeFromParent();
+					});
+				auto sequence = Sequence::create(delayAction, checkClickCallback, nullptr);
+				littleCar[waiting[j]->getCol() - 1]->carRun();
+				car->runAction(sequence);
+			}
+
+		}
+	}
+}
