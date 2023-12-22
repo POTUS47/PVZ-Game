@@ -2,26 +2,24 @@
 #include "cocos2d.h"
 #include<vector>
 #include"NormalZombie.h"
-#include"ConeHeadZombie.h"
 #include<iostream>
 #include"Level1.h"
-#include"Card.h"
-#include"Car.h"
-
-
+//添加了植物的头文件
+#include "PeaShooter.h"
+#include "Nut.h"
+#include "DoubleShooter.h"
 
 /*调度器放在这里，检测游戏是否结束等等*/
 class God :public Node
 {
 private:
-	
+	int dayOrNight;//0是白天，1是黑夜
+	Label* sunLightLabel;//左上角阳光label
 public:
 	//构造函数
-	God();
+	God(int isNight);
 	//检测游戏是否结束
 	void gameEnd();
-	//检测僵尸是否碰到小推车
-	void hitByCar();
 	//游戏开始，生成僵尸
 	void updateZombies(int level,cocos2d::Scene* scene);
 	//根据僵尸HP判断僵尸是否死亡
@@ -29,11 +27,10 @@ public:
 	//给僵尸设置出发时间
 	void setZombieStartTime();
 	//生成阳光
-	void createSun(cocos2d::Scene* scene, Label* sunLightLabel);
+	void createSun(cocos2d::Scene* scene);
 	//阳光多少的显示
-	void updateSun(Label* sunlightLabel);
-	//在植物选择器里展示植物卡片
-	void showCardinSeedBank(Scene*scene);
-	//生成小车
-	void initCar(Scene* scene);
+	void updateSun();
+	Label* getSunLightLabel() { return sunLightLabel; }
+	void changeSunLabel(Label* sunlabel) { sunLightLabel = sunlabel; }
+
 };
