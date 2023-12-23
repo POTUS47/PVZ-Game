@@ -50,6 +50,8 @@ public:
 	void checkBulletToDelete();
 	//检查僵尸要不要吃植物
 	void checkEat();
+	//种植物
+	bool plantPlant(Vec2 Point, int type);
 	
 	Label* getSunLightLabel() { return sunLightLabel; }
 	void changeSunLabel(Label* sunlabel) { sunLightLabel = sunlabel; }

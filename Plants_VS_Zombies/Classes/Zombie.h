@@ -17,7 +17,7 @@ private:
 	float startTime;//出发时间
 	bool lostHead = false;//有没有丢掉头，初设为没有
 	float eatPlantTime;//吃植物的时间间隔
-	float attackDegree;//攻击给植物扣多少血
+	int attackDegree;//攻击给植物扣多少血
 	int condition;//僵尸的状态
 public:
 	void setHP(int hp);//设置血量
@@ -34,6 +34,12 @@ public:
 
 	void setCondition(int con);//设置僵尸状态
 	int getCondition();//获取僵尸状态
+
+	void setEatingTime(float time);//设置僵尸吃植物的时间间隔
+	float getEatingTime();//获取僵尸吃植物的时间间隔
+
+	void setAttack(int att);//设置僵尸吃植物的伤害值
+	int getAttack();//获取僵尸吃植物的伤害值
 
 	bool getHeadCondition();//获取头还在不在
 	virtual void moveForward(Sprite* who) = 0;//向前走的动作

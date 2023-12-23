@@ -7,7 +7,9 @@ coneHeadZombie::coneHeadZombie(int x, int y, double scale, Scene* scene)
 {
     setSpeed(30);
     setCondition(WAIT);
-    setHP(100);
+    setHP(160);
+    setAttack(25);
+    setEatingTime(0.8f);
     auto conezombie = cocos2d::Sprite::create("/conehead/standby/1.png");
     conezombie->setPosition(x, y);
     conezombie->setScale(scale);
@@ -97,6 +99,7 @@ void coneHeadZombie::moveForward(Sprite* who)
 void coneHeadZombie::dieAndlay(Sprite* who)
 {
     auto animation = Animation::create();
+    who->stopAllActions();
     char diearray[40] = { 0 };
     /*½©Ê¬ËÀÍöÅ¿ÏÂ*/
     for (int i = 1; i < 11; i++)

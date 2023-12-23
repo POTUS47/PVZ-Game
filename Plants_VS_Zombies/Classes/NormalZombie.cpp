@@ -8,6 +8,8 @@ normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
     setSpeed(100);
     setCondition(WAIT);
     setHP(100);
+    setAttack(20);
+    setEatingTime(1.0f);
     auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");
     normalzombie->setPosition(x, y);
     normalzombie->setScale(scale);
@@ -35,10 +37,6 @@ void normalZombie::standBy(Sprite* who)
 void normalZombie::healthyEating(Sprite* who) 
 {
     who->stopAllActions();
-
-    auto moveBy = MoveBy::create(2100 / this->getSpeed(), Vec2(-2100, 0));
-    who->runAction(moveBy);
-
     auto animation = Animation::create();
     char healthyattackarray[40] = { 0 };
     /*Ω© ¨≥‘÷≤ŒÔ*/

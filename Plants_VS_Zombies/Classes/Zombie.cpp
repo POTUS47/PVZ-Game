@@ -54,3 +54,23 @@ int Zombie::getCondition()
 {
 	return condition;
 }
+
+void Zombie::setEatingTime(float time)
+{
+	eatPlantTime = time;
+}
+
+float Zombie::getEatingTime()
+{
+	return eatPlantTime;
+}
+
+void Zombie::setAttack(int att)
+{
+	attackDegree = att;
+}
+
+int Zombie::getAttack()
+{
+	return attackDegree;
+}

@@ -1,6 +1,6 @@
 #include"God.h"
 #include<algorithm>
-
+std::vector<Card*>cards;
 /*小推车*/
 std::vector<Car*>littleCar;
 /*正在等待的僵尸*/
@@ -63,19 +63,6 @@ void God::updateZombies(int level)
 
 	}
 
-
-	///////////////////////////////////////以下测试区域
-	//plants.push_back(new PeaShooter(215, 350, 2.2, currentScene));
-	//plants.push_back(new PeaShooter(405, 160, 2.2, currentScene));
-	plants.push_back(new PeaShooter(595, 540, 2.2, currentScene));
-	plants.push_back(new PeaShooter(785, 730, 2.2, currentScene));
-	plants.push_back(new PeaShooter(975, 920, 2.2, currentScene));
-	//plants.push_back(new PeaShooter(1165, 920, 2.2, currentScene));
-	//plants.push_back(new PeaShooter(1335, 920, 2.2, currentScene));
-	//plants.push_back(new PeaShooter(1545, 920, 2.2, currentScene));
-	//plants.push_back(new PeaShooter(1735, 920, 2.2, currentScene));
-	//new Bullet(300, 300, 5, currentScene);
-
 	//检查发现，横向总共1920
 	/* 植物的位置 纵坐标分别是160 350 540 730 920比较好（等差190）
 	* 横坐标分别是 215 405...（等差190）
@@ -116,7 +103,7 @@ void God::dead()
 				//死了的动画播放完了就把这个死了的僵尸从vector里删掉
 				auto delay = DelayTime::create(1.5f);
 				auto sequence = Sequence::create(delay, CallFunc::create([=]() {
-					waiting[i]->getIdv()->removeFromParent(); // 移动完成后移除子弹
+					waiting[i]->getIdv()->removeFromParent(); //僵尸死了不移除
 					//waiting.erase(waiting.begin() + i);
 					}), nullptr);
 				waiting[i]->getIdv()->runAction(sequence);
@@ -124,10 +111,11 @@ void God::dead()
 		}
 		
 	}
-	//检查是否有植物死亡//////////////////////////////这里想通过gethurt来实现
-	for (int i = 0; i < walking.size(); i++) {
+	//检查是否有植物死亡//////////////////////////////这里想通过gethurt来实现,不你不想
+	for (int i = 0; i < plants.size(); i++) {
 		if (plants[i]->getHealth() <= 0) {
 			plants[i]->dieAnimation();
+			plants.erase(plants.begin()+i);//从vector中删除
 		}
 	}
 }
@@ -230,15 +218,21 @@ void God::setZombieStartTime()
 
 void God::showCardinSeedBank(Scene* scene)
 {
-	Card peashooter(268, 1108, 1.95, "/card/peashooter.png", "1.png", scene);
-	Card sunflower(380, 1108, 1.95, "/card/sunflower.png", "/plant/sunflower/SunFlower1.png",scene);
-	Card nut(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene);
-	Card repeatershooter(604, 1108, 1.95, "/card/repeatershooter.png", "/plant/doubleshooter/Repeater1.png", scene);
+	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter.png", "1.png", scene,PEASHOOTER));
+	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower.png", "/plant/sunflower/SunFlower1.png", scene,SUNFLOWER));
+	cards.push_back(new Card(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene,NUT));
+	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter.png", "/plant/doubleshooter/Repeater1.png", scene,DOUBLESHOOTER));
+	 //peashooter(268, 1108, 1.95, "/card/peashooter.png", "1.png", scene);
+	//Card sunflower(380, 1108, 1.95, "/card/sunflower.png", "/plant/sunflower/SunFlower1.png",scene);
+	//Card nut(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene);
+	//Card repeatershooter(604, 1108, 1.95, "/card/repeatershooter.png", "/plant/doubleshooter/Repeater1.png", scene);
 	//Card sunshroom(716, 1108, 1.95, "/card/sunshroom.png", scene);
 	//Card jalapeno(828, 1108, 1.95, "/card/jalapeno.png", scene);
 	//Card card_3(940, 1108, 1.95, "/card/card_3.png", scene);
 	//Card card_4(1052, 1108, 1.95, "/card/card_4.png", scene);
 }
+
+
 
 void God::initCar(Scene* scene)
 {
@@ -295,6 +289,7 @@ void God::checkEat() {
 						bullets[i]->explodeAnimation();//子弹爆炸特效，停留0.4秒后将子弹精灵从parent移除，然后标记为要从vector删除
 						if (bullets[i]->getSEThp() == 0) {
 							int currentHP = waiting[j]->getHP();
+							
 							waiting[j]->setHP(currentHP -= 20);//20需要改成植物的攻击能力
 							bullets[i]->setSEThp(1);
 						}
@@ -311,10 +306,13 @@ void God::checkEat() {
 void God::checkCrush() {
 	for (int i = 0; i < plants.size(); i++) {
 		for (int j = 0; j<waiting.size(); j++) {
-			if (waiting[j]->getCondition() == DEAD) {
+			if (waiting[j]->getCondition() == WAIT) {//如果僵尸在等待
 				continue;
 			}
-			if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv())) {
+			if (waiting[j]->getCondition() == DEAD) {//如果僵尸死了
+				continue;
+			}
+			if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv())) {//如果僵尸没死且碰上植物
 				int plantRow = plants[i]->getRow();//获取植物所在第几行
 				int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
 				if (plantRow == zombieRow) {//由于僵尸头会碰到上一行的植物，所以添加一个判断他们在同一行
@@ -323,7 +321,26 @@ void God::checkCrush() {
 						waiting[j]->setCondition(EATING);
 						waiting[j]->healthyEating(thezombie);
 					}
+					if (plants[i]->getCondition() == 0) {
+						int currenthp = plants[i]->getHealth();
+						int attack = waiting[j]->getAttack();
+						plants[i]->setHealth(currenthp -= attack);
+						plants[i]->setCondition(1);
+						auto delay = DelayTime::create(waiting[j]->getEatingTime());
+						auto delayedCallback = CallFunc::create([=]() {
+							plants[i]->setCondition(0);
+							});
+						auto sequence = Sequence::create(delay, delayedCallback, nullptr);
+						plants[i]->getIdv()->runAction(sequence);
+					}
 				}
+			}
+			else {//如果没碰上（可能是植物死了）
+				if (waiting[j]->getCondition() != WALKING) {//如果当前没有在走
+					waiting[j]->moveForward(waiting[j]->getIdv());
+					waiting[j]->setCondition(WALKING);//设置为在走
+				}
+				
 			}
 		}
 	}

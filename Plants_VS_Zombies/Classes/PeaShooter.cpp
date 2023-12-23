@@ -3,6 +3,7 @@
 
 PeaShooter::PeaShooter(int x,int y, double scale,Scene* scene) {
     setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
+    setCol((x - 215) / 190 + 1);
     auto nut = cocos2d::Sprite::create("/plant/peashooter/Peashooter1.png");
     nut->setPosition(x, y);
     nut->setScale(scale);
@@ -12,7 +13,7 @@ PeaShooter::PeaShooter(int x,int y, double scale,Scene* scene) {
 
     //设置生命值等属性
     setHealth(100);
-    setAttackDamage(9);
+    setAttackDamage(10);
     /////////////////////////让植物开始摇摆
     waitingAnimation();
 }

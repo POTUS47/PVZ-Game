@@ -8,14 +8,21 @@ class Plant : public Entity {
 public:
 
     int getHealth(){ return health; }
-    int getAttackDamage() { return attackDamage; }
     void setHealth(int Health) { health = Health; }
+
+    int getAttackDamage() { return attackDamage; }
     void setAttackDamage(int AttackDamage) { attackDamage = AttackDamage; }
+
     int getRow() { return row; }
     void setRow(int Row) { row = Row; }
+
     int getCol() { return col; }
     void setCol(int Col) { col=Col; }
+
     void setIsSleeping(int i) { isSleeping = i; }
+
+    void setCondition(int con) { beingEaten = con;}
+    int getCondition() {return beingEaten;}
 
     //几种动画:每种植物必须写
     //virtual void waitingAnimation()=0;//空闲
@@ -38,6 +45,7 @@ private:
     int isSleeping;//植物是否在睡觉
     int row;//行
     int col;//列
+    int beingEaten=0;//记录状态
 };
 
 #endif // __PLANT_H__
