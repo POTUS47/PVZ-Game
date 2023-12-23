@@ -2,9 +2,10 @@
 
 USING_NS_CC;
 
-Bullet::Bullet(int startX,int startY,int bulletDamage,Scene* scene) 
+Bullet::Bullet(int col, int startX,int startY,int bulletDamage,Scene* scene)
     : start_x(startX), start_y(startY),damage(bulletDamage),currentScene(scene), needDestroy(0){
     
+    setCol(col);
     auto bullet = cocos2d::Sprite::create("/plant/bullet/0.png");
     bullet->setPosition(start_x, start_y);///////////////////
     bullet->setScale(2);

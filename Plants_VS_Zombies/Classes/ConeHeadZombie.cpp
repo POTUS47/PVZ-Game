@@ -6,6 +6,8 @@ USING_NS_CC;
 coneHeadZombie::coneHeadZombie(int x, int y, double scale, Scene* scene)
 {
     setSpeed(30);
+    setCondition(WAIT);
+    setHP(100);
     auto conezombie = cocos2d::Sprite::create("/conehead/standby/1.png");
     conezombie->setPosition(x, y);
     conezombie->setScale(scale);
@@ -32,6 +34,7 @@ void coneHeadZombie::standBy(Sprite* who)
 
 void coneHeadZombie::healthyEating(Sprite* who)
 {
+    who->stopAllActions();
     auto animation = Animation::create();
     char healthyattackarray[40] = { 0 };
     /*僵尸吃植物*/
@@ -106,6 +109,7 @@ void coneHeadZombie::dieAndlay(Sprite* who)
     animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
     auto anim = Animate::create(animation);
     who->runAction(anim);/////////////////////考虑变成返回anim指针？
+    
 }
 
 

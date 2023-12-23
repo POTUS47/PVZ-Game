@@ -8,12 +8,6 @@ Scene* Level1::createScene()
     return Level1::create();
 }
 
-static void problemLoading(const char* filename)
-{
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
-}
-
 bool Level1::init()
 {
     srand(static_cast<unsigned>(time(0)));
@@ -127,14 +121,23 @@ void Level1::moveRight(Ref* sender)
     update(0);//先手动调用一次
     this->schedule(schedule_selector(Level1::update), 15.0f);
     this->schedule(schedule_selector(Level1::CheckEveryMin), 0.1f);
+    this->schedule(schedule_selector(Level1::CheckEveryTwoSec), 2.0f);
+
+    
 }
 
 void Level1::CheckEveryMin(float dt)
 {
-    //god->gameEnd();
+    god->gameEnd();
     god->hitByCar();
+    god->checkCrush();
+    god->checkEat();
+    god->checkBulletToDelete();
+    god->dead();
 }
 
-//先移过去随后立刻弹出layer，此处可用sequence
-//layer的指针设成类成员
-//在layer回调函数中调用moveback
+void Level1::CheckEveryTwoSec(float dt)
+{
+    god->checkAttack();
+}
+

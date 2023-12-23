@@ -6,6 +6,8 @@ USING_NS_CC;
 normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
 {
     setSpeed(100);
+    setCondition(WAIT);
+    setHP(100);
     auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");
     normalzombie->setPosition(x, y);
     normalzombie->setScale(scale);
@@ -32,6 +34,11 @@ void normalZombie::standBy(Sprite* who)
 
 void normalZombie::healthyEating(Sprite* who) 
 {
+    who->stopAllActions();
+
+    auto moveBy = MoveBy::create(2100 / this->getSpeed(), Vec2(-2100, 0));
+    who->runAction(moveBy);
+
     auto animation = Animation::create();
     char healthyattackarray[40] = { 0 };
     /*僵尸吃植物*/
@@ -91,8 +98,11 @@ void normalZombie::moveWithoutArm(Sprite* who)
 }
 
 
+
+
 void normalZombie::dieAndlay(Sprite* who)
 {
+    who->stopAllActions();
     auto animation = Animation::create();
     char diearray[40] = { 0 };
     /*僵尸死亡趴下*/
@@ -106,6 +116,8 @@ void normalZombie::dieAndlay(Sprite* who)
     animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
     auto anim = Animate::create(animation);
     who->runAction(anim);/////////////////////考虑变成返回anim指针？
+    
+
 }
 
 

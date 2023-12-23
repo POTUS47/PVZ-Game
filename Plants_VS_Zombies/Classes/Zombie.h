@@ -3,6 +3,12 @@
 #include"cocos2d.h"
 #include"Entity.h"
 
+#define WAIT 0//在等候区
+#define WALKING 1//在向前走
+#define EATING 2//在吃植物
+#define DEAD 3//死了
+
+
 class Zombie :public Entity {
 private:
 	int HP;//僵尸血量
@@ -12,6 +18,7 @@ private:
 	bool lostHead = false;//有没有丢掉头，初设为没有
 	float eatPlantTime;//吃植物的时间间隔
 	float attackDegree;//攻击给植物扣多少血
+	int condition;//僵尸的状态
 public:
 	void setHP(int hp);//设置血量
 	int getHP();//获取血量
@@ -24,6 +31,9 @@ public:
 
 	void setCol(int Col);//设置出发赛道
 	int getCol();//获取出发赛道
+
+	void setCondition(int con);//设置僵尸状态
+	int getCondition();//获取僵尸状态
 
 	bool getHeadCondition();//获取头还在不在
 	virtual void moveForward(Sprite* who) = 0;//向前走的动作

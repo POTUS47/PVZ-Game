@@ -44,3 +44,13 @@ int Zombie::getCol()
 {
 	return col;
 }
+
+void Zombie::setCondition(int con)
+{
+	condition = con;
+}
+
+int Zombie::getCondition()
+{
+	return condition;
+}
