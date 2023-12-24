@@ -12,6 +12,7 @@
 #include"Card.h"
 #include"Car.h"
 #include "Bullet.h"
+#include"plant.h"
 
 
 /*调度器放在这里，检测游戏是否结束等等*/

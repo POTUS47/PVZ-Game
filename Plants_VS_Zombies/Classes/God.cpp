@@ -115,7 +115,8 @@ void God::dead()
 	for (int i = 0; i < plants.size(); i++) {
 		if (plants[i]->getHealth() <= 0) {
 			plants[i]->dieAnimation();
-			plants.erase(plants.begin()+i);//从vector中删除
+			plants[i]->setCondition(0);
+			//plants.erase(plants.begin()+i);//从vector中删除
 		}
 	}
 }
@@ -306,7 +307,7 @@ void God::checkEat() {
 void God::checkCrush() {
 	for (int i = 0; i < plants.size(); i++) {
 		for (int j = 0; j<waiting.size(); j++) {
-			if (waiting[j]->getCondition() == WAIT) {//如果僵尸在等待
+			if (waiting[j]->getCondition() == WAIT||plants[i]->getCondition()==0) {//如果僵尸在等待
 				continue;
 			}
 			if (waiting[j]->getCondition() == DEAD) {//如果僵尸死了
@@ -357,7 +358,7 @@ bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
 //检查植物需不需要发射子弹,可以2s检查一次？
 void God::checkAttack() {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if (plants[i]->getAttackDamage() != 0) {//筛出攻击性植物
+		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=0) {//筛出攻击性植物且植物不能死亡
 			int plantRow = plants[i]->getRow();
 			for (int j = 0; j<waiting.size(); j++) {//遍历所有僵尸
 				if (waiting[j]->getCondition() != WAIT&& waiting[j]->getCondition() != DEAD) {//如果该僵尸不在等待区中
