@@ -4,10 +4,6 @@
 #include"Entity.h"
 #include "cocos2d.h"
 
-#define PLANT_DEAD 0;
-#define PLANT_BEINGEATEN 1;
-#define PLANT_HEALTHY 2;
-
 USING_NS_CC;
 class Plant : public Entity {
 public:
@@ -50,7 +46,7 @@ private:
     int isSleeping;//植物是否在睡觉
     int row;//行
     int col;//列
-    int condition=PLANT_HEALTHY;//记录状态
+    int condition=HEALTHY;//记录状态
 };
 
 #endif // __PLANT_H__

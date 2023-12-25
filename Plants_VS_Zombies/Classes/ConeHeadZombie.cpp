@@ -58,9 +58,12 @@ void coneHeadZombie::healthyEating(Sprite* who)
 */
 void coneHeadZombie::moveForward(Sprite* who)
 {
-    int starty = getCol();
+    if (getCondition() == WAIT) {//如果是从等待区改为向前走
+        int starty = getCol();
+        who->setPosition(1950, starty * 200 - 10);//需要设置出发位置
+    }
+    setCondition(WALKING);
     who->stopAllActions();
-    who->setPosition(1950, starty * 200 - 10);
     auto moveBy = MoveBy::create(2100 / this->getSpeed(), Vec2(-2100, 0));
     who->runAction(moveBy);
     auto animation = Animation::create();
