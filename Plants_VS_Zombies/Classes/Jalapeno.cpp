@@ -1,12 +1,12 @@
 #include "Jalapeno.h"
 
-Jalapeno::Jalapeno(int x, int y, double scale, Scene* scene, int isNight) {
+Jalapeno::Jalapeno(int x, int y, double scale, Scene* scene) {
     setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
     setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
     setX(x);
     setY(y);
     setName(PUFF_SHROOM);
-    auto jalapeno = cocos2d::Sprite::create("/plant/jalapeno/j(1).png");
+    auto jalapeno = cocos2d::Sprite::create("/plant/jalapeno/j (1).png");
     jalapeno->setPosition(x, y);
     jalapeno->setScale(scale);
     //添加到当前层
@@ -24,9 +24,9 @@ Jalapeno::Jalapeno(int x, int y, double scale, Scene* scene, int isNight) {
 void Jalapeno::working() {
     auto animation = Animation::create();
     char nameSize[30] = { 0 };
-    for (int i = 1; i < 15; i++)
+    for (int i = 1; i < 9; i++)
     {
-        sprintf(nameSize, "/plant/jalapeno/j(%d).png", i);
+        sprintf(nameSize, "/plant/jalapeno/j (%d).png", i);
         animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
     }
     animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔

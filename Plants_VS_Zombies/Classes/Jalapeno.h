@@ -3,7 +3,7 @@
 
 class Jalapeno : public Plant {
 public:
-    Jalapeno(int x, int y, double scale, Scene* scene, int isNight);
+    Jalapeno(int x, int y, double scale, Scene* scene);
 
     void onAnimationFinished(Node* sender);
 

@@ -6,7 +6,7 @@ PuffShroom::PuffShroom(int x, int y, double scale, Scene* scene, int isNight) {
     setX(x);
     setY(y);
     setName(PUFF_SHROOM);
-    auto puffshroom = cocos2d::Sprite::create("/plant/puffshroom/w(1).png");
+    auto puffshroom = cocos2d::Sprite::create("/plant/puffshroom/w (1).png");
     puffshroom->setPosition(x, y);
     puffshroom->setScale(scale);
     //添加到当前层
@@ -25,12 +25,12 @@ PuffShroom::PuffShroom(int x, int y, double scale, Scene* scene, int isNight) {
 
 //植物的空闲摇摆动画
 void PuffShroom::waitingAnimation() {
-
+    this->setCondition(PLANT_SLEEP);
     auto animation = Animation::create();
     char nameSize[50] = { 0 };
     for (int i = 1; i < 11; i++)
     {
-        sprintf(nameSize, "/plant/puffshroom/s(%d).png", i);
+        sprintf(nameSize, "/plant/puffshroom/s (%d).png", i);
         animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
     }
     animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔
@@ -46,7 +46,7 @@ void PuffShroom::attackAnimation() {
     char nameSize[30] = { 0 };
     for (int i = 1; i < 15; i++)
     {
-        sprintf(nameSize, "/plant/puffshroom/w(%d).png", i);
+        sprintf(nameSize, "/plant/puffshroom/w (%d).png", i);
         animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
     }
     animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔

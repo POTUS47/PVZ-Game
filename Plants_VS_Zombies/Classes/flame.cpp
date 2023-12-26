@@ -4,7 +4,7 @@ USING_NS_CC;
 
 Flame::Flame(int row, int startX, int startY, int bulletDamage, Scene* scene) :Bullet(row, startX, startY, bulletDamage, scene)
 {
-    auto bullet = cocos2d::Sprite::create("/plant/flame/h(1).png");
+    auto bullet = cocos2d::Sprite::create("/plant/flame/h (1).png");
     bullet->setPosition(960, startY);//在该行的中间开始爆炸
     bullet->setScale(2);
     //添加到当前层
@@ -16,7 +16,7 @@ Flame::Flame(int row, int startX, int startY, int bulletDamage, Scene* scene) :B
     char nameSize[30] = { 0 };
     for (int i = 1; i < 8; i++)
     {
-        sprintf(nameSize, "/plant/flame/h(%d).png", 9-i);
+        sprintf(nameSize, "/plant/flame/h (%d).png", 9-i);
         animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
     }
     animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔

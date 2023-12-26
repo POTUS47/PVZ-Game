@@ -15,6 +15,9 @@
 #include "puffShroomBullet.h"
 #include"plant.h"
 #include"flame.h"
+#include"Jalapeno.h"
+#include"PuffShroom.h"
+#include"FumeShroom.h"
 
 
 /*调度器放在这里，检测游戏是否结束等等*/
