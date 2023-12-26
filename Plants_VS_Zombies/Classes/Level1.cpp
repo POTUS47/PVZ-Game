@@ -40,12 +40,8 @@ void Level1::startChoose()
     shovelback->setPosition(Vec2(visibleSize.width * 0.62, visibleSize.height * 0.92));
     shovelback->setScale(2.2);
     this->addChild(shovelback,1);
-    //阳光值
-    sunlightLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 30);
-    god->changeSunLabel( sunlightLabel);
-    sunlightLabel->setPosition(Vec2(115, 1038));  // 设置Label的位置
-    sunlightLabel->setTextColor(Color4B::BLACK);  // 设置字体颜色为黑色
-    this->addChild(sunlightLabel,2);  // 将Label添加到场景中
+    //阳光值//////////////////////////////////////////////////////////////////////////////////////////////////////////
+    sun = new Sun(this);
     //背景图
     background = Sprite::create("/level1/bg.jpg");
     background->setPosition(Vec2(visibleSize.width * 0.73 + origin.x, visibleSize.height / 2 + origin.y));
@@ -94,7 +90,7 @@ void Level1::onMoveByFinished()
 
 void Level1::update(float dt)
 {
-    god->createSun(this);
+    sun->createSun();
 }
 
 //按下游戏后转回菜单场景

@@ -7,6 +7,7 @@
 #include"NormalZombie.h"
 #include <string>
 #include<vector>
+#include"Sun.h"
 
 
 class God;
@@ -14,6 +15,7 @@ class Level1 : public cocos2d::Scene
 {
 private:
     God* god; //上帝的实例化
+    Sun* sun;
     Sprite* background;//背景的指针
     Layer* choose;//选择植物层的指针
     Label* sunlightLabel;

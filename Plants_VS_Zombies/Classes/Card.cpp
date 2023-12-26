@@ -1,16 +1,18 @@
 #include"Card.h"
-#include"plant.h"
-#include"PeaShooter.h"
-#include"God.h"
-#include<vector>
+
+extern std::vector<Card*>cards;
 extern std::vector<Plant*>plants;
-
-Vec2 checkPosition(Vec2 Point);
-
+extern int sunNumber ;
+extern int littleSunNumber;
+int howMuch(int type);
+float setTime(int type);
 Card::Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,Scene*_scene,int _type) {
     // 使用传入的图片路径创建 Sprite 对象
     Sprite* card = Sprite::create(imagePath);
     setIdv(card);
+	setCondition(POOR);
+	money = howMuch(_type);//设置价钱
+	sleepTime = setTime(_type);
 	plantPath = plantpath;//保存对应植物的图片路径
 	type = _type;//设置植物类型
 	scene = _scene;
@@ -28,10 +30,28 @@ void Card::addListener()
 	auto listener1 = EventListenerMouse::create();
 	listener->onTouchBegan = [&](Touch* touch, Event* event)
 	{
+		int sunmoney = 25 * sunNumber + 15 * littleSunNumber;
+		if (sunmoney >= getMoney()) {//如果现在的阳光值大于等于这个卡片的价钱
+			if (getCondition() == SLEEP) {//如果现在在休眠
+				canClick == false;
+			}
+			else {
+				setCondition(ABLE);
+			}
+		}
+		else {
+			setCondition(POOR);
+		}
+
+		if (getCondition() == ABLE) {
 			canClick = true;
+		}
+		else if (getCondition() != ABLE) {
+			canClick =false;
+		}
 		if (canClick == false)
 			return false;
-		if (!isFollowingMouse)
+		if (!isFollowingMouse&&canClick==true)
 		{
 			Point clickLocation = touch->getLocation();
 			if (getIdv()->getBoundingBox().containsPoint(clickLocation)) {
@@ -60,6 +80,13 @@ void Card::addListener()
 					}
 					else {
 						createPlant(real);
+						auto delay = DelayTime::create(sleepTime);/////////////////////////////////////////此处有问题，不恢复了
+						condition = SLEEP;
+						auto sequence = Sequence::create(delay, CallFunc::create([=]() {
+							condition=POOR; // 解除休眠
+							}), nullptr);
+						plantFollowSprite->runAction(sequence);
+						//阳光值要减少
 					}
 					
 				}
@@ -115,6 +142,54 @@ void Card::createPlant(Vec2 real)
 			break;
 		case SUNFLOWER:
 			break;
+		default:
+			break;
+	}
+}
+
+int howMuch(int type)
+{
+	switch (type) {
+		case  PEASHOOTER:
+			return 100;
+		case SUNFLOWER:
+			return 50;
+		case DOUBLESHOOTER:
+			return 200;
+		case NUT:
+			return 50;
+		case SUN_SHROOM:
+			return 25;
+		case PUFF_SHROOM:
+			return 0;
+		case FUME_SHROOM:
+			return 75;
+		case JALAPENO:
+			return 125;
+		default:
+			break;
+	}
+}
+
+float setTime(int type)
+{
+	switch (type) {
+		case  PEASHOOTER:
+			return 7.5;
+		case SUNFLOWER:
+			return 7.5;
+		case DOUBLESHOOTER:
+			return 10;
+		case NUT:
+			return 30;
+		case SUN_SHROOM:
+			return 7.5;
+		case PUFF_SHROOM:
+			return 15;
+		case FUME_SHROOM:
+			return 7.5;
+		case JALAPENO:
+			return 50;
 		default:
 			break;
 	}

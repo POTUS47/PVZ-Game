@@ -8,6 +8,10 @@
 #define HEALTHY 4//健康（植物用）
 #define BOMB 5//火爆辣椒爆炸
 
+#define SLEEP 6//卡片休眠状态
+#define POOR 7//阳光值不够购买
+#define ABLE 8//卡片可以点击
+
 enum plantName { PEA_SHOOTER, DOUBLE_SHOOTER, SUN_FLOWER, NUT, SUN_SHROOM, PUFF_SHROOM,FUME_SHROOM,JALAPENO};//植物姓名标签.
 USING_NS_CC;
 
