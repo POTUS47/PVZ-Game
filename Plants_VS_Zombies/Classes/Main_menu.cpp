@@ -3,6 +3,7 @@
 #include "HelloWorldScene.h"
 #include "MarketScene.h"
 #include "Level1.h"
+#include "MiniGame.h"
 //图片比例3:2
 ///////多条斜线是提醒修改的意思
 USING_NS_CC;
@@ -19,12 +20,18 @@ static void problemLoading(const char* filename)
 }
 
 
+
 bool Main_menu::init()
 {
     if (!Scene::init())
     {
         return false;
     }
+    CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGM/menu.mp3");
+
+    // 播放背景音乐
+    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/menu.mp3", true);
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     //1：结束按钮
@@ -93,7 +100,7 @@ bool Main_menu::init()
     auto mini_game_mode = MenuItemImage::create(
         "/main_menu/minigame1.png",
         "/main_menu/minigame2.png",
-        CC_CALLBACK_1(Main_menu::menuCloseCallback, this)
+        CC_CALLBACK_1(Main_menu::gotoMiniGame, this)
         );////////////////此处需要调用一个进入小游戏模式场景的函数
 
     if (mini_game_mode == nullptr ||
@@ -174,4 +181,10 @@ void Main_menu::gotoMarket(Ref* pSender)
 void Main_menu::gotoLevel1(Ref* pSender)
 {
     Director::getInstance()->replaceScene(Level1::createScene());
+}
+
+void Main_menu::gotoMiniGame(Ref* pSender)
+{
+    //按下开始游戏后转入菜单场景
+    Director::getInstance()->replaceScene(MiniGame::createScene());
 }

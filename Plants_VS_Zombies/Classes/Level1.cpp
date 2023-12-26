@@ -130,6 +130,7 @@ void Level1::CheckEveryMin(float dt)
     god->checkEat();
     god->checkBulletToDelete();
     god->dead();
+    god->checkJalapenoBomb();//////////////
 }
 
 void Level1::CheckEveryTwoSec(float dt)

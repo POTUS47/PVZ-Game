@@ -26,7 +26,7 @@ Sunflower::Sunflower(int x, int y, double scale, Scene* scene,int isNight, Label
 
 //Ö²ÎïµÄ¿ÕÏÐÒ¡°Ú¶¯»­
 void Sunflower::waitingAnimation() {
-
+	this->setCondition(PLANT_SLEEP);
     auto animation = Animation::create();
     char nameSize[50] = { 0 };
     for (int i = 1; i < 9; i++)

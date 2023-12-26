@@ -7,6 +7,7 @@
 
 #define HEALTHY 4//健康（植物用）
 #define BOMB 5//火爆辣椒爆炸
+#define PLANT_SLEEP 6//植物睡觉
 
 #define SLEEP 6//卡片休眠状态
 #define POOR 7//阳光值不够购买

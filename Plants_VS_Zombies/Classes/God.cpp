@@ -85,7 +85,25 @@ void God::updateZombies(int level)
 		waiting[i]->setStartTime(Statime[level-1][1-1][i]);//设置出发时间
 		waiting[i]->setCol(col);//设置出发赛道
 	}
-	
+	plants.push_back(new DoubleShooter(333, 333, 2.2, currentScene));//////////////////////
+	plants.push_back(new DoubleShooter(133, 123, 2.2, currentScene));//////////////////////
+	plants.push_back(new Jalapeno(133, 123, 2.2, currentScene));
+
+	plants.push_back(new PuffShroom(215, 730, 2.2, currentScene,1));/////////////
+	plants.push_back(new PuffShroom(405, 920, 2.2, currentScene, 1));/////////////
+	plants.push_back(new PuffShroom(595, 160, 2.2, currentScene, 1));/////////////
+	plants.push_back(new PuffShroom(785, 350, 2.2, currentScene, 1));/////////////
+	plants.push_back(new FumeShroom(975, 920, 2.2, currentScene, 1));/////////////
+
+	plants.push_back(new FumeShroom(595, 730, 2.2, currentScene, 1));/////////////
+	plants.push_back(new FumeShroom(785, 920, 2.2, currentScene, 1));/////////////
+	plants.push_back(new FumeShroom(975, 730, 2.2, currentScene, 1));/////////////
+
+	//检查发现，横向总共1920
+/* 植物的位置 纵坐标分别是160 350 540 730 920比较好（等差190）
+* 横坐标分别是 215 405...（等差190）
+* 植物的row=(y-160)/190+1
+*/
 }
 
 void God::dead()
@@ -321,10 +339,10 @@ bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
 	return rectA.intersectsRect(rectB);
 }
 
-//检查豌豆射手需不需要发射子弹,可以2s检查一次？
+//检查植物需不需要发射子弹,可以2s检查一次？
 void God::checkAttack() {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=DEAD) {//筛出攻击性植物且植物不能死亡
+		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=DEAD&& plants[i]->getCondition() != PLANT_SLEEP) {//筛出攻击性植物且植物不能死亡
 			int plantRow = plants[i]->getRow();
 			for (int j = 0; j<waiting.size(); j++) {//遍历所有僵尸
 				if (waiting[j]->getCondition() == WALKING|| waiting[j]->getCondition() ==EATING) {//得到活着的或者正在吃的僵尸
@@ -334,12 +352,25 @@ void God::checkAttack() {
 						if(plants[i]->getName()==PEA_SHOOTER)
 						    bullets.push_back(new peaBullet(plantRow,currentP.x+62, currentP.y+37, plants[i]->getAttackDamage(), currentScene));
 						else if (plants[i]->getName() == DOUBLE_SHOOTER) {
-							//想办法 发射两发子弹
+						
+							bullets.push_back(new peaBullet(plantRow, currentP.x + 62, currentP.y + 37, plants[i]->getAttackDamage(), currentScene));
+							auto delay = DelayTime::create(0.4f);
+							auto sequence = Sequence::create(delay, CallFunc::create([=]() {
+								bullets.push_back(new peaBullet(plantRow, currentP.x + 62, currentP.y + 37, plants[i]->getAttackDamage(), currentScene));
+								}), nullptr);
+							plants[i]->getIdv()->runAction(sequence);
 						}
-						else{
+						else if (plants[i]->getName() == PUFF_SHROOM&&
+							waiting[j]->getIdv()->getPosition().x - plants[i]->getX() <= 550) {
+							bullets.push_back(new puffShroomBullet(1,plantRow, currentP.x + 250, currentP.y-5 , plants[i]->getAttackDamage(), currentScene));
+						     }
+						else if (plants[i]->getName() == FUME_SHROOM &&
+							waiting[j]->getIdv()->getPosition().x - plants[i]->getX() <= 750) {
 
-						}
+							bullets.push_back(new puffShroomBullet(2,plantRow, currentP.x + 380, currentP.y +35, plants[i]->getAttackDamage(), currentScene));
+						     }
 					}
+				
 				}
 			}
 		}
@@ -384,3 +415,6 @@ void God::checkJalapenoBomb() {
 		}
 	}
 }
+
+//写新函数：
+

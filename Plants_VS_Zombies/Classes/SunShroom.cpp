@@ -204,7 +204,7 @@ void  SunShroom::createLittleSun(float dt) {
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, sun);
 
-	// 启动一个定时器，在五秒后检查是否有鼠标点击阳光，若无则自动消失
+	//启动一个定时器，在五秒后检查是否有鼠标点击阳光，若无则自动消失
 	auto delayAction = DelayTime::create(5);
 	Scene* scene = this->getScene();
 	auto checkClickCallback = CallFunc::create([sun, scene]() {
