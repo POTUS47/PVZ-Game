@@ -42,6 +42,7 @@ void Level1::startChoose()
     this->addChild(shovelback,1);
     //阳光值//////////////////////////////////////////////////////////////////////////////////////////////////////////
     sun = new Sun(this);
+    god->setSun(sun);
     //背景图
     background = Sprite::create("/level1/bg.jpg");
     background->setPosition(Vec2(visibleSize.width * 0.73 + origin.x, visibleSize.height / 2 + origin.y));
@@ -73,7 +74,7 @@ void Level1::onMoveByFinished()
     seedchooser->setPosition(Vec2(visibleSize.width * 0.3, visibleSize.height * 0.43));
     seedchooser->setScale(0.9,0.77);
     choose->addChild(seedchooser);
-    god->showCardinSeedBank(this);
+    god->showCardinSeedBank(this,sun);
 
     // 创建按钮
     auto closeButton = MenuItemImage::create(
@@ -131,6 +132,7 @@ void Level1::CheckEveryMin(float dt)
     god->checkBulletToDelete();
     god->dead();
     god->checkJalapenoBomb();//////////////
+    god->checkSunflower();
 }
 
 void Level1::CheckEveryTwoSec(float dt)

@@ -25,8 +25,8 @@ class God :public Node
 {
 private:
 	int dayOrNight;//0是白天，1是黑夜
-	Label* sunLightLabel;//左上角阳光label
 	Scene* currentScene;//GOD管理的当前场景指针
+	Sun* sun;
 public:
 	//构造函数
 	God(int isNight, Scene* currentScene);
@@ -45,7 +45,7 @@ public:
 	//阳光多少的显示
 	void updateSun();
 	//在植物选择器里展示植物卡片
-	void showCardinSeedBank(Scene* scene);
+	void showCardinSeedBank(Scene* scene, Sun* _sun);
 	//生成小车
 	void initCar(Scene* scene);
 	//检测是否有僵尸和植物相撞
@@ -63,8 +63,13 @@ public:
 	void checkJalapenoBomb();
 	//检查是否有阳光菇要生长
 	void sunShroomGrowUp();
+	//检查太阳花产阳光
+	void checkSunflower();
 	
-	Label* getSunLightLabel() { return sunLightLabel; }
-	void changeSunLabel(Label* sunlabel) { sunLightLabel = sunlabel; }
+
+
+	void setSun(Sun* _sun) {
+		sun = _sun;
+	}
 
 };

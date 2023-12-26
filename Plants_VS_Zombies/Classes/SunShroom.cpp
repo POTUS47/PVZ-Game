@@ -1,6 +1,5 @@
 #include "SunShroom.h"
-extern int sunNumber;
-extern int littleSunNumber;
+
 
 //¥¥‘Ï—Ùπ‚πΩ
 SunShroom::SunShroom(int x, int y, double scale, Scene* scene, int isNight, Label* sunLightLabel) :currentLevelSunLabel(sunLightLabel), theScencePlantIn(scene) {

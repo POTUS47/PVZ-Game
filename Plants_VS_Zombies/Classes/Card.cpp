@@ -2,17 +2,18 @@
 
 extern std::vector<Card*>cards;
 extern std::vector<Plant*>plants;
-extern int sunNumber ;
-extern int littleSunNumber;
+
 int howMuch(int type);
 float setTime(int type);
-Card::Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,Scene*_scene,int _type) {
+
+Card::Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,Scene*_scene,int _type,Sun*_sun) {
     // 使用传入的图片路径创建 Sprite 对象
     Sprite* card = Sprite::create(imagePath);
     setIdv(card);
 	setCondition(POOR);
 	money = howMuch(_type);//设置价钱
-	sleepTime = setTime(_type);
+	sleepTime = setTime(_type);//设置卡片冷却时间
+	sun = _sun;
 	plantPath = plantpath;//保存对应植物的图片路径
 	type = _type;//设置植物类型
 	scene = _scene;
@@ -30,7 +31,7 @@ void Card::addListener()
 	auto listener1 = EventListenerMouse::create();
 	listener->onTouchBegan = [&](Touch* touch, Event* event)
 	{
-		int sunmoney = 25 * sunNumber + 15 * littleSunNumber;
+		int sunmoney=sun->getSunValue();
 		if (sunmoney >= getMoney()) {//如果现在的阳光值大于等于这个卡片的价钱
 			if (getCondition() == SLEEP) {//如果现在在休眠
 				canClick == false;
@@ -80,13 +81,16 @@ void Card::addListener()
 					}
 					else {
 						createPlant(real);
+						int currentSun = sun->getSunValue();
+						int minus = getMoney();
+						sun->setSunValue(currentSun -= minus);
+						sun->updateSun();
 						auto delay = DelayTime::create(sleepTime);/////////////////////////////////////////此处有问题，不恢复了
 						condition = SLEEP;
 						auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 							condition=POOR; // 解除休眠
 							}), nullptr);
 						plantFollowSprite->runAction(sequence);
-						//阳光值要减少
 					}
 					
 				}
@@ -127,7 +131,7 @@ Vec2 checkPosition(Vec2 Point)
 		}
 	}
 	for (int i = 0; i < plants.size(); i++) {
-		if (row == plants[i]->getRow() && col == plants[i]->getCol()) {
+		if (row == plants[i]->getRow() && col == plants[i]->getCol()&&plants[i]->getCondition()!=DEAD) {
 			return Vec2(0, 0);
 		}
 	}
@@ -141,7 +145,24 @@ void Card::createPlant(Vec2 real)
 			plants.push_back(new PeaShooter(real.x, real.y, 2.2, scene));
 			break;
 		case SUNFLOWER:
+			plants.push_back(new Sunflower(real.x, real.y, 2.2, scene,1));
 			break;
+		case DOUBLESHOOTER:
+			plants.push_back(new DoubleShooter(real.x, real.y, 2.2, scene));
+			break;
+		case NUT:
+			plants.push_back(new Nut(real.x, real.y, 2.2, scene));
+			break;
+		case SUN_SHROOM:
+
+			break;
+		case PUFF_SHROOM:
+			plants.push_back(new PuffShroom(real.x, real.y, 2.2, scene, 1));
+			break;
+		case FUME_SHROOM:
+			break;
+		case JALAPENO:
+			plants.push_back(new Jalapeno(real.x, real.y, 2.2, scene));
 		default:
 			break;
 	}

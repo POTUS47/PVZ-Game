@@ -19,13 +19,13 @@ bool isIntersecting(Sprite* spriteA, Sprite* spriteB);//函数声明
 /*数组储存出场时间*/
 float Statime[2][2][10] = {5,15,20,23,25,29,45,47,50,55};//level type number
 
-int sunNumber = 0;
-int littleSunNumber = 0;//全局变量，记录大阳光（25）和小阳光（15）的个数，方便更新阳光标签
+//int sunNumber = 0;
+//int littleSunNumber = 0;//全局变量，记录大阳光（25）和小阳光（15）的个数，方便更新阳光标签
 
 //God的构造函数
 God::God(int isNight, Scene* CurrentScene):dayOrNight(isNight),currentScene(CurrentScene) {
-	sunNumber = 0;
-	littleSunNumber = 0;//每开一新关卡，阳光数清零
+	//sunNumber = 0;
+	//littleSunNumber = 0;//每开一新关卡，阳光数清零
 }
 
 //调度器每隔0.1秒调用该函数
@@ -137,7 +137,7 @@ void God::dead()
 		}
 	}
 }
-
+/*
 void God::updateSun()
 {
 	int sunlightCount = sunNumber * 25 + littleSunNumber * 15;
@@ -217,7 +217,7 @@ void God::createSun(Scene* scene)
 	auto sequence = Sequence::create(delayAction, checkClickCallback, nullptr);
 	sun->runAction(sequence);
 }
-
+*/
 void God::setZombieStartTime()
 {
 	int num = waiting.size();
@@ -234,18 +234,17 @@ void God::setZombieStartTime()
 	}
 }
 
-void God::showCardinSeedBank(Scene* scene)
+void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 {
-	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter.png", "1.png", scene,PEASHOOTER));
-	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower.png", "/plant/sunflower/SunFlower1.png", scene,SUNFLOWER));
-	cards.push_back(new Card(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene,NUT));
-	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter.png", "/plant/doubleshooter/Repeater1.png", scene,DOUBLESHOOTER));
-	 //peashooter(268, 1108, 1.95, "/card/peashooter.png", "1.png", scene);
-	//Card sunflower(380, 1108, 1.95, "/card/sunflower.png", "/plant/sunflower/SunFlower1.png",scene);
-	//Card nut(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene);
-	//Card repeatershooter(604, 1108, 1.95, "/card/repeatershooter.png", "/plant/doubleshooter/Repeater1.png", scene);
-	//Card sunshroom(716, 1108, 1.95, "/card/sunshroom.png", scene);
-	//Card jalapeno(828, 1108, 1.95, "/card/jalapeno.png", scene);
+
+	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter.png", "/plant/peashooter/Peashooter1.png", scene,PEASHOOTER,_sun));
+	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower.png", "/plant/sunflower/SunFlower1.png", scene,SUNFLOWER,_sun));
+	cards.push_back(new Card(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene,NUT,_sun));
+	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter.png", "/plant/doubleshooter/Repeater1.png", scene,DOUBLESHOOTER,_sun));
+	cards.push_back(new Card(716, 1108, 1.95, "/card/sunshroom.png", "/plant/sunshroom/b0.png",scene, SUN_SHROOM, _sun));
+	cards.push_back(new Card(828, 1108, 1.95, "/card/jalapeno.png", "/plant/jalapeno/j (1).png", scene, JALAPENO, _sun));
+	//cards.push_back(new Card(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene, NUT, _sun));
+	//cards.push_back(new Card(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene, NUT, _sun));
 	//Card card_3(940, 1108, 1.95, "/card/card_3.png", scene);
 	//Card card_4(1052, 1108, 1.95, "/card/card_4.png", scene);
 }
@@ -418,3 +417,20 @@ void God::checkJalapenoBomb() {
 
 //写新函数：
 
+//检查太阳花是不是该产生太阳了
+void God::checkSunflower()
+{
+	for (int i = 0; i < plants.size(); i++) {//遍历植物
+		if (plants[i]->getName() == SUNFLOWER && plants[i]->getCondition() != DEAD) {//是太阳花且没有死
+			if (plants[i]->getCondition() == ABLE) {//可以产阳光
+				sun->flowerSun(plants[i]->getIdv()->getPosition());
+				plants[i]->setCondition(HEALTHY);
+				auto delay = DelayTime::create(10.0f);//十秒产一次阳光
+				auto sequence = Sequence::create(delay, CallFunc::create([=]() {
+					plants[i]->setCondition(ABLE);
+					}), nullptr);
+				plants[i]->getIdv()->runAction(sequence);
+			}
+		}
+	}
+}
