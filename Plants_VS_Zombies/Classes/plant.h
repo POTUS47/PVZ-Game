@@ -4,10 +4,6 @@
 #include"Entity.h"
 #include "cocos2d.h"
 
-#define PLANT_DEAD 0;
-#define PLANT_BEINGEATEN 1;
-#define PLANT_HEALTHY 2;
-
 USING_NS_CC;
 class Plant : public Entity {
 public:
@@ -25,16 +21,9 @@ public:
     void setCol(int Col) { col=Col; }
 
     void setIsSleeping(int i) { isSleeping = i; }
-    int getIsSleeping() { return isSleeping; }
 
     void setCondition(int con) { condition = con;}
     int getCondition() {return condition;}
-
-    void setX(int _x) { x = _x; }
-    int getX() { return x; }
-
-    void setY(int _y) { y = _y; }
-    int getY() { return y; }
 
     //几种动画:每种植物必须写
     //virtual void waitingAnimation()=0;//空闲
@@ -57,9 +46,7 @@ private:
     int isSleeping;//植物是否在睡觉
     int row;//行
     int col;//列
-    int condition=PLANT_HEALTHY;//记录状态
-    int x;//xy坐标
-    int y;
+    int condition=HEALTHY;//记录状态
 };
 
 #endif // __PLANT_H__

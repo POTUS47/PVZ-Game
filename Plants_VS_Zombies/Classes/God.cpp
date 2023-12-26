@@ -113,10 +113,13 @@ void God::dead()
 	}
 	//检查是否有植物死亡//////////////////////////////这里想通过gethurt来实现,不你不想
 	for (int i = 0; i < plants.size(); i++) {
-		if (plants[i]->getHealth() <= 0) {
-			plants[i]->dieAnimation();
-			plants[i]->setCondition(0);
-			//plants.erase(plants.begin()+i);//从vector中删除
+		if (plants[i]->getCondition() != DEAD) {//如果植物没死
+			if (plants[i]->getHealth() <= 0) {
+				plants[i]->setCondition(DEAD);//设置为死了
+				//plants[i]->dieAnimation();//植物立刻消失，移除精灵指针
+				//甚至不能移除指针，我先用设置为隐形替代（勿改）
+				plants[i]->getIdv()->setVisible(false);
+			}
 		}
 	}
 }
@@ -210,7 +213,7 @@ void God::setZombieStartTime()
 		
 		auto delayedCallback = CallFunc::create([=]() {
 			waiting[i]->moveForward(waiting[i]->getIdv()); // 调用 moveForward 并传递 Sprite 参数
-			waiting[i]->setCondition(WALKING);
+			//waiting[i]->setCondition(WALKING);改为在moveforward里实现
 			});
 		auto sequence = Sequence::create(delay, delayedCallback, nullptr);
 		(waiting[i]->getIdv())->runAction(sequence);
@@ -245,38 +248,26 @@ void God::initCar(Scene* scene)
 void God::hitByCar()
 {
 	for (int j = 0; j < waiting.size(); j++) {//遍历每一只僵尸
-		if (waiting[j]->getCondition() == DEAD) {//如果死了就跳过
-			continue;
-		}
-		Sprite* current = waiting[j]->getIdv();//僵尸的精灵指针
-		int zombieRow = waiting[j]->getCol();
-		for (int i = 0; i < littleCar.size(); i++) {//遍历每个车
-			Sprite* car = littleCar[i]->getIdv();//车的精灵指针
-			int carRow = littleCar[i]->getRow();//获取车所在的行
-			if (zombieRow == carRow) {
-				if (isIntersecting(current, car)) {//如果僵尸碰到车
+		int zombieCon = waiting[j]->getCondition();
+		if (zombieCon == WALKING || zombieCon == EATING) {//只有正在走路和正在吃的僵尸会被撞
+			for (int i = 0; i < littleCar.size(); i++) {//遍历每个车
+				int zombieRow = waiting[j]->getCol();//获取僵尸的行
+				int carRow = littleCar[i]->getRow();//获取车所在的行
+				if (zombieRow == carRow&& isIntersecting(waiting[j]->getIdv(), littleCar[i]->getIdv())) {//只有在同一行才行而且要碰到
 					if (littleCar[waiting[j]->getCol() - 1]->getCondition() == NOTUSED) {//如果车没启动过
 						littleCar[waiting[j]->getCol() - 1]->setCondition(USED);//标记为启动过
-						auto delayAction = DelayTime::create(2);
 						littleCar[waiting[j]->getCol() - 1]->carRun();
-						car->runAction(delayAction);
 					}
 					else {//如果车启动了
-						if (waiting[j]->getCondition() != WAIT) {//如果僵尸不是在等待区碰到了车
-							waiting[j]->setHP(-100);
-						}
-						else {
-							CCLOG("碰到一个等待僵尸");
-						}
+						waiting[j]->setHP(-100);
 					}
-
 				}
 			}
 		}
-		
-		
 	}
 }
+
+
 
 //检查僵尸和子弹有没有相撞
 void God::checkEat() {
@@ -302,7 +293,7 @@ void God::checkEat() {
 		}
 	}
 }
-
+/*
 //检查僵尸和植物有没有相撞（相撞意味着要吃植物）
 void God::checkCrush() {
 	for (int i = 0; i < plants.size(); i++) {
@@ -339,13 +330,55 @@ void God::checkCrush() {
 			else {//如果没碰上（可能是植物死了）
 				if (waiting[j]->getCondition() != WALKING) {//如果当前没有在走
 					waiting[j]->moveForward(waiting[j]->getIdv());
-					waiting[j]->setCondition(WALKING);//设置为在走
+					//waiting[j]->setCondition(WALKING);//改为在moveforward里实现
 				}
 				
 			}
 		}
 	}
 }
+*/
+void God::checkCrush()
+{
+	for (int i = 0; i < plants.size(); i++) {
+		for (int j = 0; j < waiting.size(); j++) {
+			int zombieCon = waiting[j]->getCondition();
+			int plantCon = plants[i]->getCondition();
+			int plantRow = plants[i]->getRow();//获取植物所在第几行
+			int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
+			if (zombieCon == WALKING) {//如果僵尸在走路的途中
+				if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv()) && zombieRow == plantRow) {//碰上植物且在同一行
+					if (plantCon == HEALTHY || plantCon == BEINGEATEN) {
+						waiting[j]->setCondition(EATING);//僵尸变为在吃
+						waiting[j]->healthyEating(waiting[j]->getIdv());
+						plants[i]->setCondition(BEINGEATEN);//植物变为被吃
+					}
+				}
+			}
+			else if (zombieCon == EATING) {//僵尸还在吃呢
+				if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv()) && zombieRow == plantRow) {//碰上植物且在同一行
+					if (plantCon == DEAD) {//植物死了
+						waiting[j]->moveForward(waiting[j]->getIdv());//僵尸变为走路
+					}
+					else if (plantCon == BEINGEATEN) {//植物是被吃状态要扣血
+						int currenthp = plants[i]->getHealth();
+						int attack = waiting[j]->getAttack();
+						plants[i]->setHealth(currenthp -= attack);
+						plants[i]->setCondition(HEALTHY);//一次只吃一次，扣完血变回健康状态
+						auto delay = DelayTime::create(waiting[j]->getEatingTime());
+						auto delayedCallback = CallFunc::create([=]() {
+							plants[i]->setCondition(BEINGEATEN);//过一段时间变为被吃
+							});
+						auto sequence = Sequence::create(delay, delayedCallback, nullptr);
+						plants[i]->getIdv()->runAction(sequence);
+					}
+				}
+			}
+		}
+	}
+
+}
+
 
 //用于检测两精灵有无相遇的辅助函数
 bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
@@ -358,10 +391,10 @@ bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
 //检查植物需不需要发射子弹,可以2s检查一次？
 void God::checkAttack() {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=0) {//筛出攻击性植物且植物不能死亡
+		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=DEAD) {//筛出攻击性植物且植物不能死亡
 			int plantRow = plants[i]->getRow();
 			for (int j = 0; j<waiting.size(); j++) {//遍历所有僵尸
-				if (waiting[j]->getCondition() != WAIT&& waiting[j]->getCondition() != DEAD) {//如果该僵尸不在等待区中
+				if (waiting[j]->getCondition() == WALKING|| waiting[j]->getCondition() ==EATING) {//得到活着的或者正在吃的僵尸
 					int zombieRow = waiting[j]->getCol();
 					if (zombieRow == plantRow) {//该植物启动攻击行为
 						Vec2 currentP=plants[i]->getIdv()->getPosition();//获取要发射子弹的植物的位置

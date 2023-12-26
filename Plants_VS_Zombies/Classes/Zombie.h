@@ -3,10 +3,7 @@
 #include"cocos2d.h"
 #include"Entity.h"
 
-#define WAIT 0//在等候区
-#define WALKING 1//在向前走
-#define EATING 2//在吃植物
-#define DEAD 3//死了
+
 
 
 class Zombie :public Entity {
