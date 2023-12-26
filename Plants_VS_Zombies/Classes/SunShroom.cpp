@@ -9,7 +9,7 @@ SunShroom::SunShroom(int x, int y, double scale, Scene* scene, int isNight, Labe
 	setX(x);
 	setY(y);
 	setName (SUN_SHROOM);
-	plantTime = time(0);//获取阳光菇栽种的时间
+	setPlantTime( time(0));//获取阳光菇栽种的时间
 	auto sunshroom = cocos2d::Sprite::create("/plant/sunshroom/s0.png");
 	sunshroom->setPosition(x, y);
 	sunshroom->setScale(scale);
@@ -63,6 +63,7 @@ void SunShroom::littleAnimation() {
 
 //大阳光菇工作中(
 void SunShroom::bigAnimation() {
+	this->getIdv()->stopAllActions();
 	auto animation = Animation::create();
 	char nameSize[50] = { 0 };
 	for (int i = 0; i < 10; i++)
@@ -81,7 +82,9 @@ void SunShroom::bigAnimation() {
 
 //植物死亡：消失
 void SunShroom::dieAnimation() {
-	this->getIdv()->removeFromParent();//让植物立刻消失在画面中
+	this->setCondition(DEAD);
+	getIdv()->setVisible(false);
+	//this->getIdv()->removeFromParent();//让植物立刻消失在画面中
 }
 
 //产生25大阳光
@@ -212,4 +215,8 @@ void  SunShroom::createLittleSun(float dt) {
 		});
 	auto sequence = Sequence::create(delayAction, checkClickCallback, nullptr);
 	sun->runAction(sequence);
+}
+
+void  SunShroom::growUp() {
+	bigAnimation();
 }

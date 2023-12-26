@@ -15,7 +15,7 @@ public:
 
     int getX() { return start_x; }
     int getY() { return start_y; }
-    virtual void explodeAnimation()=0;
+    virtual void explodeAnimation() {};
 private:
     int start_x;//×Óµ¯·¢ÉäÎ»ÖÃ
     int start_y;

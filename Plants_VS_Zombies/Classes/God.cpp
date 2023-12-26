@@ -280,51 +280,7 @@ void God::checkCrush() {
 		}
 	}
 }
-/*
-//检查僵尸和植物有没有相撞（相撞意味着要吃植物）
-void God::checkCrush() {
-	for (int i = 0; i < plants.size(); i++) {
-		for (int j = 0; j<waiting.size(); j++) {
-			if (waiting[j]->getCondition() == WAIT||plants[i]->getCondition()==0) {//如果僵尸在等待
-				continue;
-			}
-			if (waiting[j]->getCondition() == DEAD) {//如果僵尸死了
-				continue;
-			}
-			if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv())) {//如果僵尸没死且碰上植物
-				int plantRow = plants[i]->getRow();//获取植物所在第几行
-				int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
-				if (plantRow == zombieRow) {//由于僵尸头会碰到上一行的植物，所以添加一个判断他们在同一行
-					Sprite* thezombie = waiting[j]->getIdv();
-					if (waiting[j]->getCondition() != EATING) {//如果现在没有在吃，就播放吃的画面
-						waiting[j]->setCondition(EATING);
-						waiting[j]->healthyEating(thezombie);
-					}
-					if (plants[i]->getCondition() == 0) {
-						int currenthp = plants[i]->getHealth();
-						int attack = waiting[j]->getAttack();
-						plants[i]->setHealth(currenthp -= attack);
-						plants[i]->setCondition(1);
-						auto delay = DelayTime::create(waiting[j]->getEatingTime());
-						auto delayedCallback = CallFunc::create([=]() {
-							plants[i]->setCondition(0);
-							});
-						auto sequence = Sequence::create(delay, delayedCallback, nullptr);
-						plants[i]->getIdv()->runAction(sequence);
-					}
-				}
-			}
-			else {//如果没碰上（可能是植物死了）
-				if (waiting[j]->getCondition() != WALKING) {//如果当前没有在走
-					waiting[j]->moveForward(waiting[j]->getIdv());
-					//waiting[j]->setCondition(WALKING);//改为在moveforward里实现
-				}
-				
-			}
-		}
-	}
-}
-*/
+
 void God::checkEat()
 {
 	for (int i = 0; i < plants.size(); i++) {
@@ -365,7 +321,7 @@ bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
 	return rectA.intersectsRect(rectB);
 }
 
-//检查植物需不需要发射子弹,可以2s检查一次？
+//检查豌豆射手需不需要发射子弹,可以2s检查一次？
 void God::checkAttack() {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
 		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=DEAD) {//筛出攻击性植物且植物不能死亡
@@ -401,3 +357,30 @@ void God::checkBulletToDelete() {
 }
 
 //写新函数：检查阳光菇要不要生长
+void God::sunShroomGrowUp() {
+
+	for (int i = 0; i < plants.size(); i++) {//遍历植物
+		if (plants[i]->getName()==SUN_SHROOM&&plants[i]->IsAdolescent()) {
+			long long int now = time(0);
+			if (now - plants[i]->getPlantTime() >= 90) {
+				plants[i]->growUp();
+			}//90s长大
+		}
+	}
+}
+
+//写新函数：检测火爆辣椒要不要爆炸
+void God::checkJalapenoBomb() {
+	for (int i = 0; i < plants.size(); i++) {//遍历植物
+		if (plants[i]->getCondition() == BOMB) {
+			plants[i]->dieAnimation();
+			new Flame(plants[i]->getRow(), plants[i]->getX(), plants[i]->getY(), plants[i]->getAttackDamage(), currentScene);
+			for (int j = 0; j < waiting.size(); j++) {
+				if (waiting[i]->getCol() == plants[i]->getRow()) {
+					//植物和僵尸在同一行，则该行僵尸均播放被烧毁动画，且设置死亡标志
+					//这里没有把火爆辣椒子弹放到子弹数组中，其他函数查不到
+				}
+		    }
+		}
+	}
+}

@@ -4,6 +4,7 @@
 class SunShroom : public Plant {
 public:
     SunShroom(int x, int y, double scale, Scene* scene, int isNight, Label* sunLightLabel);
+
     void waitingAnimation();
     void littleAnimation();
     void bigAnimation();
@@ -11,13 +12,16 @@ public:
 
     Scene* getScene() { return theScencePlantIn; }
     Label* getCurrentLevelSunLabel() { return currentLevelSunLabel; }
-    long long int getPlantTime() { return plantTime; }//获取植物种植时间
+
 
     void  createLittleSun(float dt);
     void  createSun(float dt);
+    void growUp();
+
 
 private:
     Scene* theScencePlantIn;
     Label* currentLevelSunLabel;
-    long long int plantTime;
+
+
 };

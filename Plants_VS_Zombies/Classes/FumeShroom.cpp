@@ -1,12 +1,12 @@
-#include "PuffShroom.h"
+#include "FumeShroom.h"
 
-PuffShroom::PuffShroom(int x, int y, double scale, Scene* scene, int isNight) {
+FumeShroom::FumeShroom(int x, int y, double scale, Scene* scene,int isNight) {
     setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
     setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
     setX(x);
     setY(y);
-    setName(PUFF_SHROOM);
-    auto puffshroom = cocos2d::Sprite::create("/plant/puffshroom/w(1).png");
+    setName(FUME_SHROOM);
+    auto puffshroom = cocos2d::Sprite::create("/plant/fumeshroom/w(1).png");
     puffshroom->setPosition(x, y);
     puffshroom->setScale(scale);
     //添加到当前层
@@ -24,13 +24,13 @@ PuffShroom::PuffShroom(int x, int y, double scale, Scene* scene, int isNight) {
 }
 
 //植物的空闲摇摆动画
-void PuffShroom::waitingAnimation() {
+void FumeShroom::waitingAnimation() {
 
     auto animation = Animation::create();
     char nameSize[50] = { 0 };
-    for (int i = 1; i < 11; i++)
+    for (int i = 1; i < 15; i++)
     {
-        sprintf(nameSize, "/plant/puffshroom/s(%d).png", i);
+        sprintf(nameSize, "/plant/fumeshroom/s(%d).png", i);
         animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
     }
     animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔
@@ -41,12 +41,12 @@ void PuffShroom::waitingAnimation() {
 }
 
 //植物的攻击动画
-void PuffShroom::attackAnimation() {
+void FumeShroom::attackAnimation() {
     auto animation = Animation::create();
     char nameSize[30] = { 0 };
-    for (int i = 1; i < 15; i++)
+    for (int i = 1; i < 9; i++)
     {
-        sprintf(nameSize, "/plant/puffshroom/w(%d).png", i);
+        sprintf(nameSize, "/plant/fumeshroom/w(%d).png", i);
         animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
     }
     animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔
@@ -58,8 +58,8 @@ void PuffShroom::attackAnimation() {
 }
 
 //植物死亡：消失
-void PuffShroom::dieAnimation() {
-    this->setCondition(DEAD);
+void FumeShroom::dieAnimation() {
+    this->setCondition(DEAD);//给god标签，让其删除植物
     getIdv()->setVisible(false);
     //this->getIdv()->removeFromParent();//让植物立刻消失在画面中
 }

@@ -34,11 +34,18 @@ public:
     void setY(int _y) { y = _y; }
     int getY() { return y; }
 
+    bool IsAdolescent() { return isAdolescent; }
+    void setAdolescent(bool i) { isAdolescent = i; }
+
+    long long int getPlantTime() { return plantTime; }//获取植物种植时间
+    void setPlantTime(long long int t) { plantTime = t; }
 
     //几种动画:每种植物必须写
-    //virtual void waitingAnimation()=0;//空闲
-    //virtual void attackAnimation()=0;//工作
+    virtual void waitingAnimation(){};//空闲
+    virtual void attackAnimation() {};//工作
     virtual void dieAnimation() {};//死亡
+
+    virtual void growUp(){}//用于特殊植物的生长
 
     //植物受伤
     void getHurt(int hurtValue) {
@@ -57,6 +64,8 @@ private:
     int condition = HEALTHY;//记录状态
     int x;//xy坐标
     int y;
+    bool isAdolescent = 1;//植物处于幼年期 用于阳光菇的生长
+    long long int plantTime;//记录植物的种植时间
 };
 
 #endif // __PLANT_H__

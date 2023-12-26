@@ -40,7 +40,9 @@ void PeaShooter::waitingAnimation() {
 
 //植物死亡：消失
 void PeaShooter::dieAnimation() {
-    this->getIdv()->removeFromParent();//让植物立刻消失在画面中
+    this->setCondition(DEAD);
+    getIdv()->setVisible(false);
+    //this->getIdv()->removeFromParent();//让植物立刻消失在画面中
 }
 
 

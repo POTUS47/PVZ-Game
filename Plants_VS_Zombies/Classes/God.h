@@ -14,6 +14,7 @@
 #include "peaBullet.h"
 #include "puffShroomBullet.h"
 #include"plant.h"
+#include"flame.h"
 
 
 /*调度器放在这里，检测游戏是否结束等等*/
@@ -54,6 +55,11 @@ public:
 	void checkEat();
 	//种植物
 	bool plantPlant(Vec2 Point, int type);
+
+	//检查是否有辣椒要爆炸
+	void checkJalapenoBomb();
+	//检查是否有阳光菇要生长
+	void sunShroomGrowUp();
 	
 	Label* getSunLightLabel() { return sunLightLabel; }
 	void changeSunLabel(Label* sunlabel) { sunLightLabel = sunlabel; }

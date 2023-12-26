@@ -61,6 +61,7 @@ void Sunflower::attackAnimation() {
 
 //植物死亡：消失
 void Sunflower::dieAnimation() {
+	this->setCondition(DEAD);
     this->getIdv()->removeFromParent();//让植物立刻消失在画面中
 }
 
