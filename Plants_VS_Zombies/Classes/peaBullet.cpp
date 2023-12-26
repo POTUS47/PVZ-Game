@@ -2,9 +2,8 @@
 
 USING_NS_CC;
 
-peaBullet::peaBullet(int startX,int startY,int bulletDamage,Scene* scene):Bullet(startX, startY, bulletDamage, scene)
+peaBullet::peaBullet(int row,int startX,int startY,int bulletDamage,Scene* scene):Bullet(row,startX, startY, bulletDamage, scene)
 {
-    setCol(startY);/////////////////////////////////////////转换公式仍不确定
     auto bullet = cocos2d::Sprite::create("/plant/bullet/0.png");
     bullet->setPosition(startX, startY);
     bullet->setScale(2);

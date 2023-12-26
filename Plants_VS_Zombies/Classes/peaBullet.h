@@ -3,7 +3,6 @@
 #include "Bullet.h"
 class peaBullet : public Bullet{
 public:
-    peaBullet(int startX, int startY, int bulletDamage, Scene* scene);
+    peaBullet(int row,int startX, int startY, int bulletDamage, Scene* scene);
     void explodeAnimation();
- 
 };

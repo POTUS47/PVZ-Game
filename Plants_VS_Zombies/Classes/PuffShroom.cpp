@@ -2,9 +2,10 @@
 
 PuffShroom::PuffShroom(int x, int y, double scale, Scene* scene) {
     setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
-    setCol((x - 215) / 190 + 1);
+    setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
     setX(x);
     setY(y);
+    setName(PUFF_SHROOM);
     auto puffshroom = cocos2d::Sprite::create("/plant/puffshroom/w(1).png");
     puffshroom->setPosition(x, y);
     puffshroom->setScale(scale);
@@ -15,7 +16,7 @@ PuffShroom::PuffShroom(int x, int y, double scale, Scene* scene) {
     //设置生命值等属性
     setHealth(100);
     setAttackDamage(10);
-    /////////////////////////让植物开始摇摆
+    //让植物开始摇摆
     waitingAnimation();
 }
 

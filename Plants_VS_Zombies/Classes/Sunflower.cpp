@@ -4,8 +4,10 @@ extern int sunNumber;
 
 Sunflower::Sunflower(int x, int y, double scale, Scene* scene,int isNight, Label* sunLightLabel):currentLevelSunLabel(sunLightLabel), theScencePlantIn(scene) {
 	setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
+	setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
 	setX(x);
 	setY(y);
+	setName(SUN_FLOWER);
 	auto sunflower = cocos2d::Sprite::create("/plant/sunflower/SunFlower1.png");
     sunflower->setPosition(x, y);
     sunflower->setScale(scale);
@@ -15,7 +17,7 @@ Sunflower::Sunflower(int x, int y, double scale, Scene* scene,int isNight, Label
 
     //设置生命值等属性
     setHealth(100);
-    /////////////////////让植物开始摇摆
+    //让植物开始摇摆
 	if (isNight)
 		waitingAnimation();
 	else
@@ -39,7 +41,7 @@ void Sunflower::waitingAnimation() {
     this->getIdv()->runAction(animate);//将动画动作应用到精灵上，并运行动画
 }
 
-//植物的攻击动画
+//植物的工作动画：产生阳光
 void Sunflower::attackAnimation() {
 	auto animation = Animation::create();
 	char nameSize[50] = { 0 };
@@ -56,7 +58,6 @@ void Sunflower::attackAnimation() {
 	//this->getScene()->schedule(schedule_selector(Sunflower::createSun), 15.0f);
 	///////////////////////////////////////////////////////////错误
 }
-
 
 //植物死亡：消失
 void Sunflower::dieAnimation() {

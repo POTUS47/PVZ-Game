@@ -11,7 +11,8 @@
 #include "DoubleShooter.h"
 #include"Card.h"
 #include"Car.h"
-#include "Bullet.h"
+#include "peaBullet.h"
+#include "puffShroomBullet.h"
 #include"plant.h"
 
 

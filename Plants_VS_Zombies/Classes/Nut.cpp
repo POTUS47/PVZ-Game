@@ -2,6 +2,7 @@
 
 Nut::Nut(int x, int y, double scale, Scene* scene) {
     setRow((y - 160) / 190 + 1);//设置植物在哪一行出现
+    setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
     auto nut = cocos2d::Sprite::create("/plant/nut/zz1.png");
     nut->setPosition(x, y);
     nut->setScale(scale);
@@ -11,7 +12,7 @@ Nut::Nut(int x, int y, double scale, Scene* scene) {
 
     //设置生命值等属性
     setHealth(600);
-    /////////////////////////让植物开始摇摆
+    //让植物开始摇摆
     waitingAnimation();
 }
 
@@ -30,11 +31,6 @@ void Nut::waitingAnimation() {
     //animation->setRestoreOriginalFrame(true);动画播放完后定格在第一帧
     auto animate = Animate::create(animation);//创建动画动作
     this->getIdv()->runAction(animate);//将动画动作应用到精灵上，并运行动画
-}
-
-//植物的攻击动画
-void Nut::attackAnimation() {
-    ///////////////////////////////////////////////坚果不需要
 }
 
 //植物死亡：消失

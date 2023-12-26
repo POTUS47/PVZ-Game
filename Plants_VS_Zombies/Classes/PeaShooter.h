@@ -6,7 +6,6 @@ public:
     PeaShooter(int x, int y, double scale, Scene* scene);
 
     void waitingAnimation();
-    void attackAnimation();
     void dieAnimation();
 };
 

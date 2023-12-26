@@ -6,7 +6,8 @@
 #define DEAD 3//死了
 
 #define HEALTHY 4//健康（植物用）
-#define BEINGEATEN 5//被吃（植物用）
+
+enum plantName { PEA_SHOOTER, DOUBLE_SHOOTER, SUN_FLOWER, NUT, SUN_SHROOM, PUFF_SHROOM };//植物姓名标签。长期待更新~
 USING_NS_CC;
 
 class Entity {

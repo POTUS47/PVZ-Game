@@ -9,11 +9,15 @@ public:
     void bigAnimation();
     void dieAnimation();
 
-    void createSun(float dt);
-
     Scene* getScene() { return theScencePlantIn; }
     Label* getCurrentLevelSunLabel() { return currentLevelSunLabel; }
+    long long int getPlantTime() { return plantTime; }//获取植物种植时间
+
+    void  createLittleSun(float dt);
+    void  createSun(float dt);
+
 private:
     Scene* theScencePlantIn;
     Label* currentLevelSunLabel;
+    long long int plantTime;
 };

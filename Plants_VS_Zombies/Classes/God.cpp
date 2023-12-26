@@ -20,10 +20,12 @@ bool isIntersecting(Sprite* spriteA, Sprite* spriteB);//函数声明
 float Statime[2][2][10] = {5,15,20,23,25,29,45,47,50,55};//level type number
 
 int sunNumber = 0;
+int littleSunNumber = 0;//全局变量，记录大阳光（25）和小阳光（15）的个数，方便更新阳光标签
 
 //God的构造函数
 God::God(int isNight, Scene* CurrentScene):dayOrNight(isNight),currentScene(CurrentScene) {
 	sunNumber = 0;
+	littleSunNumber = 0;//每开一新关卡，阳光数清零
 }
 
 //调度器每隔0.1秒调用该函数
@@ -48,8 +50,6 @@ void God::gameEnd()
 	}
 }
 
-
-
 void God::updateZombies(int level)
 {
 	int normZ = 0;
@@ -63,11 +63,7 @@ void God::updateZombies(int level)
 
 	}
 
-	//检查发现，横向总共1920
-	/* 植物的位置 纵坐标分别是160 350 540 730 920比较好（等差190）
-	* 横坐标分别是 215 405...（等差190）
-	* 植物的col=(x-160)/190+1
-	*/
+
 
 	//开始生成僵尸,放入等待容器中
 	//普通僵尸
@@ -111,7 +107,7 @@ void God::dead()
 		}
 		
 	}
-	//检查是否有植物死亡//////////////////////////////这里想通过gethurt来实现,不你不想
+	//检查是否有植物死亡
 	for (int i = 0; i < plants.size(); i++) {
 		if (plants[i]->getCondition() != DEAD) {//如果植物没死
 			if (plants[i]->getHealth() <= 0) {
@@ -126,7 +122,7 @@ void God::dead()
 
 void God::updateSun()
 {
-	int sunlightCount = sunNumber * 25;
+	int sunlightCount = sunNumber * 25 + littleSunNumber * 15;
 
 	// 更新Label的文本
 	this->getSunLightLabel()->setString(" " + std::to_string(sunlightCount));
@@ -270,23 +266,14 @@ void God::hitByCar()
 
 
 //检查僵尸和子弹有没有相撞
-void God::checkEat() {
+void God::checkCrush() {
 	for (int i = 0; i < bullets.size(); i++) {//遍历所有子弹
 		for (int j = 0; j<waiting.size(); j++) {//遍历所有僵尸
 			if ((!bullets[i]->NeedRemove()) && (waiting[j]->getCondition() != DEAD)) {//如果子弹是需要被移除的就不再判断是否接触僵尸
 				if (isIntersecting(bullets[i]->getIdv(), waiting[j]->getIdv())) {//如果子弹碰上僵尸
-					int bulletRow = bullets[i]->getCol();//获取子弹所在第几行
-					int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
-					if (bulletRow == zombieRow) {
-						bullets[i]->explodeAnimation();//子弹爆炸特效，停留0.4秒后将子弹精灵从parent移除，然后标记为要从vector删除
-						if (bullets[i]->getSEThp() == 0) {
-							int currentHP = waiting[j]->getHP();
-							
-							waiting[j]->setHP(currentHP -= 20);//20需要改成植物的攻击能力
-							bullets[i]->setSEThp(1);
-						}
-						
-					}
+					bullets[i]->explodeAnimation();//子弹爆炸特效，停留0.2秒后将子弹精灵从parent移除，然后标记为要从vector删除
+					int currentHP = waiting[j]->getHP();
+					waiting[j]->setHP(currentHP -= bullets[i]->getDamgeVlue());
 				}
 			}
 			
@@ -338,7 +325,7 @@ void God::checkCrush() {
 	}
 }
 */
-void God::checkCrush()
+void God::checkEat()
 {
 	for (int i = 0; i < plants.size(); i++) {
 		for (int j = 0; j < waiting.size(); j++) {
@@ -348,10 +335,10 @@ void God::checkCrush()
 			int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
 			if (zombieCon == WALKING) {//如果僵尸在走路的途中
 				if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv()) && zombieRow == plantRow) {//碰上植物且在同一行
-					if (plantCon == HEALTHY || plantCon == BEINGEATEN) {
+					if (plantCon == HEALTHY) {
 						waiting[j]->setCondition(EATING);//僵尸变为在吃
 						waiting[j]->healthyEating(waiting[j]->getIdv());
-						plants[i]->setCondition(BEINGEATEN);//植物变为被吃
+						plants[i]->getHurt(waiting[j]->getAttack());///////////////////////////////////////////////////////具体数值需要再斟酌
 					}
 				}
 			}
@@ -360,17 +347,8 @@ void God::checkCrush()
 					if (plantCon == DEAD) {//植物死了
 						waiting[j]->moveForward(waiting[j]->getIdv());//僵尸变为走路
 					}
-					else if (plantCon == BEINGEATEN) {//植物是被吃状态要扣血
-						int currenthp = plants[i]->getHealth();
-						int attack = waiting[j]->getAttack();
-						plants[i]->setHealth(currenthp -= attack);
-						plants[i]->setCondition(HEALTHY);//一次只吃一次，扣完血变回健康状态
-						auto delay = DelayTime::create(waiting[j]->getEatingTime());
-						auto delayedCallback = CallFunc::create([=]() {
-							plants[i]->setCondition(BEINGEATEN);//过一段时间变为被吃
-							});
-						auto sequence = Sequence::create(delay, delayedCallback, nullptr);
-						plants[i]->getIdv()->runAction(sequence);
+					else {//植物是被吃状态要扣血
+						plants[i]->getHurt(waiting[j]->getAttack());
 					}
 				}
 			}
@@ -378,7 +356,6 @@ void God::checkCrush()
 	}
 
 }
-
 
 //用于检测两精灵有无相遇的辅助函数
 bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
@@ -398,7 +375,14 @@ void God::checkAttack() {
 					int zombieRow = waiting[j]->getCol();
 					if (zombieRow == plantRow) {//该植物启动攻击行为
 						Vec2 currentP=plants[i]->getIdv()->getPosition();//获取要发射子弹的植物的位置
-						bullets.push_back(new Bullet(plantRow,currentP.x, currentP.y, 5, currentScene));
+						if(plants[i]->getName()==PEA_SHOOTER)
+						    bullets.push_back(new peaBullet(plantRow,currentP.x+62, currentP.y+37, plants[i]->getAttackDamage(), currentScene));
+						else if (plants[i]->getName() == DOUBLE_SHOOTER) {
+							//想办法 发射两发子弹
+						}
+						else{
+
+						}
 					}
 				}
 			}
@@ -416,4 +400,4 @@ void God::checkBulletToDelete() {
 	}
 }
 
-//子弹加一个状态判断，如果需要被移除就不再判断有没有跟僵尸挨着
+//写新函数：检查阳光菇要不要生长
