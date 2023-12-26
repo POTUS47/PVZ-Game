@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ShooterPlant.h"
+#include "Plant.h"
 
-class DoubleShooter : public ShooterPlant {
+class DoubleShooter : public Plant {
 public:
     DoubleShooter(int x, int y, double scale, Scene* scene);
 

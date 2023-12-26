@@ -1,13 +1,12 @@
-#include "Bullet.h"
+#include "peaBullet.h"
 
 USING_NS_CC;
 
-Bullet::Bullet(int col, int startX,int startY,int bulletDamage,Scene* scene)
-    : start_x(startX), start_y(startY),damage(bulletDamage),currentScene(scene), needDestroy(0){
-    
-    setCol(col);
+peaBullet::peaBullet(int startX,int startY,int bulletDamage,Scene* scene):Bullet(startX, startY, bulletDamage, scene)
+{
+    setCol(startY);/////////////////////////////////////////转换公式仍不确定
     auto bullet = cocos2d::Sprite::create("/plant/bullet/0.png");
-    bullet->setPosition(start_x, start_y);///////////////////
+    bullet->setPosition(startX, startY);
     bullet->setScale(2);
     //添加到当前层
     scene->addChild(bullet, 6);
@@ -23,12 +22,12 @@ Bullet::Bullet(int col, int startX,int startY,int bulletDamage,Scene* scene)
 }
 
 //子弹播放爆炸特效并消失
-void Bullet::explodeAnimation() {
+void peaBullet::explodeAnimation() {
 
     Sprite* bullet = this->getIdv();
     bullet->stopAllActions();//停止动作
     bullet->setTexture("/plant/bullet/1.png");
-    auto delay = DelayTime::create(0.4f);//子弹暂留零点四秒
+    auto delay = DelayTime::create(0.1f);//子弹暂留零点一秒
     auto removeAction = CallFunc::create([bullet]() {
         bullet->removeFromParent();
         });
@@ -38,9 +37,4 @@ void Bullet::explodeAnimation() {
     // 执行动作序列
     bullet->runAction(sequence);
     //注意Cocos2d-x 的动作是异步执行的 这个构造函数并不会等待动作播放完成就能执行完毕
-}
-
-//通知GOD需要移除子弹
-void Bullet::onAnimationFinished(Node* sender) {
-    needDestroy = 1;
 }

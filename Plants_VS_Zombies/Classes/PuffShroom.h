@@ -1,13 +1,11 @@
 #pragma once
 #include "Plant.h"
 
-class PeaShooter : public Plant {
+class PuffShroom : public Plant {
 public:
-    PeaShooter(int x, int y, double scale, Scene* scene);
+    PuffShroom(int x, int y, double scale, Scene* scene);
 
     void waitingAnimation();
     void attackAnimation();
     void dieAnimation();
 };
-
-
