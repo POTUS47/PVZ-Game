@@ -17,7 +17,7 @@ std::vector<Bullet*>bullets;//子弹的数组
 bool isIntersecting(Sprite* spriteA, Sprite* spriteB);//函数声明
 
 /*数组储存出场时间*/
-float Statime[2][3][10] = {5,15,20,23,25,29,45,47,50,55};//level type number
+float Statime[2][3][10] = { 15,25,40,45,67,80,89,88,90,105,45,50,75,78,90,35,70,75,87};//level type number
 
 
 //God的构造函数
@@ -31,7 +31,7 @@ void God::gameEnd()
 	for (int i = 0; i < waiting.size(); i++) {
 		if (waiting[i]->getCondition() == DEAD) {
 			totaldeath++;
-			if (totaldeath == 9) {
+			if (totaldeath == 18) {
 				//赢了
 				exit(2);
 			}
@@ -53,9 +53,9 @@ void God::updateZombies(int level)
 	int newsZ = 0;
 	//根据关卡的不同设置不同数量的僵尸
 	if (level == 1) {
-		normZ = 6;
-		coneZ = 3;
-		newsZ = 2;
+		normZ = 10;
+		coneZ = 5;
+		newsZ = 3;
 	}
 	else {
 
@@ -370,11 +370,22 @@ void God::checkJalapenoBomb() {
 void God::checkSunflower()
 {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if (plants[i]->getName() == SUNFLOWER && plants[i]->getCondition() != DEAD) {//是太阳花且没有死
+		if ((plants[i]->getName() == SUNFLOWER|| plants[i]->getName() == SUN_SHROOM) && plants[i]->getCondition() != DEAD) {//是太阳花且没有死
 			if (plants[i]->getCondition() == ABLE) {//可以产阳光
-				sun->flowerSun(plants[i]->getIdv()->getPosition());
+				if (plants[i]->getName() == SUNFLOWER) {
+					sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
+				}
+				else {
+					if (plants[i]->IsAdolescent()) {
+						sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
+					}
+					else {
+						sun->flowerSun(plants[i]->getIdv()->getPosition(), 0);
+					}
+				}
+				
 				plants[i]->setCondition(HEALTHY);
-				auto delay = DelayTime::create(10.0f);//十秒产一次阳光
+				auto delay = DelayTime::create(20.0f);//十秒产一次阳光
 				auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 					plants[i]->setCondition(ABLE);
 					}), nullptr);

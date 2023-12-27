@@ -16,6 +16,7 @@
 #include "puffShroomBullet.h"
 #include"plant.h"
 #include"flame.h"
+#include "SunShroom.h"
 #include"Jalapeno.h"
 #include"PuffShroom.h"
 #include"FumeShroom.h"

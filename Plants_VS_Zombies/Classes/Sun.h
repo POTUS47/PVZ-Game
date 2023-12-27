@@ -14,7 +14,7 @@ public:
 	Sun(Scene* scene);//构造函数，建立阳光标签
 	void updateSun();//更新阳光值标签
 	void createSun();//生成随机阳光
-	void flowerSun(Vec2 position);
+	void flowerSun(Vec2 position,int kind);
 	int getSunValue() {
 		return sunValue;
 	}

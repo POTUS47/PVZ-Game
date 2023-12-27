@@ -90,12 +90,17 @@ void Sun::createSun()
 	sun->runAction(sequence);
 }
 
-void Sun::flowerSun(Vec2 position)
+void Sun::flowerSun(Vec2 position, int kind)
 {
 	
 	auto sun = Sprite::create("1.png");
 	sun->setPosition(position.x,position.y);
-	sun->setScale(2.0);
+	if (kind == 1) {
+		sun->setScale(2.0);
+	}
+	else {
+		sun->setScale(1.2);
+	}
 	currentScene->addChild(sun, 2);
 
 	auto animation = Animation::create();
@@ -117,14 +122,19 @@ void Sun::flowerSun(Vec2 position)
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->setSwallowTouches(true);
-	listener->onTouchBegan = [sun, this](Touch* touch, Event* event) {
+	listener->onTouchBegan = [=](Touch* touch, Event* event) {
 		// 获取点击位置
 		Point touchLocation = touch->getLocation();
 
 		// 判断点击位置是否在阳光范围内
 		if (sun->getBoundingBox().containsPoint(touchLocation)) {
 			// 阳光被点击，执行消失逻辑
-			sunValue += 25;
+			if (kind == 1) {
+				sunValue += 25;
+			}
+			else {
+				sunValue += 15;
+			}
 			updateSun();
 
 			sun->stopAllActions();

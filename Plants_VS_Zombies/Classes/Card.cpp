@@ -160,7 +160,7 @@ void Card::createPlant(Vec2 real)
 			plants.push_back(new Nut(real.x, real.y, 2.2, scene));
 			break;
 		case SUN_SHROOM:
-
+			plants.push_back(new SunShroom(real.x, real.y, 2.2, scene,0));
 			break;
 		case PUFF_SHROOM:
 			plants.push_back(new PuffShroom(real.x, real.y, 2.2, scene, 1));
