@@ -2,11 +2,12 @@
 
 USING_NS_CC;
 
-puffShroomBullet::puffShroomBullet(int scale,int row, int startX, int startY, int bulletDamage, Scene* scene) :Bullet(row, startX, startY, bulletDamage, scene)
+puffShroomBullet::puffShroomBullet(int scale,int _row, int startX, int startY, int bulletDamage, Scene* scene) :Bullet(_row,startX, startY, bulletDamage, scene)
 {
     auto bullet = cocos2d::Sprite::create("/plant/shroombullet/s (1).png");
     bullet->setPosition(startX, startY); 
     bullet->setScale(scale);
+    setRow(_row);
     //添加到当前层
     scene->addChild(bullet, 6);
     setIdv(bullet);//将精灵指针存入idv

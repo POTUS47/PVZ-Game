@@ -16,9 +16,13 @@ private:
 	float eatPlantTime;//吃植物的时间间隔
 	int attackDegree;//攻击给植物扣多少血
 	int condition;//僵尸的状态
+	bool weapen;//僵尸是否有武器？帽子等
 public:
 	void setHP(int hp);//设置血量
 	int getHP();//获取血量
+
+	void setWeapen(bool wea);//设置血量
+	bool getWeapen();//获取血量
 
 	void setSpeed(int speed);//设置前进速度
 	int getSpeed();//获取僵尸行走速度

@@ -6,6 +6,7 @@ USING_NS_CC;
 normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
 {
     setSpeed(30);
+    setWeapen(false);//∆’Õ®Ω© ¨√ª”–Œ‰∆˜
     setCondition(WAIT);
     setHP(100);
     setAttack(2);

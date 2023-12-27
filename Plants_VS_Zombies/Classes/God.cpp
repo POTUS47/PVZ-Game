@@ -17,15 +17,11 @@ std::vector<Bullet*>bullets;//子弹的数组
 bool isIntersecting(Sprite* spriteA, Sprite* spriteB);//函数声明
 
 /*数组储存出场时间*/
-float Statime[2][2][10] = {5,15,20,23,25,29,45,47,50,55};//level type number
+float Statime[2][3][10] = {5,15,20,23,25,29,45,47,50,55};//level type number
 
-//int sunNumber = 0;
-//int littleSunNumber = 0;//全局变量，记录大阳光（25）和小阳光（15）的个数，方便更新阳光标签
 
 //God的构造函数
 God::God(int isNight, Scene* CurrentScene):dayOrNight(isNight),currentScene(CurrentScene) {
-	//sunNumber = 0;
-	//littleSunNumber = 0;//每开一新关卡，阳光数清零
 }
 
 //调度器每隔0.1秒调用该函数
@@ -54,10 +50,12 @@ void God::updateZombies(int level)
 {
 	int normZ = 0;
 	int coneZ = 0;
+	int newsZ = 0;
 	//根据关卡的不同设置不同数量的僵尸
 	if (level == 1) {
 		normZ = 6;
 		coneZ = 3;
+		newsZ = 2;
 	}
 	else {
 
@@ -77,6 +75,12 @@ void God::updateZombies(int level)
 		int x = rand() % 300 + 1400;
 		int y = rand() % 800 + 100;
 		waiting.push_back(new coneHeadZombie(x, y, 2.0, currentScene));
+	}
+	//报纸僵尸---
+	for (int i = 0; i < newsZ; i++) {
+		int x = rand() % 300 + 1400;
+		int y = rand() % 800 + 100;
+		waiting.push_back(new newspaperZombie(x, y, 2.0, currentScene));
 	}
 	//让所有等待区的僵尸进入等待状态，并设置出发时间，设置出发赛道
 	for (int i = 0; i < waiting.size(); i++) {
@@ -109,6 +113,18 @@ void God::dead()
 					//waiting.erase(waiting.begin() + i);
 					}), nullptr);
 				waiting[i]->getIdv()->runAction(sequence);
+			}
+			else if (waiting[i]->getHP() <= 60) {
+				if (waiting[i]->getWeapen() == true) {
+					waiting[i]->setWeapen(false);
+					if (waiting[i]->getCondition() == WALKING) {
+						waiting[i]->moveForward(waiting[i]->getIdv());
+					}
+					else if (waiting[i]->getCondition() == EATING) {
+						waiting[i]->healthyEating(waiting[i]->getIdv());
+					}
+				}
+				
 			}
 		}
 		
@@ -195,9 +211,18 @@ void God::checkCrush() {
 		for (int j = 0; j<waiting.size(); j++) {//遍历所有僵尸
 			if ((!bullets[i]->NeedRemove()) && (waiting[j]->getCondition() != DEAD)) {//如果子弹是需要被移除的就不再判断是否接触僵尸
 				if (isIntersecting(bullets[i]->getIdv(), waiting[j]->getIdv())) {//如果子弹碰上僵尸
-					bullets[i]->explodeAnimation();//子弹爆炸特效，停留0.2秒后将子弹精灵从parent移除，然后标记为要从vector删除
-					int currentHP = waiting[j]->getHP();
-					waiting[j]->setHP(currentHP -= bullets[i]->getDamgeVlue());
+					int bulletRow = bullets[i]->getRow();//获取子弹所在第几行
+					int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
+					if (bulletRow == zombieRow) {
+						bullets[i]->explodeAnimation();//子弹爆炸特效，停留0.4秒后将子弹精灵从parent移除，然后标记为要从vector删除
+						if (bullets[i]->condition == 0) {
+							int currentHP = waiting[j]->getHP();
+							int minus = bullets[i]->getDamgeVlue();
+							waiting[j]->setHP(currentHP -= minus);
+							bullets[i]->condition = 1;//保证一颗子弹只扣一次血，勿改勿改
+						}
+
+					}
 				}
 			}
 			
@@ -227,8 +252,17 @@ void God::checkEat()
 					if (plantCon == DEAD) {//植物死了
 						waiting[j]->moveForward(waiting[j]->getIdv());//僵尸变为走路
 					}
-					else {//植物是被吃状态要扣血
-						plants[i]->getHurt(waiting[j]->getAttack());
+					else if (plantCon == BEINGEATEN) {//植物是被吃状态要扣血
+						int currenthp = plants[i]->getHealth();
+						int attack = waiting[j]->getAttack();
+						plants[i]->setHealth(currenthp -= attack);
+						plants[i]->setCondition(HEALTHY);//一次只吃一次，扣完血变回健康状态
+						auto delay = DelayTime::create(waiting[j]->getEatingTime());
+						auto delayedCallback = CallFunc::create([=]() {
+							plants[i]->setCondition(BEINGEATEN);//过一段时间变为被吃
+							});
+						auto sequence = Sequence::create(delay, delayedCallback, nullptr);
+						plants[i]->getIdv()->runAction(sequence);
 					}
 				}
 			}
@@ -358,6 +392,10 @@ void God::checkCard()
 				cards[i]->setCondition(ABLE);
 				cards[i]->changeApperence(1);
 			}
+		}
+		else {
+			cards[i]->setCondition(POOR);
+			cards[i]->changeApperence(0);
 		}
 	}
 }

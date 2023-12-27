@@ -3,6 +3,7 @@
 #include<vector>
 #include"NormalZombie.h"
 #include"ConeHeadZombie.h"
+#include"NewspaperZombie.h"
 #include<iostream>
 #include"Level1.h"
 //添加了植物的头文件

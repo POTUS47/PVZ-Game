@@ -10,6 +10,16 @@ int Zombie::getHP() {
 	return HP;
 }
 
+void Zombie::setWeapen(bool wea)
+{
+	weapen = wea;
+}
+
+bool Zombie::getWeapen() 
+{
+	return weapen;
+}
+
 void Zombie::setSpeed(int speed)
 {
 	walkSpeed = speed;//传入自定义速度

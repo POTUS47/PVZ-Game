@@ -8,11 +8,12 @@
 #define HEALTHY 4//健康（植物用）
 #define BOMB 5//火爆辣椒爆炸
 #define PLANT_SLEEP 6//植物睡觉
+#define BEINGEATEN 7
 
-#define SLEEP 6//卡片休眠状态
-#define ENOUPH 7//卡片阳光够但能不能买还要判断
-#define POOR 8//阳光值不够购买
-#define ABLE 9//卡片可以点击
+#define SLEEP 8//卡片休眠状态
+#define ENOUPH 9//卡片阳光够但能不能买还要判断
+#define POOR 10//阳光值不够购买
+#define ABLE 11//卡片可以点击
 
 #define SUNFLOWER 1
 #define PEASHOOTER 2
