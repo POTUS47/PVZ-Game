@@ -6,7 +6,7 @@ Sunflower::Sunflower(int x, int y, double scale, Scene* scene,int isNight):theSc
 	setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
 	setX(x);
 	setY(y);
-	setName(SUN_FLOWER);
+	setName(SUNFLOWER);
 	auto sunflower = cocos2d::Sprite::create("/plant/sunflower/SunFlower1.png");
     sunflower->setPosition(x, y);
     sunflower->setScale(scale);

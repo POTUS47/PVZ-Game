@@ -6,7 +6,7 @@ PeaShooter::PeaShooter(int x,int y, double scale,Scene* scene) {
     setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
     setX(x);
     setY(y);
-    setName(PEA_SHOOTER);
+    setName(PEASHOOTER);
     auto nut = cocos2d::Sprite::create("/plant/peashooter/Peashooter1.png");
     nut->setPosition(x, y);
     nut->setScale(scale);

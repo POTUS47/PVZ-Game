@@ -44,4 +44,5 @@ public:
 	virtual void healthyEating(Sprite* who) = 0;//没有被攻击吃植物的动作
 	virtual void dieAndlay(Sprite* who) = 0;//死亡并且倒下的动作
 	virtual void loseHead(Sprite* who) = 0;//头掉动作
+	void burning() ;//烧成灰烬
 };

@@ -85,19 +85,7 @@ void God::updateZombies(int level)
 		waiting[i]->setStartTime(Statime[level-1][1-1][i]);//设置出发时间
 		waiting[i]->setCol(col);//设置出发赛道
 	}
-	plants.push_back(new DoubleShooter(333, 333, 2.2, currentScene));//////////////////////
-	plants.push_back(new DoubleShooter(133, 123, 2.2, currentScene));//////////////////////
-	plants.push_back(new Jalapeno(133, 123, 2.2, currentScene));
 
-	plants.push_back(new PuffShroom(215, 730, 2.2, currentScene,1));/////////////
-	plants.push_back(new PuffShroom(405, 920, 2.2, currentScene, 1));/////////////
-	plants.push_back(new PuffShroom(595, 160, 2.2, currentScene, 1));/////////////
-	plants.push_back(new PuffShroom(785, 350, 2.2, currentScene, 1));/////////////
-	plants.push_back(new FumeShroom(975, 920, 2.2, currentScene, 1));/////////////
-
-	plants.push_back(new FumeShroom(595, 730, 2.2, currentScene, 1));/////////////
-	plants.push_back(new FumeShroom(785, 920, 2.2, currentScene, 1));/////////////
-	plants.push_back(new FumeShroom(975, 730, 2.2, currentScene, 1));/////////////
 
 	//检查发现，横向总共1920
 /* 植物的位置 纵坐标分别是160 350 540 730 920比较好（等差190）
@@ -137,87 +125,7 @@ void God::dead()
 		}
 	}
 }
-/*
-void God::updateSun()
-{
-	int sunlightCount = sunNumber * 25 + littleSunNumber * 15;
 
-	// 更新Label的文本
-	this->getSunLightLabel()->setString(" " + std::to_string(sunlightCount));
-}
-
-
-void God::createSun(Scene* scene)
-{
-	int x = rand() % 1200 + 100;
-	int y = rand() % 900 + 100;
-
-	auto sun = Sprite::create("1.png");
-	sun->setPosition(x,1400);
-	sun->setScale(2.0);
-	scene->addChild(sun,2);
-
-	auto animation = Animation::create();
-	char nameSize[30] = { 0 };
-	for (int i = 1; i < 30; i++){
-		sprintf(nameSize, "%d.png", i);
-		animation->addSpriteFrameWithFile(nameSize);
-	}
-	animation->setDelayPerUnit(0.03f);
-	animation->setLoops(-1);
-	animation->setRestoreOriginalFrame(true);
-	auto animate = Animate::create(animation);
-
-	sun->runAction(animate);
-	int speed = 150;
-	auto moveBy = MoveBy::create((1400-y)/speed, Vec2(0, -(1400-y)));
-	sun->runAction(moveBy);
-
-	
-	// 为阳光添加点击事件监听器
-	Label* sunLabel=this->getSunLightLabel();
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
-	listener->onTouchBegan = [sun,this, sunLabel](Touch* touch, Event* event) {
-		// 获取点击位置
-		Point touchLocation = touch->getLocation();
-
-		// 判断点击位置是否在阳光范围内
-		if (sun->getBoundingBox().containsPoint(touchLocation)) {
-			// 阳光被点击，执行消失逻辑
-			sunNumber++;
-			this->updateSun();
-
-			sun->stopAllActions();
-			auto moveTo = MoveTo::create(0.5, Vec2(120, 1130));
-			sun->runAction(moveTo);
-			auto delayAction = DelayTime::create(0.8f);
-			
-			auto checkClickCallback = CallFunc::create([sun]() {
-				sun->removeFromParent();
-				});
-			auto sequence = Sequence::create(delayAction, checkClickCallback, nullptr);
-			sun->runAction(sequence);
-			
-			return true;
-		}
-		return false;
-	};
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, sun);
-
-	// 启动一个定时器，在五秒后检查是否有鼠标点击阳光，若无则自动消失
-	float t = (1400 - y) / speed+5;
-	auto delayAction = DelayTime::create(t);
-	auto checkClickCallback = CallFunc::create([sun, scene]() {
-		if (sun && sun->getParent()) {
-			// 阳光还存在且没有被点击，则自动让阳光消失
-			sun->removeFromParent();
-		}
-		});
-	auto sequence = Sequence::create(delayAction, checkClickCallback, nullptr);
-	sun->runAction(sequence);
-}
-*/
 void God::setZombieStartTime()
 {
 	int num = waiting.size();
@@ -237,16 +145,15 @@ void God::setZombieStartTime()
 void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 {
 
-	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter.png", "/plant/peashooter/Peashooter1.png", scene,PEASHOOTER,_sun));
-	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower.png", "/plant/sunflower/SunFlower1.png", scene,SUNFLOWER,_sun));
-	cards.push_back(new Card(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene,NUT,_sun));
-	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter.png", "/plant/doubleshooter/Repeater1.png", scene,DOUBLESHOOTER,_sun));
-	cards.push_back(new Card(716, 1108, 1.95, "/card/sunshroom.png", "/plant/sunshroom/b0.png",scene, SUN_SHROOM, _sun));
-	cards.push_back(new Card(828, 1108, 1.95, "/card/jalapeno.png", "/plant/jalapeno/j (1).png", scene, JALAPENO, _sun));
-	//cards.push_back(new Card(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene, NUT, _sun));
-	//cards.push_back(new Card(492, 1108, 1.95, "/card/nut.png", "/plant/nut/zz1.png", scene, NUT, _sun));
-	//Card card_3(940, 1108, 1.95, "/card/card_3.png", scene);
-	//Card card_4(1052, 1108, 1.95, "/card/card_4.png", scene);
+	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEASHOOTER,_sun));
+	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower", "/plant/sunflower/SunFlower1.png", scene, SUNFLOWER, _sun));
+	cards.push_back(new Card(492, 1108, 1.95, "/card/nut", "/plant/nut/zz1.png", scene,NUT,_sun));
+	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter", "/plant/doubleshooter/Repeater1.png", scene,DOUBLESHOOTER,_sun));
+	cards.push_back(new Card(716, 1108, 1.95, "/card/sunshroom", "/plant/sunshroom/b0.png",scene, SUN_SHROOM, _sun));
+	cards.push_back(new Card(828, 1108, 1.95, "/card/jalapeno", "/plant/jalapeno/j (1).png", scene, JALAPENO, _sun));
+	cards.push_back(new Card(940, 1108, 1.2, "/card/fumeshroom", "/plant/fumeshroom/s (1).png", scene, FUME_SHROOM, _sun));
+	cards.push_back(new Card(1052, 1108, 1.95, "/card/puffshroom", "/plant/puffshroom/w (1).png", scene, PUFF_SHROOM, _sun));
+	
 }
 
 
@@ -348,9 +255,9 @@ void God::checkAttack() {
 					int zombieRow = waiting[j]->getCol();
 					if (zombieRow == plantRow) {//该植物启动攻击行为
 						Vec2 currentP=plants[i]->getIdv()->getPosition();//获取要发射子弹的植物的位置
-						if(plants[i]->getName()==PEA_SHOOTER)
+						if(plants[i]->getName()==PEASHOOTER)
 						    bullets.push_back(new peaBullet(plantRow,currentP.x+62, currentP.y+37, plants[i]->getAttackDamage(), currentScene));
-						else if (plants[i]->getName() == DOUBLE_SHOOTER) {
+						else if (plants[i]->getName() == DOUBLESHOOTER) {
 						
 							bullets.push_back(new peaBullet(plantRow, currentP.x + 62, currentP.y + 37, plants[i]->getAttackDamage(), currentScene));
 							auto delay = DelayTime::create(0.4f);
@@ -406,7 +313,15 @@ void God::checkJalapenoBomb() {
 			plants[i]->dieAnimation();
 			new Flame(plants[i]->getRow(), plants[i]->getX(), plants[i]->getY(), plants[i]->getAttackDamage(), currentScene);
 			for (int j = 0; j < waiting.size(); j++) {
-				if (waiting[i]->getCol() == plants[i]->getRow()) {
+				if (waiting[j]->getCol() == plants[i]->getRow()) {
+					waiting[j]->setCondition(DEAD);
+					waiting[j]->burning();
+					//死了的动画播放完了就把这个死了的僵尸从vector里删掉
+					auto delay = DelayTime::create(3.0f);
+					auto sequence = Sequence::create(delay, CallFunc::create([=]() {
+						waiting[j]->getIdv()->removeFromParent(); //僵尸死了不移除
+						}), nullptr);
+					waiting[j]->getIdv()->runAction(sequence);
 					//植物和僵尸在同一行，则该行僵尸均播放被烧毁动画，且设置死亡标志
 					//这里没有把火爆辣椒子弹放到子弹数组中，其他函数查不到
 				}
@@ -430,6 +345,18 @@ void God::checkSunflower()
 					plants[i]->setCondition(ABLE);
 					}), nullptr);
 				plants[i]->getIdv()->runAction(sequence);
+			}
+		}
+	}
+}
+
+void God::checkCard()
+{
+	for (int i = 0; i < cards.size(); i++) {
+		if (sun->getSunValue() >= cards[i]->getMoney()) {
+			if (cards[i]->getCondition() != SLEEP) {//如果没休眠
+				cards[i]->setCondition(ABLE);
+				cards[i]->changeApperence(1);
 			}
 		}
 	}

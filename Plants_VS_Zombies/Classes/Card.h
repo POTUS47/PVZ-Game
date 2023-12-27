@@ -20,14 +20,7 @@
 #include"Sun.h"
 #include<vector>
 #include<string>
-#define SUNFLOWER 1
-#define PEASHOOTER 2
-#define NUT 3
-#define DOUBLESHOOTER 4
-#define SUN_SHROOM 5
-#define PUFF_SHROOM 6
-#define FUME_SHROOM 7
-#define JALAPENO 8
+
 
 
 
@@ -35,7 +28,9 @@ class Card :public Entity
 {
 private:
 	Sun* sun;
-	std::string plantPath;
+	std::string plantPath;//植物的路径
+	std::string cardPath;//卡片的路径
+	std::string waitCardPath;//冷却卡片的路径
 	bool canClick;
 	bool isFollowingMouse = false;
 	Sprite* plantFollowSprite;
@@ -55,6 +50,7 @@ public:
 	int getCondition() { return condition; }
 	void setMoney(int _money) { money = _money; }
 	int getMoney() { return money; }
+	void changeApperence(int kind);
 	void setSun(Sun* _sun) {
 		sun = _sun;
 	}

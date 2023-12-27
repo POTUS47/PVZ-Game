@@ -65,6 +65,8 @@ public:
 	void sunShroomGrowUp();
 	//检查太阳花产阳光
 	void checkSunflower();
+	//检查card的状态
+	void checkCard();
 	
 
 

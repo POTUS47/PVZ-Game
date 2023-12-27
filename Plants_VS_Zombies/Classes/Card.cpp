@@ -8,20 +8,22 @@ float setTime(int type);
 
 Card::Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,Scene*_scene,int _type,Sun*_sun) {
     // 使用传入的图片路径创建 Sprite 对象
-    Sprite* card = Sprite::create(imagePath);
+	plantPath = plantpath;//保存对应植物的图片路径
+	cardPath = imagePath + ".png";
+	waitCardPath= imagePath + "wait.png";
+    Sprite* card = Sprite::create(cardPath);
     setIdv(card);
 	setCondition(POOR);
 	money = howMuch(_type);//设置价钱
 	sleepTime = setTime(_type);//设置卡片冷却时间
 	sun = _sun;
-	plantPath = plantpath;//保存对应植物的图片路径
+	
 	type = _type;//设置植物类型
 	scene = _scene;
     // 设置位置和缩放
     card->setPosition(Vec2(x, y));
     card->setScale(scale);
     _scene->addChild(card,2);
-	
 	addListener();
 }
 
@@ -38,10 +40,13 @@ void Card::addListener()
 			}
 			else {
 				setCondition(ABLE);
+				changeApperence(1);
 			}
 		}
 		else {
 			setCondition(POOR);
+			changeApperence(0);
+		
 		}
 
 		if (getCondition() == ABLE) {
@@ -87,6 +92,7 @@ void Card::addListener()
 						sun->updateSun();
 						auto delay = DelayTime::create(sleepTime);/////////////////////////////////////////此处有问题，不恢复了
 						condition = SLEEP;
+						getIdv()->setTexture(waitCardPath);
 						auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 							condition=POOR; // 解除休眠
 							}), nullptr);
@@ -145,7 +151,7 @@ void Card::createPlant(Vec2 real)
 			plants.push_back(new PeaShooter(real.x, real.y, 2.2, scene));
 			break;
 		case SUNFLOWER:
-			plants.push_back(new Sunflower(real.x, real.y, 2.2, scene,1));
+			plants.push_back(new Sunflower(real.x, real.y, 2.2, scene,0));//要改成isnight
 			break;
 		case DOUBLESHOOTER:
 			plants.push_back(new DoubleShooter(real.x, real.y, 2.2, scene));
@@ -160,6 +166,7 @@ void Card::createPlant(Vec2 real)
 			plants.push_back(new PuffShroom(real.x, real.y, 2.2, scene, 1));
 			break;
 		case FUME_SHROOM:
+			plants.push_back(new FumeShroom(real.x, real.y, 2.2, scene, 1));
 			break;
 		case JALAPENO:
 			plants.push_back(new Jalapeno(real.x, real.y, 2.2, scene));
@@ -196,13 +203,13 @@ float setTime(int type)
 {
 	switch (type) {
 		case  PEASHOOTER:
-			return 7.5;
+			return 5;
 		case SUNFLOWER:
-			return 7.5;
+			return 2;
 		case DOUBLESHOOTER:
 			return 10;
 		case NUT:
-			return 30;
+			return 15;
 		case SUN_SHROOM:
 			return 7.5;
 		case PUFF_SHROOM:
@@ -213,5 +220,15 @@ float setTime(int type)
 			return 50;
 		default:
 			break;
+	}
+}
+
+void Card::changeApperence(int kind)
+{
+	if (kind == 1) {//如果是ABLE
+		getIdv()->setTexture(cardPath);
+	}
+	else if (kind == 0) {
+		getIdv()->setTexture(waitCardPath);
 	}
 }

@@ -116,7 +116,7 @@ void Level1::moveRight(Ref* sender)
     god->setZombieStartTime();
     god->initCar(this);
     update(0);//先手动调用一次
-    this->schedule(schedule_selector(Level1::update), 15.0f);
+    this->schedule(schedule_selector(Level1::update), 10.0f);
     this->schedule(schedule_selector(Level1::CheckEveryMin), 0.1f);
     this->schedule(schedule_selector(Level1::CheckEveryTwoSec), 2.0f);
 
@@ -133,6 +133,7 @@ void Level1::CheckEveryMin(float dt)
     god->dead();
     god->checkJalapenoBomb();//////////////
     god->checkSunflower();
+    god->checkCard();
 }
 
 void Level1::CheckEveryTwoSec(float dt)

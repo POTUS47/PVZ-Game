@@ -10,10 +10,19 @@
 #define PLANT_SLEEP 6//植物睡觉
 
 #define SLEEP 6//卡片休眠状态
-#define POOR 7//阳光值不够购买
-#define ABLE 8//卡片可以点击
+#define ENOUPH 7//卡片阳光够但能不能买还要判断
+#define POOR 8//阳光值不够购买
+#define ABLE 9//卡片可以点击
 
-enum plantName { PEA_SHOOTER, DOUBLE_SHOOTER, SUN_FLOWER, NUT, SUN_SHROOM, PUFF_SHROOM,FUME_SHROOM,JALAPENO};//植物姓名标签.
+#define SUNFLOWER 1
+#define PEASHOOTER 2
+#define NUT 3
+#define DOUBLESHOOTER 4
+#define SUN_SHROOM 5
+#define PUFF_SHROOM 6
+#define FUME_SHROOM 7
+#define JALAPENO 8
+//enum plantName { PEA_SHOOTER, DOUBLE_SHOOTER, SUN_FLOWER, NUT, SUN_SHROOM, PUFF_SHROOM,FUME_SHROOM,JALAPENO};//植物姓名标签.
 USING_NS_CC;
 
 class Entity {
