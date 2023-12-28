@@ -33,28 +33,33 @@ void Card::addListener()
 	auto listener1 = EventListenerMouse::create();
 	listener->onTouchBegan = [&](Touch* touch, Event* event)
 	{
-		int sunmoney=sun->getSunValue();
-		if (sunmoney >= getMoney()) {//如果现在的阳光值大于等于这个卡片的价钱
-			if (getCondition() == SLEEP) {//如果现在在休眠
-				canClick == false;
-			}
-			else {
-				setCondition(ABLE);
-				changeApperence(1);
-			}
-		}
-		else {
-			setCondition(POOR);
-			changeApperence(0);
-		
-		}
-
-		if (getCondition() == ABLE) {
+		if (type == SHOVEL) {
 			canClick = true;
 		}
-		else if (getCondition() != ABLE) {
-			canClick =false;
+		else {
+			int sunmoney = sun->getSunValue();
+			if (sunmoney >= getMoney()) {//如果现在的阳光值大于等于这个卡片的价钱
+				if (getCondition() == SLEEP) {//如果现在在休眠
+					canClick == false;
+				}
+				else {
+					setCondition(ABLE);
+					changeApperence(1);
+				}
+			}
+			else {
+				setCondition(POOR);
+				changeApperence(0);
+			}
+
+			if (getCondition() == ABLE) {
+				canClick = true;
+			}
+			else if (getCondition() != ABLE) {
+				canClick = false;
+			}
 		}
+		
 		if (canClick == false)
 			return false;
 		if (!isFollowingMouse&&canClick==true)
@@ -82,7 +87,15 @@ void Card::addListener()
 				else {
 					Vec2 real = checkPosition(clickLocation);
 					if (real.x == 0 && real.y == 0) {//如果该点已经有植物了
-						;
+						if (type == SHOVEL) {
+							for (int i = 0; i < plants.size(); i++) {
+								cocos2d::Rect boundingBox = plants[i]->getIdv()->getBoundingBox();
+								if (boundingBox.containsPoint(clickLocation)) {
+									plants[i]->setCondition(DEAD);
+									plants[i]->getIdv()->setVisible(false);
+								}
+							}
+						}
 					}
 					else {
 						createPlant(real);
@@ -194,6 +207,8 @@ int howMuch(int type)
 			return 75;
 		case JALAPENO:
 			return 125;
+		case SHOVEL:
+			return 0;
 		default:
 			break;
 	}
@@ -218,6 +233,8 @@ float setTime(int type)
 			return 7.5;
 		case JALAPENO:
 			return 50;
+		case SHOVEL:
+			return 0;
 		default:
 			break;
 	}
