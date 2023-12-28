@@ -5,10 +5,11 @@ USING_NS_CC;
 //传入起始位置 缩放大小
 normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
 {
-    setSpeed(100);
+    setSpeed(20);
+    setWeapen(false);//普通僵尸没有武器
     setCondition(WAIT);
     setHP(100);
-    setAttack(20);
+    setAttack(2);
     setEatingTime(1.0f);
     auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");
     normalzombie->setPosition(x, y);
@@ -116,7 +117,7 @@ void normalZombie::dieAndlay(Sprite* who)
     animation->setLoops(1);//只播放一次
     animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
     auto anim = Animate::create(animation);
-    who->runAction(anim);/////////////////////考虑变成返回anim指针？
+    who->runAction(anim);
     
 
 }
@@ -141,3 +142,4 @@ void normalZombie::loseHead(Sprite* who)
     auto anim = Animate::create(animation);
     who->runAction(anim);
 }
+

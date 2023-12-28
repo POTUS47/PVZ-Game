@@ -11,11 +11,15 @@ public:
     int getRow() {
         return row;
     }
+    void setRow(int _row) {
+        row = _row;
+    }
     int getDamgeVlue() { return damage; }
 
     int getX() { return start_x; }
     int getY() { return start_y; }
     virtual void explodeAnimation() {};
+    int condition=0;//子弹不要重复攻击用
 private:
     int start_x;//子弹发射位置
     int start_y;

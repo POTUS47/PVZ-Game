@@ -3,7 +3,7 @@
 #include "Plant.h"
 class SunShroom : public Plant {
 public:
-    SunShroom(int x, int y, double scale, Scene* scene, int isNight, Label* sunLightLabel);
+    SunShroom(int x, int y, double scale, Scene* scene, int isNight);
 
     void waitingAnimation();
     void littleAnimation();
@@ -13,11 +13,8 @@ public:
     Scene* getScene() { return theScencePlantIn; }
     Label* getCurrentLevelSunLabel() { return currentLevelSunLabel; }
 
-
-    void  createLittleSun(float dt);
-    void  createSun(float dt);
     void growUp();
-
+    bool isBig = false;//标记是否长大，初设为否
 
 private:
     Scene* theScencePlantIn;

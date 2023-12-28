@@ -15,7 +15,7 @@ PuffShroom::PuffShroom(int x, int y, double scale, Scene* scene, int isNight) {
 
     //设置生命值等属性
     setHealth(100);
-    setAttackDamage(10);
+    setAttackDamage(20);
     //让植物开始摇摆
     if (isNight)
         attackAnimation();

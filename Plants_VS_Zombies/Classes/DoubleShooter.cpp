@@ -5,7 +5,7 @@ DoubleShooter::DoubleShooter(int x, int y, double scale, Scene* scene) {
     setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
     setX(x);
     setY(y);
-    setName(DOUBLE_SHOOTER);
+    setName(DOUBLESHOOTER);
     auto doubleShooter = cocos2d::Sprite::create("/plant/doubleshooter/Repeater1.png");
     doubleShooter->setPosition(x, y);
     doubleShooter->setScale(scale);
@@ -15,7 +15,7 @@ DoubleShooter::DoubleShooter(int x, int y, double scale, Scene* scene) {
 
     //设置生命值等属性
     setHealth(100);
-    setAttackDamage(9);
+    setAttackDamage(10);
     //让植物开始摇摆
     waitingAnimation();
 }
