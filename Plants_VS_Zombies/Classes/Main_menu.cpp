@@ -28,7 +28,6 @@ bool Main_menu::init()
         return false;
     }
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGM/menu.mp3");
-
     // ²¥·Å±³¾°ÒôÀÖ
     CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/menu.mp3", true);
 
@@ -157,7 +156,7 @@ void Main_menu::startGameCallback(Ref* pSender)
 
 }
 
-void Main_menu::GoToWhichScene(int latestLevel) {
+void Main_menu::GoToWhichScene(int latestLevel) {//ÕâÀï¼ÇµÃÍ£Ö¹±³¾°ÒôÀÖ CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
     switch (latestLevel) {
         case 1: {
             Scene* aaa = Level1::createScene();

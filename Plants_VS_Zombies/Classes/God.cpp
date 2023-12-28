@@ -85,9 +85,9 @@ void God::updateZombies(int level)
 		waiting[i]->setStartTime(Statime[level-1][1-1][i]);//设置出发时间
 		waiting[i]->setCol(col);//设置出发赛道
 	}
-	plants.push_back(new DoubleShooter(333, 333, 2.2, currentScene));//////////////////////
-	plants.push_back(new DoubleShooter(133, 123, 2.2, currentScene));//////////////////////
-	plants.push_back(new Jalapeno(133, 123, 2.2, currentScene));
+	plants.push_back(new DoubleShooter(215, 350, 2.2, currentScene));//////////////////////
+	plants.push_back(new DoubleShooter(405, 160, 2.2, currentScene));//////////////////////
+	plants.push_back(new Jalapeno(215, 123, 2.2, currentScene));
 
 	plants.push_back(new PuffShroom(215, 730, 2.2, currentScene,1));/////////////
 	plants.push_back(new PuffShroom(405, 920, 2.2, currentScene, 1));/////////////
@@ -352,9 +352,8 @@ void God::checkAttack() {
 						if(plants[i]->getName()==PEA_SHOOTER)
 						    bullets.push_back(new peaBullet(plantRow,currentP.x+62, currentP.y+37, plants[i]->getAttackDamage(), currentScene));
 						else if (plants[i]->getName() == DOUBLE_SHOOTER) {
-						
 							bullets.push_back(new peaBullet(plantRow, currentP.x + 62, currentP.y + 37, plants[i]->getAttackDamage(), currentScene));
-							auto delay = DelayTime::create(0.4f);
+							auto delay = DelayTime::create(0.3f);
 							auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 								bullets.push_back(new peaBullet(plantRow, currentP.x + 62, currentP.y + 37, plants[i]->getAttackDamage(), currentScene));
 								}), nullptr);
@@ -370,7 +369,6 @@ void God::checkAttack() {
 							bullets.push_back(new puffShroomBullet(2,plantRow, currentP.x + 380, currentP.y +35, plants[i]->getAttackDamage(), currentScene));
 						     }
 					}
-				
 				}
 			}
 		}
