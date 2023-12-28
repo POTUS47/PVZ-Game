@@ -32,7 +32,7 @@ void SunShroom::waitingAnimation() {
 	char nameSize[50] = { 0 };
 	for (int i = 0; i < 14; i++)
 	{
-		sprintf(nameSize, "/plant/sunshroom/s%d", i);
+		sprintf(nameSize, "/plant/sunshroom/s%d.png", i);
 		animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
 	}
 	animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔
@@ -67,7 +67,7 @@ void SunShroom::bigAnimation() {
 	char nameSize[50] = { 0 };
 	for (int i = 0; i < 10; i++)
 	{
-		sprintf(nameSize, "/plant/sunshroom/b%d.png", i);
+		sprintf(nameSize, "/plant/sunshroom/b %d.png", i);
 		animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
 	}
 	animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔

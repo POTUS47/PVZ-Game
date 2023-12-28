@@ -134,6 +134,7 @@ void Level1::CheckEveryMin(float dt)
     god->checkJalapenoBomb();
     god->checkSunflower();
     god->checkCard();
+    god->sunShroomGrowUp();
 }
 
 void Level1::CheckEveryTwoSec(float dt)

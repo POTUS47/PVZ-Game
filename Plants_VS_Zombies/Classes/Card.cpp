@@ -2,7 +2,7 @@
 
 extern std::vector<Card*>cards;
 extern std::vector<Plant*>plants;
-
+extern bool isNight;
 int howMuch(int type);
 float setTime(int type);
 
@@ -105,11 +105,12 @@ void Card::addListener()
 						sun->updateSun();
 						auto delay = DelayTime::create(sleepTime);/////////////////////////////////////////此处有问题，不恢复了
 						condition = SLEEP;
+						changeApperence(0);
 						getIdv()->setTexture(waitCardPath);
 						auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 							condition=POOR; // 解除休眠
 							}), nullptr);
-						plantFollowSprite->runAction(sequence);
+						getIdv()->runAction(sequence);
 					}
 					
 				}
@@ -164,7 +165,7 @@ void Card::createPlant(Vec2 real)
 			plants.push_back(new PeaShooter(real.x, real.y, 2.2, scene));
 			break;
 		case SUNFLOWER:
-			plants.push_back(new Sunflower(real.x, real.y, 2.2, scene,0));//要改成isnight
+			plants.push_back(new Sunflower(real.x, real.y, 2.2, scene,isNight));//要改成isnight
 			break;
 		case DOUBLESHOOTER:
 			plants.push_back(new DoubleShooter(real.x, real.y, 2.2, scene));
@@ -173,13 +174,13 @@ void Card::createPlant(Vec2 real)
 			plants.push_back(new Nut(real.x, real.y, 2.2, scene));
 			break;
 		case SUN_SHROOM:
-			plants.push_back(new SunShroom(real.x, real.y, 2.2, scene,0));
+			plants.push_back(new SunShroom(real.x, real.y, 2.2, scene,isNight));
 			break;
 		case PUFF_SHROOM:
-			plants.push_back(new PuffShroom(real.x, real.y, 2.2, scene, 1));
+			plants.push_back(new PuffShroom(real.x, real.y, 2.2, scene, isNight));
 			break;
 		case FUME_SHROOM:
-			plants.push_back(new FumeShroom(real.x, real.y, 2.2, scene, 1));
+			plants.push_back(new FumeShroom(real.x, real.y, 2.2, scene, isNight));
 			break;
 		case JALAPENO:
 			plants.push_back(new Jalapeno(real.x, real.y, 2.2, scene));
@@ -220,7 +221,7 @@ float setTime(int type)
 		case  PEASHOOTER:
 			return 5;
 		case SUNFLOWER:
-			return 2;
+			return 20;
 		case DOUBLESHOOTER:
 			return 10;
 		case NUT:

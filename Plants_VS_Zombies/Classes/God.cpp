@@ -10,6 +10,8 @@ std::vector<Zombie*>walking;
 /*死了的僵尸*/
 std::vector<Zombie*>dead;
 
+bool isNight = false;//是不是晚上，暂设为不是
+
 /*当前关卡的所有植物*/
 std::vector<Plant*>plants;
 
@@ -241,10 +243,11 @@ void God::checkEat()
 			int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
 			if (zombieCon == WALKING) {//如果僵尸在走路的途中
 				if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv()) && zombieRow == plantRow) {//碰上植物且在同一行
-					if (plantCon == HEALTHY) {
+					if (plantCon == HEALTHY||plantCon==PLANT_SLEEP) {
 						waiting[j]->setCondition(EATING);//僵尸变为在吃
+						plants[i]->setCondition(BEINGEATEN);
 						waiting[j]->healthyEating(waiting[j]->getIdv());
-						plants[i]->getHurt(waiting[j]->getAttack());///////////////////////////////////////////////////////具体数值需要再斟酌
+						//plants[i]->getHurt(waiting[j]->getAttack());///////////////////////////////////////////////////////具体数值需要再斟酌
 					}
 				}
 			}
@@ -301,11 +304,11 @@ void God::checkAttack() {
 								}), nullptr);
 							plants[i]->getIdv()->runAction(sequence);
 						}
-						else if (plants[i]->getName() == PUFF_SHROOM&&
+						else if (isNight&&plants[i]->getName() == PUFF_SHROOM&&
 							waiting[j]->getIdv()->getPosition().x - plants[i]->getX() <= 550) {
 							bullets.push_back(new puffShroomBullet(1,plantRow, currentP.x + 250, currentP.y-5 , plants[i]->getAttackDamage(), currentScene));
 						     }
-						else if (plants[i]->getName() == FUME_SHROOM &&
+						else if (isNight && plants[i]->getName() == FUME_SHROOM &&
 							waiting[j]->getIdv()->getPosition().x - plants[i]->getX() <= 750) {
 
 							bullets.push_back(new puffShroomBullet(2,plantRow, currentP.x + 380, currentP.y +35, plants[i]->getAttackDamage(), currentScene));
@@ -377,14 +380,15 @@ void God::checkSunflower()
 					sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
 				}
 				else {
-					if (plants[i]->IsAdolescent()) {
-						sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
-					}
-					else {
-						sun->flowerSun(plants[i]->getIdv()->getPosition(), 0);
+					if (isNight) {
+						if (plants[i]->IsAdolescent()) {
+							sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
+						}
+						else {
+							sun->flowerSun(plants[i]->getIdv()->getPosition(), 0);
+						}
 					}
 				}
-				
 				plants[i]->setCondition(HEALTHY);
 				auto delay = DelayTime::create(20.0f);//十秒产一次阳光
 				auto sequence = Sequence::create(delay, CallFunc::create([=]() {
