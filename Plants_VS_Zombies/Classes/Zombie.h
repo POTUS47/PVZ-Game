@@ -3,9 +3,6 @@
 #include"cocos2d.h"
 #include"Entity.h"
 
-
-
-
 class Zombie :public Entity {
 private:
 	int HP;//僵尸血量
@@ -19,28 +16,28 @@ private:
 	bool weapen;//僵尸是否有武器？帽子等
 public:
 	void setHP(int hp);//设置血量
-	int getHP();//获取血量
+	int getHP()const;//获取血量
 
 	void setWeapen(bool wea);//设置血量
-	bool getWeapen();//获取血量
+	bool getWeapen()const;//获取血量
 
 	void setSpeed(int speed);//设置前进速度
-	int getSpeed();//获取僵尸行走速度
+	int getSpeed()const;//获取僵尸行走速度
 
 	void setStartTime(float time);//设置出发时间
-	float getStartTime();//获取出发时间
+	float getStartTime()const;//获取出发时间
 
 	void setCol(int Col);//设置出发赛道
-	int getCol();//获取出发赛道
+	int getCol()const;//获取出发赛道
 
 	void setCondition(int con);//设置僵尸状态
-	int getCondition();//获取僵尸状态
+	int getCondition()const;//获取僵尸状态
 
 	void setEatingTime(float time);//设置僵尸吃植物的时间间隔
-	float getEatingTime();//获取僵尸吃植物的时间间隔
+	float getEatingTime()const;//获取僵尸吃植物的时间间隔
 
 	void setAttack(int att);//设置僵尸吃植物的伤害值
-	int getAttack();//获取僵尸吃植物的伤害值
+	int getAttack()const;//获取僵尸吃植物的伤害值
 
 	bool getHeadCondition();//获取头还在不在
 	virtual void moveForward(Sprite* who) = 0;//向前走的动作

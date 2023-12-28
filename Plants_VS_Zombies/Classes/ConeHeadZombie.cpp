@@ -115,7 +115,7 @@ void coneHeadZombie::dieAndlay(Sprite* who)
     animation->setLoops(1);//只播放一次
     animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
     auto anim = Animate::create(animation);
-    who->runAction(anim);/////////////////////考虑变成返回anim指针？
+    who->runAction(anim);
     
 }
 

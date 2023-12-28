@@ -6,7 +6,7 @@ void Zombie::setHP(int hp)
 	HP = hp;//传入自定义血量
 }
 
-int Zombie::getHP() {
+int Zombie::getHP() const{
 	return HP;
 }
 
@@ -15,7 +15,7 @@ void Zombie::setWeapen(bool wea)
 	weapen = wea;
 }
 
-bool Zombie::getWeapen() 
+bool Zombie::getWeapen() const
 {
 	return weapen;
 }
@@ -25,7 +25,7 @@ void Zombie::setSpeed(int speed)
 	walkSpeed = speed;//传入自定义速度
 }
 
-int Zombie::getSpeed()
+int Zombie::getSpeed()const
 {
 	return walkSpeed;
 }
@@ -40,7 +40,7 @@ void Zombie::setStartTime(float time)
 	startTime = time;
 }
 
-float Zombie::getStartTime()
+float Zombie::getStartTime()const
 {
 	return startTime;
 }
@@ -50,7 +50,7 @@ void Zombie::setCol(int Col)
 	col = Col;
 }
 
-int Zombie::getCol()
+int Zombie::getCol()const
 {
 	return col;
 }
@@ -60,7 +60,7 @@ void Zombie::setCondition(int con)
 	condition = con;
 }
 
-int Zombie::getCondition()
+int Zombie::getCondition()const
 {
 	return condition;
 }
@@ -70,7 +70,7 @@ void Zombie::setEatingTime(float time)
 	eatPlantTime = time;
 }
 
-float Zombie::getEatingTime()
+float Zombie::getEatingTime()const
 {
 	return eatPlantTime;
 }
@@ -80,7 +80,7 @@ void Zombie::setAttack(int att)
 	attackDegree = att;
 }
 
-int Zombie::getAttack()
+int Zombie::getAttack()const
 {
 	return attackDegree;
 }
