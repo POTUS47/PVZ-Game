@@ -12,6 +12,10 @@
 USING_NS_CC;
 class Plant : public Entity {
 public:
+    bool canCreateSun() { return CanCreateSun; }
+    void setCanNotCreateSun(){ CanCreateSun = 0; }//设为不能产阳光
+
+    bool IsHealthy() { return !(health < 0); }
 
     int getHealth() { return health; }
     void setHealth(int Health) { health = Health; }
@@ -57,11 +61,12 @@ public:
 
 private:
     int name;//记录是何种植物,方便发射相应的子弹
-    int health;   //生命值      
+    int health;//生命值      
     int attackDamage = 0;//单发子弹伤害值
     int row;//行
     int col;//列
     int condition = HEALTHY;//记录状态
+    bool CanCreateSun=1;//针对能产阳光的特殊植物
     int x;//xy坐标
     int y;
     bool isAdolescent = 1;//植物处于幼年期 用于阳光菇的生长

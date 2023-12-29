@@ -161,13 +161,13 @@ Vec2 checkPosition(Vec2 Point)
 void Card::createPlant(Vec2 real)
 {
 	switch (type) {
-		case PEASHOOTER:
+		case PEA_SHOOTER:
 			plants.push_back(new PeaShooter(real.x, real.y, 2.2, scene));
 			break;
 		case SUNFLOWER:
 			plants.push_back(new Sunflower(real.x, real.y, 2.2, scene,isNight));//Òª¸Ä³Éisnight
 			break;
-		case DOUBLESHOOTER:
+		case DOUBLE_SHOOTER:
 			plants.push_back(new DoubleShooter(real.x, real.y, 2.2, scene));
 			break;
 		case NUT:
@@ -192,11 +192,11 @@ void Card::createPlant(Vec2 real)
 int howMuch(int type)
 {
 	switch (type) {
-		case  PEASHOOTER:
+		case  PEA_SHOOTER:
 			return 100;
 		case SUNFLOWER:
 			return 50;
-		case DOUBLESHOOTER:
+		case DOUBLE_SHOOTER:
 			return 200;
 		case NUT:
 			return 50;
@@ -218,11 +218,11 @@ int howMuch(int type)
 float setTime(int type)
 {
 	switch (type) {
-		case  PEASHOOTER:
+		case  PEA_SHOOTER:
 			return 5;
 		case SUNFLOWER:
 			return 20;
-		case DOUBLESHOOTER:
+		case DOUBLE_SHOOTER:
 			return 10;
 		case NUT:
 			return 15;

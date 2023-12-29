@@ -14,7 +14,6 @@ public:
     Label* getCurrentLevelSunLabel() { return currentLevelSunLabel; }
 
     void growUp();
-    bool isBig = false;//标记是否长大，初设为否
 
 private:
     Scene* theScencePlantIn;

@@ -10,7 +10,7 @@ std::vector<Zombie*>walking;
 /*死了的僵尸*/
 std::vector<Zombie*>dead;
 
-bool isNight = false;//是不是晚上，暂设为不是
+
 
 /*当前关卡的所有植物*/
 std::vector<Plant*>plants;
@@ -93,7 +93,7 @@ void God::updateZombies(int level)
 	}
 	plants.push_back(new DoubleShooter(215, 350, 2.2, currentScene));//////////////////////
 	plants.push_back(new DoubleShooter(405, 160, 2.2, currentScene));//////////////////////
-	plants.push_back(new Jalapeno(215, 123, 2.2, currentScene));
+	plants.push_back(new Jalapeno(215, 160, 2.2, currentScene));
 
 	plants.push_back(new PuffShroom(215, 730, 2.2, currentScene,1));/////////////
 	plants.push_back(new PuffShroom(405, 920, 2.2, currentScene, 1));/////////////
@@ -140,17 +140,7 @@ void God::dead()
 		}
 		
 	}
-	//检查是否有植物死亡
-	for (int i = 0; i < plants.size(); i++) {
-		if (plants[i]->getCondition() != DEAD) {//如果植物没死
-			if (plants[i]->getHealth() <= 0) {
-				plants[i]->setCondition(DEAD);//设置为死了
-				//plants[i]->dieAnimation();//植物立刻消失，移除精灵指针
-				//甚至不能移除指针，我先用设置为隐形替代（勿改）
-				plants[i]->getIdv()->setVisible(false);
-			}
-		}
-	}
+	//植物死亡已由植物类内函数处理
 }
 
 void God::setZombieStartTime()
@@ -172,10 +162,10 @@ void God::setZombieStartTime()
 void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 {
 
-	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEASHOOTER,_sun));
+	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEA_SHOOTER,_sun));
 	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower", "/plant/sunflower/SunFlower1.png", scene, SUNFLOWER, _sun));
 	cards.push_back(new Card(492, 1108, 1.95, "/card/nut", "/plant/nut/zz1.png", scene,NUT,_sun));
-	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter", "/plant/doubleshooter/Repeater1.png", scene,DOUBLESHOOTER,_sun));
+	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter", "/plant/doubleshooter/Repeater1.png", scene,DOUBLE_SHOOTER,_sun));
 	cards.push_back(new Card(716, 1108, 1.95, "/card/sunshroom", "/plant/sunshroom/b0.png",scene, SUN_SHROOM, _sun));
 	cards.push_back(new Card(828, 1108, 1.95, "/card/jalapeno", "/plant/jalapeno/j (1).png", scene, JALAPENO, _sun));
 	cards.push_back(new Card(940, 1108, 1.2, "/card/fumeshroom", "/plant/fumeshroom/s (1).png", scene, FUME_SHROOM, _sun));
@@ -183,8 +173,6 @@ void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 	
 	cards.push_back(new Card(1164, 1108, 1.05, "/card/shovel", "/card/shovel.png", scene, SHOVEL, _sun));
 }
-
-
 
 void God::initCar(Scene* scene)
 {
@@ -215,8 +203,6 @@ void God::hitByCar()
 	}
 }
 
-
-
 //检查僵尸和子弹有没有相撞
 void God::checkCrush() {
 	for (int i = 0; i < bullets.size(); i++) {//遍历所有子弹
@@ -227,11 +213,11 @@ void God::checkCrush() {
 					int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
 					if (bulletRow == zombieRow) {
 						bullets[i]->explodeAnimation();//子弹爆炸特效，停留0.4秒后将子弹精灵从parent移除，然后标记为要从vector删除
-						if (bullets[i]->condition == 0) {
+						if (bullets[i]->condition == NOT_USED) {
 							int currentHP = waiting[j]->getHP();
 							int minus = bullets[i]->getDamgeVlue();
 							waiting[j]->setHP(currentHP -= minus);
-							bullets[i]->condition = 1;//保证一颗子弹只扣一次血，勿改勿改
+							bullets[i]->condition = USED;//保证一颗子弹只扣一次血，勿改勿改
 						}
 
 					}
@@ -250,9 +236,10 @@ void God::checkEat()
 			int plantCon = plants[i]->getCondition();
 			int plantRow = plants[i]->getRow();//获取植物所在第几行
 			int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
+
 			if (zombieCon == WALKING) {//如果僵尸在走路的途中
 				if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv()) && zombieRow == plantRow) {//碰上植物且在同一行
-					if (plantCon == HEALTHY||plantCon==PLANT_SLEEP) {
+					if (plantCon == HEALTHY||plantCon==SLEEP) {
 						waiting[j]->setCondition(EATING);//僵尸变为在吃
 						plants[i]->setCondition(BEINGEATEN);
 						waiting[j]->healthyEating(waiting[j]->getIdv());
@@ -294,15 +281,16 @@ bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
 
 //检查植物需不需要发射子弹,可以2s检查一次？
 void God::checkAttack() {
+	int isNight = dayOrNight;
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=DEAD&& plants[i]->getCondition() != PLANT_SLEEP) {//筛出攻击性植物且植物不能死亡
+		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=DEAD&& plants[i]->getCondition() != SLEEP) {//筛出攻击性植物且植物不能死亡
 			int plantRow = plants[i]->getRow();
 			for (int j = 0; j<waiting.size(); j++) {//遍历所有僵尸
 				if (waiting[j]->getCondition() == WALKING|| waiting[j]->getCondition() ==EATING) {//得到活着的或者正在吃的僵尸
 					int zombieRow = waiting[j]->getCol();
 					if (zombieRow == plantRow) {//该植物启动攻击行为
 						Vec2 currentP=plants[i]->getIdv()->getPosition();//获取要发射子弹的植物的位置
-						if(plants[i]->getName()==PEASHOOTER)
+						if(plants[i]->getName()==PEA_SHOOTER)
 						    bullets.push_back(new peaBullet(plantRow,currentP.x+62, currentP.y+37, plants[i]->getAttackDamage(), currentScene));
 						else if (plants[i]->getName() == DOUBLE_SHOOTER) {
 							bullets.push_back(new peaBullet(plantRow, currentP.x + 62, currentP.y + 37, plants[i]->getAttackDamage(), currentScene));
@@ -375,34 +363,32 @@ void God::checkJalapenoBomb() {
 	}
 }
 
-//写新函数：
-
-//检查太阳花是不是该产生太阳了
+//检查太阳花和阳光菇是不是该产生太阳了
 void God::checkSunflower()
 {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if ((plants[i]->getName() == SUNFLOWER|| plants[i]->getName() == SUN_SHROOM) && plants[i]->getCondition() != DEAD) {//是太阳花且没有死
-			if (plants[i]->getCondition() == ABLE) {//可以产阳光
-				if (plants[i]->getName() == SUNFLOWER) {
-					sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
-				}
-				else {
-					if (isNight) {
-						if (plants[i]->IsAdolescent()) {
-							sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
-						}
-						else {
-							sun->flowerSun(plants[i]->getIdv()->getPosition(), 0);
-						}
+		if ((plants[i]->getName() == SUNFLOWER|| plants[i]->getName() == SUN_SHROOM)
+			&& plants[i]->getCondition() != DEAD&& plants[i]->canCreateSun()) {//是太阳花且没有死且能产阳光
+			if (plants[i]->getName() == SUNFLOWER && dayOrNight != NIGHT) {
+				plants[i]->attackAnimation();//植物短暂发亮
+				sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
+			}
+			else {
+				if (dayOrNight == NIGHT) {
+					if (plants[i]->IsAdolescent()) {
+						sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
+					}
+					else {
+						sun->flowerSun(plants[i]->getIdv()->getPosition(), 0);
 					}
 				}
-				plants[i]->setCondition(HEALTHY);
-				auto delay = DelayTime::create(20.0f);//十秒产一次阳光
-				auto sequence = Sequence::create(delay, CallFunc::create([=]() {
-					plants[i]->setCondition(ABLE);
-					}), nullptr);
-				plants[i]->getIdv()->runAction(sequence);
 			}
+			plants[i]->setCondition(HEALTHY);
+			auto delay = DelayTime::create(20.0f);//十秒产一次阳光
+			auto sequence = Sequence::create(delay, CallFunc::create([=]() {
+				plants[i]->setCanNotCreateSun();//设为不能产阳光
+				}), nullptr);
+			plants[i]->getIdv()->runAction(sequence);
 		}
 	}
 }
@@ -422,3 +408,5 @@ void God::checkCard()
 		}
 	}
 }
+
+///////////////////记得在level的析构函数中清空vector 释放内存
