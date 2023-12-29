@@ -44,6 +44,7 @@ public:
 	Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,Scene*_scene,int _type,Sun* _sun);
 	//添加卡片监听器
 	void addListener();
+	void addMINIListener();
 	//调用构造植物的函数
 	void createPlant(Vec2 real);
 	void setCondition(int con) { condition = con; }
