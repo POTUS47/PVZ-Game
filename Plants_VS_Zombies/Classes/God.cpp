@@ -1,6 +1,7 @@
 #include"God.h"
 #include<algorithm>
 std::vector<Card*>cards;
+std::vector<Card*>randCards;
 /*小推车*/
 std::vector<Car*>littleCar;
 /*正在等待的僵尸*/
@@ -407,4 +408,28 @@ void God::checkCard()
 	}
 }
 
-///////////////////记得在level的析构函数中清空vector 释放内存
+void God::randomCardInit(Sun* _sun)
+{
+	int x = rand() % 1200 + 100;
+	int y = rand() % 900 + 100;
+
+	Card* rcard=new Card(x, 1400, 1.05, "empty", "empty.png", currentScene, MINIGAME, _sun);
+	randCards.push_back(rcard);
+	int speed = 150;
+	auto moveBy = MoveBy::create((1400 - y) / speed, Vec2(0, -(1400 - y)));
+	rcard->getIdv()->runAction(moveBy);
+	Sprite* current = rcard->getIdv();
+
+	// 启动一个定时器，在五秒后检查是否有鼠标点击阳光，若无则自动消失
+	float t = (1400 - y) / speed + 5;
+	auto delayAction = DelayTime::create(t);
+	auto checkClickCallback = CallFunc::create([=]() {
+		if (current && current->getParent()) {
+			// 阳光还存在且没有被点击，则自动让阳光消失
+			current->removeFromParent();
+		}
+		});
+	auto sequence = Sequence::create(delayAction, checkClickCallback, nullptr);
+	current->runAction(sequence);
+	
+}

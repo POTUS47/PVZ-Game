@@ -69,7 +69,10 @@ public:
 	void checkSunflower();
 	//检查card的状态
 	void checkCard();
-	
+	//种子雨
+	void randomCardInit( Sun* _sun);
+
+
 	void setSun(Sun* _sun) {
 		sun = _sun;
 	}
