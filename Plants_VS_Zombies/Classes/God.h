@@ -2,19 +2,42 @@
 #include "cocos2d.h"
 #include<vector>
 #include"NormalZombie.h"
+<<<<<<< Updated upstream
+=======
+#include"ConeHeadZombie.h"
+#include"NewspaperZombie.h"
+>>>>>>> Stashed changes
 #include<iostream>
 #include"Level1.h"
 //添加了植物的头文件
 #include "PeaShooter.h"
 #include "Nut.h"
 #include "DoubleShooter.h"
+<<<<<<< Updated upstream
+=======
+#include"Card.h"
+#include"Car.h"
+#include "peaBullet.h"
+#include "puffShroomBullet.h"
+#include"plant.h"
+#include"flame.h"
+#include "SunShroom.h"
+#include"Jalapeno.h"
+#include"PuffShroom.h"
+#include"FumeShroom.h"
+>>>>>>> Stashed changes
 
 /*调度器放在这里，检测游戏是否结束等等*/
 class God :public Node
 {
 private:
 	int dayOrNight;//0是白天，1是黑夜
+<<<<<<< Updated upstream
 	Label* sunLightLabel;//左上角阳光label
+=======
+	Scene* currentScene;//GOD管理的当前场景指针
+	Sun* sun;
+>>>>>>> Stashed changes
 public:
 	//构造函数
 	God(int isNight);
@@ -30,7 +53,37 @@ public:
 	void createSun(cocos2d::Scene* scene);
 	//阳光多少的显示
 	void updateSun();
+<<<<<<< Updated upstream
 	Label* getSunLightLabel() { return sunLightLabel; }
 	void changeSunLabel(Label* sunlabel) { sunLightLabel = sunlabel; }
+=======
+	//在植物选择器里展示植物卡片
+	void showCardinSeedBank(Scene* scene, Sun* _sun);
+	//生成小车
+	void initCar(Scene* scene);
+	//检测是否有僵尸和植物相撞
+	void checkCrush();
+	//检查植物需不需要发射子弹
+	void checkAttack();
+	//删除在vector中不需要的子弹
+	void checkBulletToDelete();
+	//检查僵尸要不要吃植物
+	void checkEat();
+	//种植物
+	bool plantPlant(Vec2 Point, int type);
+
+	//检查是否有辣椒要爆炸
+	void checkJalapenoBomb();
+	//检查是否有阳光菇要生长
+	void sunShroomGrowUp();
+	//检查太阳花产阳光
+	void checkSunflower();
+	//检查card的状态
+	void checkCard();
+	
+	void setSun(Sun* _sun) {
+		sun = _sun;
+	}
+>>>>>>> Stashed changes
 
 };

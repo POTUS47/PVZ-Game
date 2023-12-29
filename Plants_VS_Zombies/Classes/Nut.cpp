@@ -9,8 +9,13 @@ Nut::Nut(int x, int y, double scale, Scene* scene) {
     setIdv(nut);//将精灵指针存入idv
 
     //设置生命值等属性
+<<<<<<< Updated upstream
     setHealth(600);
     /////////////////////////让植物开始摇摆
+=======
+    setHealth(800);
+    //让植物开始摇摆
+>>>>>>> Stashed changes
     waitingAnimation();
 }
 

@@ -11,8 +11,13 @@ PeaShooter::PeaShooter(int x,int y, double scale,Scene* scene) {
 
     //设置生命值等属性
     setHealth(100);
+<<<<<<< Updated upstream
     setAttackDamage(9);
     /////////////////////////让植物开始摇摆
+=======
+    setAttackDamage(10);
+    //植物进入等待动画
+>>>>>>> Stashed changes
     waitingAnimation();
 }
 
