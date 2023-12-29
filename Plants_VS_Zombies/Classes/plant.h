@@ -13,6 +13,7 @@ USING_NS_CC;
 class Plant : public Entity {
 public:
     bool canCreateSun() { return CanCreateSun; }
+    void setCanCreateSun() { CanCreateSun = 1; }
     void setCanNotCreateSun(){ CanCreateSun = 0; }//设为不能产阳光
 
     bool IsHealthy() { return !(health < 0); }
@@ -54,6 +55,8 @@ public:
     //植物受伤
     void getHurt(int hurtValue) {
         health -= hurtValue;
+        if (!IsHealthy()) 
+            dieAnimation();
     }
 
     void setName(int n) { name = n; }

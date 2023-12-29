@@ -39,9 +39,13 @@ private:
 	int condition=POOR;//卡片的状态
 	int money;//购买的价格
 	int sleepTime;//休眠时间
+
+	int isNight;
+
 public:
 	//构造函数，传入位置，大小，图片路径,植物图片路径
-	Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,Scene*_scene,int _type,Sun* _sun);
+	Card(int x, int y, float scale, const std::string& imagePath, 
+		const std::string& plantpath,Scene*_scene,int _type,Sun* _sun,int IsNight);
 	//添加卡片监听器
 	void addListener();
 	//调用构造植物的函数

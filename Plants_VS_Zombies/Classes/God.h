@@ -5,7 +5,7 @@
 #include"ConeHeadZombie.h"
 #include"NewspaperZombie.h"
 #include<iostream>
-#include"Level1.h"
+#include"Level.h"
 //添加了植物的头文件
 #include "PeaShooter.h"
 #include "Nut.h"
@@ -70,8 +70,6 @@ public:
 	//检查card的状态
 	void checkCard();
 	
-
-
 	void setSun(Sun* _sun) {
 		sun = _sun;
 	}

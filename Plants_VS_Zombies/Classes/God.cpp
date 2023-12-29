@@ -10,8 +10,6 @@ std::vector<Zombie*>walking;
 /*死了的僵尸*/
 std::vector<Zombie*>dead;
 
-
-
 /*当前关卡的所有植物*/
 std::vector<Plant*>plants;
 
@@ -162,16 +160,16 @@ void God::setZombieStartTime()
 void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 {
 
-	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEA_SHOOTER,_sun));
-	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower", "/plant/sunflower/SunFlower1.png", scene, SUNFLOWER, _sun));
-	cards.push_back(new Card(492, 1108, 1.95, "/card/nut", "/plant/nut/zz1.png", scene,NUT,_sun));
-	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter", "/plant/doubleshooter/Repeater1.png", scene,DOUBLE_SHOOTER,_sun));
-	cards.push_back(new Card(716, 1108, 1.95, "/card/sunshroom", "/plant/sunshroom/b0.png",scene, SUN_SHROOM, _sun));
-	cards.push_back(new Card(828, 1108, 1.95, "/card/jalapeno", "/plant/jalapeno/j (1).png", scene, JALAPENO, _sun));
-	cards.push_back(new Card(940, 1108, 1.2, "/card/fumeshroom", "/plant/fumeshroom/s (1).png", scene, FUME_SHROOM, _sun));
-	cards.push_back(new Card(1052, 1108, 1.95, "/card/puffshroom", "/plant/puffshroom/w (1).png", scene, PUFF_SHROOM, _sun));
+	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEA_SHOOTER,_sun, dayOrNight));
+	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower", "/plant/sunflower/SunFlower1.png", scene, SUNFLOWER, _sun, dayOrNight));
+	cards.push_back(new Card(492, 1108, 1.95, "/card/nut", "/plant/nut/zz1.png", scene,NUT,_sun, dayOrNight));
+	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter", "/plant/doubleshooter/Repeater1.png", scene,DOUBLE_SHOOTER,_sun, dayOrNight));
+	cards.push_back(new Card(716, 1108, 1.95, "/card/sunshroom", "/plant/sunshroom/b0.png",scene, SUN_SHROOM, _sun, dayOrNight));
+	cards.push_back(new Card(828, 1108, 1.95, "/card/jalapeno", "/plant/jalapeno/j (1).png", scene, JALAPENO, _sun, dayOrNight));
+	cards.push_back(new Card(940, 1108, 1.2, "/card/fumeshroom", "/plant/fumeshroom/s (1).png", scene, FUME_SHROOM, _sun, dayOrNight));
+	cards.push_back(new Card(1052, 1108, 1.95, "/card/puffshroom", "/plant/puffshroom/w (1).png", scene, PUFF_SHROOM, _sun, dayOrNight));
 	
-	cards.push_back(new Card(1164, 1108, 1.05, "/card/shovel", "/card/shovel.png", scene, SHOVEL, _sun));
+	cards.push_back(new Card(1164, 1108, 1.05, "/card/shovel", "/card/shovel.png", scene, SHOVEL, _sun, dayOrNight));
 }
 
 void God::initCar(Scene* scene)
@@ -223,7 +221,6 @@ void God::checkCrush() {
 					}
 				}
 			}
-			
 		}
 	}
 }
@@ -371,6 +368,7 @@ void God::checkSunflower()
 			&& plants[i]->getCondition() != DEAD&& plants[i]->canCreateSun()) {//是太阳花且没有死且能产阳光
 			if (plants[i]->getName() == SUNFLOWER && dayOrNight != NIGHT) {
 				plants[i]->attackAnimation();//植物短暂发亮
+				plants[i]->setCanNotCreateSun();//
 				sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
 			}
 			else {
@@ -386,7 +384,7 @@ void God::checkSunflower()
 			plants[i]->setCondition(HEALTHY);
 			auto delay = DelayTime::create(20.0f);//十秒产一次阳光
 			auto sequence = Sequence::create(delay, CallFunc::create([=]() {
-				plants[i]->setCanNotCreateSun();//设为不能产阳光
+				plants[i]->setCanCreateSun();//设为能产阳光
 				}), nullptr);
 			plants[i]->getIdv()->runAction(sequence);
 		}

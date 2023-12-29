@@ -2,14 +2,9 @@
 
 extern std::vector<Zombie*>waiting;//考虑把vector变成god的一个内置成员
 
-
-Scene* Level::createScene()
-{
-    return Level::create();
-}
-
-bool Level::init()
-{
+bool Level::initWithLevelNumber(int levelNumber) {
+    // 在这里进行场景的初始化，可以根据 levelNumber 做不同的处理
+    levelNum = levelNumber;
     srand(static_cast<unsigned>(time(0)));
     god = new God(0, this);
     if (!Scene::init())
@@ -21,8 +16,25 @@ bool Level::init()
     //开始进度条
     //开始生成阳光
     //僵尸准备出发
-
+    // 返回初始化结果
     return true;
+}
+
+Level* Level::createWithLevelNumber(int levelNumber) {
+    
+    Level* level = new Level();// 创建 Level 对象
+
+    // 调用 initWithLevelNumber 进行初始化
+    if (level && level->initWithLevelNumber(levelNumber)) {
+        // 自动调用 retain()，由 autorelease() 来释放
+        level->autorelease();
+        return level;
+    }
+    else {
+        // 初始化失败，手动释放内存
+        CC_SAFE_DELETE(level);
+        return nullptr;
+    }
 }
 
 void Level::startChoose()
@@ -40,11 +52,12 @@ void Level::startChoose()
     shovelback->setPosition(Vec2(visibleSize.width * 0.62, visibleSize.height * 0.92));
     shovelback->setScale(2.2);
     this->addChild(shovelback, 1);
-    //阳光值//////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //阳光值///////////////////////////////////////////////////////
     sun = new Sun(this);
     god->setSun(sun);
     //背景图
-    SetBackground();////////////////////////////////
+    setBackground();
+
     //背景图移过去
     auto moveBy = MoveBy::create(2, Vec2(-870, 0));
     background->runAction(moveBy);
@@ -55,14 +68,25 @@ void Level::startChoose()
     background->runAction(sequence);
 }
 
+void Level::setBackground() {
+    const auto visibleSize = Director::getInstance()->getVisibleSize();
+    const Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    if (levelNum == 1)
+        background = Sprite::create("/level1/bg.jpg");
+    else {
 
+    }//////其他关卡
+    background->setPosition(Vec2(visibleSize.width * 0.73 + origin.x, visibleSize.height / 2 + origin.y));
+    background->setScale(2.47, 2.13);
+    this->addChild(background, 0);
+}
 
-// 在你的类中定义一个成员函数，用于在MoveBy动作完成时执行的回调
+//用于在MoveBy动作完成时执行的回调
 void Level::onMoveByFinished()
 {
     const auto visibleSize = Director::getInstance()->getVisibleSize();
     //生成僵尸
-    god->updateZombies(1);
+    god->updateZombies(levelNum);
     //生成层
     auto transparentLayer = LayerColor::create(Color4B(0, 0, 0, 128));
     this->addChild(transparentLayer);
@@ -138,4 +162,33 @@ void Level::CheckEveryMin(float dt)
 void Level::CheckEveryTwoSec(float dt)
 {
     god->checkAttack();
+}
+
+void Level::Win() {
+    const auto visibleSize = Director::getInstance()->getVisibleSize();
+    const Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    //戴夫
+    auto sprite = Sprite::create("/market/dave.png");
+
+    sprite->setPosition(Vec2(visibleSize.width / 5 + origin.x, visibleSize.height / 3 + origin.y));
+    sprite->setScale(2.5);
+    ->addChild(sprite, 0);
+
+    //---------------------------------------------------------------------------------
+    //返回菜单的按钮
+    auto back = MenuItemImage::create(
+        "/market/backbutton1.png", "/market/backbutton2.png",
+        CC_CALLBACK_1(Market::goBackMain, this)
+    );////////////////////////////此处需要调用一个进入商店场景的函数，记得修改按钮图片
+
+    float x = origin.x + visibleSize.width * 0.55;
+    float y = origin.y + visibleSize.height * 0.2;
+    back->setPosition(Vec2(x, y));
+    back->setScale(2.0);
+
+
+
+    auto menu = Menu::create(back, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 0);
 }

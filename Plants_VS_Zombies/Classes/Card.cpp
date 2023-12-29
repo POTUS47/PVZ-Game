@@ -2,11 +2,11 @@
 
 extern std::vector<Card*>cards;
 extern std::vector<Plant*>plants;
-extern bool isNight;
 int howMuch(int type);
 float setTime(int type);
 
-Card::Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,Scene*_scene,int _type,Sun*_sun) {
+Card::Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,
+	Scene*_scene,int _type,Sun*_sun,int IsNight) :isNight(IsNight){
     // 使用传入的图片路径创建 Sprite 对象
 	plantPath = plantpath;//保存对应植物的图片路径
 	cardPath = imagePath + ".png";
