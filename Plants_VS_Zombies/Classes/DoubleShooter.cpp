@@ -5,7 +5,7 @@ DoubleShooter::DoubleShooter(int x, int y, double scale, Scene* scene) {
     setCol((x - 215) / 190 + 1);//设置植物在哪一列出现
     setX(x);
     setY(y);
-    setName(DOUBLESHOOTER);
+    setName(DOUBLE_SHOOTER);
     auto doubleShooter = cocos2d::Sprite::create("/plant/doubleshooter/Repeater1.png");
     doubleShooter->setPosition(x, y);
     doubleShooter->setScale(scale);

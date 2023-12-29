@@ -21,7 +21,7 @@
 #include"PuffShroom.h"
 #include"FumeShroom.h"
 
-
+enum{DAY,NIGHT};
 /*调度器放在这里，检测游戏是否结束等等*/
 class God :public Node
 {

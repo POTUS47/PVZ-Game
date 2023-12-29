@@ -1,6 +1,7 @@
 #pragma once
 #include "cocos2d.h"
 #include "Entity.h"
+
 class Bullet : public Entity {
 public:
     Bullet(int Row,int startX, int startY, int bulletDamage, Scene* scene): 
@@ -19,7 +20,7 @@ public:
     int getX() { return start_x; }
     int getY() { return start_y; }
     virtual void explodeAnimation() {};
-    int condition=0;//子弹不要重复攻击用
+    int condition=NOT_USED;//子弹不要重复攻击用
 private:
     int start_x;//子弹发射位置
     int start_y;

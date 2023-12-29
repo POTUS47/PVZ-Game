@@ -8,14 +8,13 @@ SunShroom::SunShroom(int x, int y, double scale, Scene* scene, int isNight) : th
 	setX(x);
 	setY(y);
 	setName (SUN_SHROOM);
-	setPlantTime( time(0));//获取阳光菇栽种的时间
+	setPlantTime(time(0));//获取阳光菇栽种的时间
 	auto sunshroom = cocos2d::Sprite::create("/plant/sunshroom/s1.png");
 	sunshroom->setPosition(x, y);
 	sunshroom->setScale(scale);
 	//添加到当前层
 	scene->addChild(sunshroom, 2);
 	setIdv(sunshroom);//将精灵指针存入idv
-	setCondition(ABLE);//初设为可以产阳光
 	//设置生命值等属性
 	setHealth(100);
 	//让植物开始摇摆
@@ -88,5 +87,6 @@ void SunShroom::dieAnimation() {
 
 
 void  SunShroom::growUp() {
+	setAdolescent(0);
 	bigAnimation();
 }
