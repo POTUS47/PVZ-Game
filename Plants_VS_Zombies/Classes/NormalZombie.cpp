@@ -9,7 +9,7 @@ normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
     setWeapen(false);//ÆÕÍ¨½©Ê¬Ã»ÓÐÎäÆ÷
     setCondition(WAIT);
     setHP(100);
-    setAttack(2);
+    setAttack(20);
     setEatingTime(1.0f);
     auto normalzombie = cocos2d::Sprite::create("/normalzombie/standgif/1.png");
     normalzombie->setPosition(x, y);

@@ -1,7 +1,7 @@
 #include"God.h"
 #include<algorithm>
 std::vector<Card*>cards;
-std::vector<Card*>randCards;
+std::vector<Card*>randCards;//随机卡片种子雨
 /*小推车*/
 std::vector<Car*>littleCar;
 /*正在等待的僵尸*/
@@ -11,7 +11,6 @@ std::vector<Zombie*>walking;
 /*死了的僵尸*/
 std::vector<Zombie*>dead;
 
-bool isNight = false;//是不是晚上，暂设为不是
 
 /*当前关卡的所有植物*/
 std::vector<Plant*>plants;
@@ -132,17 +131,6 @@ void God::dead()
 		}
 		
 	}
-	//检查是否有植物死亡
-	for (int i = 0; i < plants.size(); i++) {
-		if (plants[i]->getCondition() != DEAD) {//如果植物没死
-			if (plants[i]->getHealth() <= 0) {
-				plants[i]->setCondition(DEAD);//设置为死了
-				//plants[i]->dieAnimation();//植物立刻消失，移除精灵指针
-				//甚至不能移除指针，我先用设置为隐形替代（勿改）
-				plants[i]->getIdv()->setVisible(false);
-			}
-		}
-	}
 }
 
 void God::setZombieStartTime()
@@ -164,16 +152,16 @@ void God::setZombieStartTime()
 void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 {
 
-	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEASHOOTER,_sun));
-	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower", "/plant/sunflower/SunFlower1.png", scene, SUNFLOWER, _sun));
-	cards.push_back(new Card(492, 1108, 1.95, "/card/nut", "/plant/nut/zz1.png", scene,NUT,_sun));
-	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter", "/plant/doubleshooter/Repeater1.png", scene,DOUBLESHOOTER,_sun));
-	cards.push_back(new Card(716, 1108, 1.95, "/card/sunshroom", "/plant/sunshroom/b0.png",scene, SUN_SHROOM, _sun));
-	cards.push_back(new Card(828, 1108, 1.95, "/card/jalapeno", "/plant/jalapeno/j (1).png", scene, JALAPENO, _sun));
-	cards.push_back(new Card(940, 1108, 1.2, "/card/fumeshroom", "/plant/fumeshroom/s (1).png", scene, FUME_SHROOM, _sun));
-	cards.push_back(new Card(1052, 1108, 1.95, "/card/puffshroom", "/plant/puffshroom/w (1).png", scene, PUFF_SHROOM, _sun));
+	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEASHOOTER,_sun, dayOrNight));
+	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower", "/plant/sunflower/SunFlower1.png", scene, SUNFLOWER, _sun, dayOrNight));
+	cards.push_back(new Card(492, 1108, 1.95, "/card/nut", "/plant/nut/zz1.png", scene,NUT,_sun, dayOrNight));
+	cards.push_back(new Card(604, 1108, 1.95, "/card/repeatershooter", "/plant/doubleshooter/Repeater1.png", scene,DOUBLESHOOTER,_sun, dayOrNight));
+	cards.push_back(new Card(716, 1108, 1.95, "/card/sunshroom", "/plant/sunshroom/b0.png",scene, SUN_SHROOM, _sun, dayOrNight));
+	cards.push_back(new Card(828, 1108, 1.95, "/card/jalapeno", "/plant/jalapeno/j (1).png", scene, JALAPENO, _sun, dayOrNight));
+	cards.push_back(new Card(940, 1108, 1.2, "/card/fumeshroom", "/plant/fumeshroom/s (1).png", scene, FUME_SHROOM, _sun, dayOrNight));
+	cards.push_back(new Card(1052, 1108, 1.95, "/card/puffshroom", "/plant/puffshroom/w (1).png", scene, PUFF_SHROOM, _sun, dayOrNight));
 	
-	cards.push_back(new Card(1164, 1108, 1.05, "/card/shovel", "/card/shovel.png", scene, SHOVEL, _sun));
+	cards.push_back(new Card(1164, 1108, 1.05, "/card/shovel", "/card/shovel.png", scene, SHOVEL, _sun, dayOrNight));
 }
 
 
@@ -207,8 +195,6 @@ void God::hitByCar()
 	}
 }
 
-
-
 //检查僵尸和子弹有没有相撞
 void God::checkCrush() {
 	for (int i = 0; i < bullets.size(); i++) {//遍历所有子弹
@@ -239,32 +225,36 @@ void God::checkEat()
 	for (int i = 0; i < plants.size(); i++) {
 		for (int j = 0; j < waiting.size(); j++) {
 			int zombieCon = waiting[j]->getCondition();
-			int plantCon = plants[i]->getCondition();
 			int plantRow = plants[i]->getRow();//获取植物所在第几行
 			int zombieRow = waiting[j]->getCol();//获取僵尸在第几行
+
 			if (zombieCon == WALKING) {//如果僵尸在走路的途中
 				if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv()) && zombieRow == plantRow) {//碰上植物且在同一行
-					if (plantCon == HEALTHY||plantCon==PLANT_SLEEP) {
+					if (plants[i]-> getCondition()!=DEAD) {
 						waiting[j]->setCondition(EATING);//僵尸变为在吃
-						plants[i]->setCondition(BEINGEATEN);
+						plants[i]->setEatCondition(BEINGEATEN);
+
 						waiting[j]->healthyEating(waiting[j]->getIdv());
 						//plants[i]->getHurt(waiting[j]->getAttack());///////////////////////////////////////////////////////具体数值需要再斟酌
 					}
 				}
 			}
 			else if (zombieCon == EATING) {//僵尸还在吃呢
+
 				if (isIntersecting(plants[i]->getIdv(), waiting[j]->getIdv()) && zombieRow == plantRow) {//碰上植物且在同一行
-					if (plantCon == DEAD) {//植物死了
+					if (plants[i]->getCondition() == DEAD) {//植物死了
+
 						waiting[j]->moveForward(waiting[j]->getIdv());//僵尸变为走路
 					}
-					else if (plantCon == BEINGEATEN) {//植物是被吃状态要扣血
-						int currenthp = plants[i]->getHealth();
+					else if (plants[i]->getEatCondition() == BEINGEATEN) {//植物是被吃状态要扣血
 						int attack = waiting[j]->getAttack();
-						plants[i]->setHealth(currenthp -= attack);
-						plants[i]->setCondition(HEALTHY);//一次只吃一次，扣完血变回健康状态
+						plants[i]->getHurt(attack);
+						if (plants[i]->getCondition() == DEAD)
+							continue;
+						plants[i]->setEatCondition(NOT_EATEN);//一次只吃一次，扣完血变回健康状态
 						auto delay = DelayTime::create(waiting[j]->getEatingTime());
 						auto delayedCallback = CallFunc::create([=]() {
-							plants[i]->setCondition(BEINGEATEN);//过一段时间变为被吃
+							plants[i]->setEatCondition(BEINGEATEN);//过一段时间变为被吃
 							});
 						auto sequence = Sequence::create(delay, delayedCallback, nullptr);
 						plants[i]->getIdv()->runAction(sequence);
@@ -286,8 +276,9 @@ bool isIntersecting(Sprite* spriteA, Sprite* spriteB) {
 
 //检查植物需不需要发射子弹,可以2s检查一次？
 void God::checkAttack() {
+	int isNight = dayOrNight;
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=DEAD&& plants[i]->getCondition() != PLANT_SLEEP) {//筛出攻击性植物且植物不能死亡
+		if (plants[i]->getAttackDamage() != 0&&plants[i]->getCondition()!=DEAD&& plants[i]->getCondition() != SLEEP) {//筛出攻击性植物且植物不能死亡
 			int plantRow = plants[i]->getRow();
 			for (int j = 0; j<waiting.size(); j++) {//遍历所有僵尸
 				if (waiting[j]->getCondition() == WALKING|| waiting[j]->getCondition() ==EATING) {//得到活着的或者正在吃的僵尸
@@ -297,7 +288,6 @@ void God::checkAttack() {
 						if(plants[i]->getName()==PEASHOOTER)
 						    bullets.push_back(new peaBullet(plantRow,currentP.x+62, currentP.y+37, plants[i]->getAttackDamage(), currentScene));
 						else if (plants[i]->getName() == DOUBLESHOOTER) {
-						
 							bullets.push_back(new peaBullet(plantRow, currentP.x + 62, currentP.y + 37, plants[i]->getAttackDamage(), currentScene));
 							auto delay = DelayTime::create(0.4f);
 							auto sequence = Sequence::create(delay, CallFunc::create([=]() {
@@ -311,7 +301,6 @@ void God::checkAttack() {
 						     }
 						else if (isNight && plants[i]->getName() == FUME_SHROOM &&
 							waiting[j]->getIdv()->getPosition().x - plants[i]->getX() <= 750) {
-
 							bullets.push_back(new puffShroomBullet(2,plantRow, currentP.x + 380, currentP.y +35, plants[i]->getAttackDamage(), currentScene));
 						     }
 					}
@@ -334,11 +323,12 @@ void God::checkBulletToDelete() {
 
 //写新函数：检查阳光菇要不要生长
 void God::sunShroomGrowUp() {
-
+	if (dayOrNight != NIGHT)
+		return;
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if (plants[i]->getName()==SUN_SHROOM&&plants[i]->IsAdolescent()) {
+		if (plants[i]->getName() == SUN_SHROOM && plants[i]->IsAdolescent()) {
 			long long int now = time(0);
-			if (now - plants[i]->getPlantTime() >= 90) {
+			if (now - plants[i]->getPlantTime() >= 9) {
 				plants[i]->growUp();
 			}//90s长大
 		}
@@ -375,28 +365,34 @@ void God::checkJalapenoBomb() {
 void God::checkSunflower()
 {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
-		if ((plants[i]->getName() == SUNFLOWER|| plants[i]->getName() == SUN_SHROOM) && plants[i]->getCondition() != DEAD) {//是太阳花且没有死
-			if (plants[i]->getCondition() == ABLE) {//可以产阳光
-				if (plants[i]->getName() == SUNFLOWER) {
-					sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
+		if ((plants[i]->getName() == SUNFLOWER|| plants[i]->getName() == SUN_SHROOM) &&
+			plants[i]->getCondition() != DEAD &&plants[i]->getCondition() != SLEEP && plants[i]->canCreateSun()) {//是太阳花且没有死且没睡觉
+			
+			if (plants[i]->getName() == SUNFLOWER) {//可以产阳光
+				plants[i]->attackAnimation();//植物短暂发亮
+				plants[i]->setCanNotCreateSun();//
+				sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
+			}
+			else {
+
+				if (plants[i]->IsAdolescent()) {
+					sun->flowerSun(plants[i]->getIdv()->getPosition(), 0);
+					plants[i]->setCanNotCreateSun();//
 				}
 				else {
-					if (isNight) {
-						if (plants[i]->IsAdolescent()) {
-							sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
-						}
-						else {
-							sun->flowerSun(plants[i]->getIdv()->getPosition(), 0);
-						}
-					}
+
+					sun->flowerSun(plants[i]->getIdv()->getPosition(), 1);
+					plants[i]->setCanNotCreateSun();//
 				}
-				plants[i]->setCondition(HEALTHY);
-				auto delay = DelayTime::create(20.0f);//十秒产一次阳光
-				auto sequence = Sequence::create(delay, CallFunc::create([=]() {
-					plants[i]->setCondition(ABLE);
-					}), nullptr);
-				plants[i]->getIdv()->runAction(sequence);
 			}
+			plants[i]->setCondition(HEALTHY);
+			auto delay = DelayTime::create(5.0f);//十秒产一次阳光
+			auto sequence = Sequence::create(delay, CallFunc::create([=]() {
+				plants[i]->setCanCreateSun();//设为能产阳光
+
+				}), nullptr);
+			plants[i]->getIdv()->runAction(sequence);
+			
 		}
 	}
 }
@@ -422,7 +418,7 @@ void God::randomCardInit(Sun* _sun)
 	int x = rand() % 1200 + 100;
 	int y = rand() % 900 + 100;
 
-	Card* rcard=new Card(x, 1400, 1.05, "empty", "empty.png", currentScene, MINIGAME, _sun);
+	Card* rcard=new Card(x, 1400, 1.05, "empty", "empty.png", currentScene, MINIGAME, _sun,  dayOrNight);
 	randCards.push_back(rcard);
 	int speed = 150;
 	auto moveBy = MoveBy::create((1400 - y) / speed, Vec2(0, -(1400 - y)));

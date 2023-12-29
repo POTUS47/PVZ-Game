@@ -15,12 +15,13 @@ SunShroom::SunShroom(int x, int y, double scale, Scene* scene, int isNight) : th
 	//添加到当前层
 	scene->addChild(sunshroom, 2);
 	setIdv(sunshroom);//将精灵指针存入idv
-	setCondition(ABLE);//初设为可以产阳光
 	//设置生命值等属性
 	setHealth(100);
 	//让植物开始摇摆
-	if (!isNight)
+	if (!isNight) {
 		waitingAnimation();
+		setCondition(SLEEP);
+	}
 	else
 		littleAnimation();
 }
@@ -62,12 +63,14 @@ void SunShroom::littleAnimation() {
 
 //大阳光菇工作中(
 void SunShroom::bigAnimation() {
+	setAdolescent(0);
 	this->getIdv()->stopAllActions();
+	setCanCreateSun();
 	auto animation = Animation::create();
 	char nameSize[50] = { 0 };
 	for (int i = 0; i < 10; i++)
 	{
-		sprintf(nameSize, "/plant/sunshroom/b %d.png", i);
+		sprintf(nameSize, "/plant/sunshroom/b%d.png", i);
 		animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
 	}
 	animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔
@@ -75,8 +78,6 @@ void SunShroom::bigAnimation() {
 	//animation->setRestoreOriginalFrame(true);动画播放完后定格在第一帧
 	auto animate = Animate::create(animation);//创建动画动作
 	this->getIdv()->runAction(animate);//将动画动作应用到精灵上，并运行动画
-	//this->getScene()->schedule(schedule_selector(Sunflower::createSun), 15.0f);
-	///////////////////////////////////////////////////////////错误
 }
 
 //植物死亡：消失

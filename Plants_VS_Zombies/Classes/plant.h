@@ -12,6 +12,11 @@
 USING_NS_CC;
 class Plant : public Entity {
 public:
+    bool canCreateSun() { return CanCreateSun; }
+    void setCanCreateSun() { CanCreateSun = 1; }
+    void setCanNotCreateSun() { CanCreateSun = 0; }//设为不能产阳光
+
+    bool IsHealthy() { return !(health < 0); }
 
     int getHealth() { return health; }
     void setHealth(int Health) { health = Health; }
@@ -27,6 +32,9 @@ public:
 
     void setCondition(int con) { condition = con; }
     int getCondition() { return condition; }
+
+    void setEatCondition(int con) { eatCondition = con; }
+    int getEatCondition() { return eatCondition; }
 
     void setX(int _x) { x = _x; }
     int getX() { return x; }
@@ -50,12 +58,18 @@ public:
     //植物受伤
     void getHurt(int hurtValue) {
         health -= hurtValue;
+        if (!IsHealthy())
+            dieAnimation();
     }
 
     void setName(int n) { name = n; }
     int getName() { return name; }
 
 private:
+    bool CanCreateSun = 1;//针对能产阳光的特殊植物
+
+    int eatCondition = NOT_EATEN;
+
     int name;//记录是何种植物,方便发射相应的子弹
     int health;   //生命值      
     int attackDamage = 0;//单发子弹伤害值

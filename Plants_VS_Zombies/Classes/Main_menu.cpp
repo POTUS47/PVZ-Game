@@ -2,7 +2,7 @@
 #include "SimpleAudioEngine.h"
 #include "HelloWorldScene.h"
 #include "MarketScene.h"
-#include "Level1.h"
+#include "Level.h"
 #include "MiniGame.h"
 //图片比例3:2
 ///////多条斜线是提醒修改的意思
@@ -160,8 +160,9 @@ void Main_menu::startGameCallback(Ref* pSender)
 void Main_menu::GoToWhichScene(int latestLevel) {
     switch (latestLevel) {
         case 1: {
-            Scene* aaa = Level1::createScene();
-            Director::getInstance()->replaceScene(aaa);
+            auto level = Level::createWithLevelNumber(1);
+            // 将 Level 对象添加到场景中
+            Director::getInstance()->replaceScene(level);
             break;
         }
     case 2:
@@ -180,7 +181,9 @@ void Main_menu::gotoMarket(Ref* pSender)
 
 void Main_menu::gotoLevel1(Ref* pSender)
 {
-    Director::getInstance()->replaceScene(Level1::createScene());
+    auto level = Level::createWithLevelNumber(1);
+    // 将 Level 对象添加到场景中
+    Director::getInstance()->replaceScene(level);
 }
 
 void Main_menu::gotoMiniGame(Ref* pSender)

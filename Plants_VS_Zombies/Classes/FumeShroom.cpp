@@ -25,7 +25,7 @@ FumeShroom::FumeShroom(int x, int y, double scale, Scene* scene,int isNight) {
 
 //Ö²ÎïµÄ¿ÕÏÐÒ¡°Ú¶¯»­
 void FumeShroom::waitingAnimation() {
-    this->setCondition(PLANT_SLEEP);
+    this->setCondition(SLEEP);
     auto animation = Animation::create();
     char nameSize[50] = { 0 };
     for (int i = 1; i < 15; i++)
