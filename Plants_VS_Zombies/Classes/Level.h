@@ -8,7 +8,7 @@
 #include <string>
 #include<vector>
 #include"Sun.h"
-
+#include"User.h"
 
 class God;
 class Level : public cocos2d::Scene
@@ -24,25 +24,25 @@ private:
 public:
     // 创建 Level 对象的静态函数，接受一个整数参数
     static Level* createWithLevelNumber(int levelNumber);
-
-    // 初始化函数，你可以在这里进行场景的初始化操作
-    virtual bool initWithLevelNumber(int levelNumber);
-
+    virtual bool initWithLevelNumber(int levelNumber);// 初始化函数
     void setBackground();
 
-    // 使用宏定义创建 Level 对象
-    CREATE_FUNC(Level);
+
+    CREATE_FUNC(Level);// 使用宏定义创建 Level 对象
 
     static cocos2d::Scene* createScene();
     void update(float dt);
     void CheckEveryMin(float dt);
     void goBackMain(cocos2d::Ref* pSender);
     void CheckEveryTwoSec(float dt);
+    void moveRight(Ref* sender);//场景和僵尸向右移动
+
 
     virtual void onMoveByFinished();//小游戏需要重新写
-
-    void moveRight(Ref* sender);//场景和僵尸向右移动
     virtual void startChoose();//小游戏需要重新写
+
+    //新写的函数
+
 };
 
 

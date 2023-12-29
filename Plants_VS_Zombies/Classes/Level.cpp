@@ -6,7 +6,13 @@ bool Level::initWithLevelNumber(int levelNumber) {
     // 在这里进行场景的初始化，可以根据 levelNumber 做不同的处理
     levelNum = levelNumber;
     srand(static_cast<unsigned>(time(0)));
-    god = new God(1, this);
+    int isNight;
+    if (levelNumber == 1)
+        isNight = 0;
+    else if (levelNumber == 2)
+        isNight = 1;
+    /////////////////////////////////////////////////需要再添加
+    god = new God(isNight, this, levelNumber);
     if (!Scene::init())
     {
         return false;
@@ -163,34 +169,4 @@ void Level::CheckEveryTwoSec(float dt)
 {
     god->checkAttack();
 }
-/*
 
-void Level::Win() {
-    const auto visibleSize = Director::getInstance()->getVisibleSize();
-    const Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    //戴夫
-    auto sprite = Sprite::create("/market/dave.png");
-
-    sprite->setPosition(Vec2(visibleSize.width / 5 + origin.x, visibleSize.height / 3 + origin.y));
-    sprite->setScale(2.5);
-    ->addChild(sprite, 0);
-
-    //---------------------------------------------------------------------------------
-    //返回菜单的按钮
-    auto back = MenuItemImage::create(
-        "/market/backbutton1.png", "/market/backbutton2.png",
-        CC_CALLBACK_1(Market::goBackMain, this)
-    );////////////////////////////此处需要调用一个进入商店场景的函数，记得修改按钮图片
-
-    float x = origin.x + visibleSize.width * 0.55;
-    float y = origin.y + visibleSize.height * 0.2;
-    back->setPosition(Vec2(x, y));
-    back->setScale(2.0);
-
-
-
-    auto menu = Menu::create(back, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 0);
-}
-*/
