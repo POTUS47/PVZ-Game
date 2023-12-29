@@ -3,7 +3,6 @@
 #include<vector>
 #include"NormalZombie.h"
 #include"ConeHeadZombie.h"
-#include"NewspaperZombie.h"
 #include<iostream>
 #include"Level.h"
 //添加了植物的头文件
@@ -16,7 +15,6 @@
 #include "puffShroomBullet.h"
 #include"plant.h"
 #include"flame.h"
-#include "SunShroom.h"
 #include"Jalapeno.h"
 #include"PuffShroom.h"
 #include"FumeShroom.h"
@@ -27,8 +25,8 @@ class God :public Node
 {
 private:
 	int dayOrNight;//0是白天，1是黑夜
+	Label* sunLightLabel;//左上角阳光label
 	Scene* currentScene;//GOD管理的当前场景指针
-	Sun* sun;
 public:
 	//构造函数
 	God(int isNight, Scene* currentScene);
@@ -47,7 +45,7 @@ public:
 	//阳光多少的显示
 	void updateSun();
 	//在植物选择器里展示植物卡片
-	void showCardinSeedBank(Scene* scene, Sun* _sun);
+	void showCardinSeedBank(Scene* scene);
 	//生成小车
 	void initCar(Scene* scene);
 	//检测是否有僵尸和植物相撞

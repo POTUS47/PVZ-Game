@@ -15,7 +15,7 @@ FumeShroom::FumeShroom(int x, int y, double scale, Scene* scene,int isNight) {
 
     //设置生命值等属性
     setHealth(100);
-    setAttackDamage(20);
+    setAttackDamage(10);
     //让植物开始摇摆
     if (isNight)
         attackAnimation();
@@ -30,7 +30,7 @@ void FumeShroom::waitingAnimation() {
     char nameSize[50] = { 0 };
     for (int i = 1; i < 15; i++)
     {
-        sprintf(nameSize, "/plant/fumeshroom/s (%d).png", i);
+        sprintf(nameSize, "/plant/fumeshroom/s(%d).png", i);
         animation->addSpriteFrameWithFile(nameSize);//向动画中添加一个文件路径对应的精灵帧
     }
     animation->setDelayPerUnit(0.15f);//设置每帧播放的时间间隔

@@ -1,25 +1,21 @@
 #include"Card.h"
-
-extern std::vector<Card*>cards;
+#include"plant.h"
+#include"PeaShooter.h"
+#include"God.h"
+#include<vector>
 extern std::vector<Plant*>plants;
 extern std::vector<Card*>randCards;
 
 int howMuch(int type);
 float setTime(int type);
 
-Card::Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,
-	Scene*_scene,int _type,Sun*_sun,int IsNight) :isNight(IsNight){
+Vec2 checkPosition(Vec2 Point);
+
+Card::Card(int x, int y, float scale, const std::string& imagePath, const std::string& plantpath,Scene*_scene,int _type) {
     // 使用传入的图片路径创建 Sprite 对象
-	plantPath = plantpath;//保存对应植物的图片路径
-	cardPath = imagePath + ".png";
-	waitCardPath= imagePath + "wait.png";
-    Sprite* card = Sprite::create(cardPath);
+    Sprite* card = Sprite::create(imagePath);
     setIdv(card);
-	setCondition(POOR);
-	money = howMuch(_type);//设置价钱
-	sleepTime = setTime(_type);//设置卡片冷却时间
-	sun = _sun;
-	
+	plantPath = plantpath;//保存对应植物的图片路径
 	type = _type;//设置植物类型
 	scene = _scene;
     // 设置位置和缩放
@@ -40,36 +36,10 @@ void Card::addListener()
 	auto listener1 = EventListenerMouse::create();
 	listener->onTouchBegan = [&](Touch* touch, Event* event)
 	{
-		if (type == SHOVEL) {
 			canClick = true;
-		}
-		else {
-			int sunmoney = sun->getSunValue();
-			if (sunmoney >= getMoney()) {//如果现在的阳光值大于等于这个卡片的价钱
-				if (getCondition() == SLEEP) {//如果现在在休眠
-					canClick == false;
-				}
-				else {
-					setCondition(ABLE);
-					changeApperence(1);
-				}
-			}
-			else {
-				setCondition(POOR);
-				changeApperence(0);
-			}
-
-			if (getCondition() == ABLE) {
-				canClick = true;
-			}
-			else if (getCondition() != ABLE) {
-				canClick = false;
-			}
-		}
-		
 		if (canClick == false)
 			return false;
-		if (!isFollowingMouse&&canClick==true)
+		if (!isFollowingMouse)
 		{
 			Point clickLocation = touch->getLocation();
 			if (getIdv()->getBoundingBox().containsPoint(clickLocation)) {
@@ -94,15 +64,7 @@ void Card::addListener()
 				else {
 					Vec2 real = checkPosition(clickLocation);
 					if (real.x == 0 && real.y == 0) {//如果该点已经有植物了
-						if (type == SHOVEL) {
-							for (int i = 0; i < plants.size(); i++) {
-								cocos2d::Rect boundingBox = plants[i]->getIdv()->getBoundingBox();
-								if (boundingBox.containsPoint(clickLocation)) {
-									plants[i]->setCondition(DEAD);
-									plants[i]->getIdv()->setVisible(false);
-								}
-							}
-						}
+						;
 					}
 					else {
 						
@@ -255,7 +217,7 @@ Vec2 checkPosition(Vec2 Point)
 		}
 	}
 	for (int i = 0; i < plants.size(); i++) {
-		if (row == plants[i]->getRow() && col == plants[i]->getCol()&&plants[i]->getCondition()!=DEAD) {
+		if (row == plants[i]->getRow() && col == plants[i]->getCol()) {
 			return Vec2(0, 0);
 		}
 	}
@@ -269,7 +231,6 @@ void Card::createPlant(Vec2 real)
 			plants.push_back(new PeaShooter(real.x, real.y, 2.2, scene));
 			break;
 		case SUNFLOWER:
-			plants.push_back(new Sunflower(real.x, real.y, 2.2, scene,isNight));//要改成isnight
 			break;
 		case DOUBLE_SHOOTER:
 			plants.push_back(new DoubleShooter(real.x, real.y, 2.2, scene));

@@ -6,9 +6,8 @@ USING_NS_CC;
 coneHeadZombie::coneHeadZombie(int x, int y, double scale, Scene* scene)
 {
     setSpeed(30);
-    setWeapen(true);
     setCondition(WAIT);
-    setHP(120);
+    setHP(160);
     setAttack(25);
     setEatingTime(0.8f);
     auto conezombie = cocos2d::Sprite::create("/conehead/standby/1.png");
@@ -39,21 +38,12 @@ void coneHeadZombie::healthyEating(Sprite* who)
 {
     who->stopAllActions();
     auto animation = Animation::create();
-    
     char healthyattackarray[40] = { 0 };
-    if (getWeapen() == true) {//如果现在还有武器
-        for (int i = 1; i < 12; i++)
-        {
-            sprintf(healthyattackarray, "/conehead/healthyeating/%d.png", i);
-            animation->addSpriteFrameWithFile(healthyattackarray);
-        }
-    }
-    else {//如果没武器了（帽子掉了）
-        for (int i = 1; i < 22; i++)
-        {
-            sprintf(healthyattackarray, "/normalzombie/healthyattack/%d.png", i);
-            animation->addSpriteFrameWithFile(healthyattackarray);
-        }
+    /*僵尸吃植物*/
+    for (int i = 1; i < 12; i++)
+    {
+        sprintf(healthyattackarray, "/conehead/healthyeating/%d.png", i);
+        animation->addSpriteFrameWithFile(healthyattackarray);
     }
     animation->setDelayPerUnit(0.15f);
     animation->setLoops(-1);//循环播放
@@ -78,19 +68,11 @@ void coneHeadZombie::moveForward(Sprite* who)
     who->runAction(moveBy);
     auto animation = Animation::create();
     char nameSize[40] = { 0 };
-    if (getWeapen() == true) {//如果现在还有武器
-        for (int i = 1; i < 22; i++)
-        {
-            sprintf(nameSize, "/conehead/walking/%d.png", i);
-            animation->addSpriteFrameWithFile(nameSize);
-        }
-    }
-    else {//如果没武器了（帽子掉了）
-        for (int i = 1; i < 30; i++)
-        {
-            sprintf(nameSize, "/normalzombie/moveforwardgif/%d.png", i);
-            animation->addSpriteFrameWithFile(nameSize);
-        }
+    /*走路前进gif*/
+    for (int i = 1; i < 22; i++)
+    {
+        sprintf(nameSize, "/conehead/walking/%d.png", i);
+        animation->addSpriteFrameWithFile(nameSize);
     }
     animation->setDelayPerUnit(0.15f);//设置动画帧频率
     animation->setLoops(-1);//设置播放循环 一直播放 为-1
@@ -99,6 +81,23 @@ void coneHeadZombie::moveForward(Sprite* who)
     who->runAction(animate);
 }
 
+
+/*void coneHeadZombie::moveWithoutArm(Sprite* who)
+{
+    auto animation = Animation::create();
+    char nameSize1[40] = { 0 };
+    /*断胳膊向前走
+    for (int i = 1; i < 21; i++)
+    {
+        sprintf(nameSize1, "/normalzombie/standgif/%d.png", i);
+        animation->addSpriteFrameWithFile(nameSize1);
+    }
+    animation->setDelayPerUnit(0.15f);
+    animation->setLoops(1);
+    animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
+    auto anim2 = Animate::create(animation);
+}
+*/
 
 void coneHeadZombie::dieAndlay(Sprite* who)
 {
@@ -115,9 +114,12 @@ void coneHeadZombie::dieAndlay(Sprite* who)
     animation->setLoops(1);//只播放一次
     animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
     auto anim = Animate::create(animation);
-    who->runAction(anim);
+    who->runAction(anim);/////////////////////考虑变成返回anim指针？
     
 }
+
+
+
 
 //头掉动画
 void coneHeadZombie::loseHead(Sprite* who)

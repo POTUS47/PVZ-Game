@@ -12,5 +12,5 @@ public:
 	virtual void healthyEating(Sprite* who);
 	virtual void dieAndlay(Sprite* who);
 	virtual void loseHead(Sprite* who);
-
+	//void moveWithoutArm(Sprite* who);
 };

@@ -12,9 +12,6 @@ public:
     int getRow() {
         return row;
     }
-    void setRow(int _row) {
-        row = _row;
-    }
     int getDamgeVlue() { return damage; }
 
     int getX() { return start_x; }

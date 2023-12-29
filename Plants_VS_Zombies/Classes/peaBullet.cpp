@@ -7,7 +7,6 @@ peaBullet::peaBullet(int row,int startX,int startY,int bulletDamage,Scene* scene
     auto bullet = cocos2d::Sprite::create("/plant/bullet/0.png");
     bullet->setPosition(startX, startY);
     bullet->setScale(2);
-    setRow(row);
     //添加到当前层
     scene->addChild(bullet, 6);
     setIdv(bullet);//将精灵指针存入idv

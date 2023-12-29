@@ -16,7 +16,7 @@ PeaShooter::PeaShooter(int x,int y, double scale,Scene* scene) {
 
     //设置生命值等属性
     setHealth(100);
-    setAttackDamage(10);
+    setAttackDamage(1);
     //植物进入等待动画
     waitingAnimation();
 }
