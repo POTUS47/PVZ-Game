@@ -15,7 +15,7 @@ coneHeadZombie::coneHeadZombie(int x, int y, double scale, Scene* scene)
     conezombie->setPosition(x, y);
     conezombie->setScale(scale);
     //添加到当前层
-    scene->addChild(conezombie, 2);
+    scene->addChild(conezombie, 7);
     setIdv(conezombie);//将精灵指针存入idv
 }
 

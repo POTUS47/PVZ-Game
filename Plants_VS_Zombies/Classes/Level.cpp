@@ -3,6 +3,17 @@
 extern std::vector<Zombie*>waiting;//考虑把vector变成god的一个内置成员
 
 bool Level::initWithLevelNumber(int levelNumber) {
+
+    CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+    if (levelNum == 1) {
+        CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGM/Level1.mp3");
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/Level1.mp3");
+    }
+    else if (levelNum == 2) {
+        CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGM/night.mp3");
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/night.mp3");
+    }
+   
     // 在这里进行场景的初始化，可以根据 levelNumber 做不同的处理
     levelNum = levelNumber;
     srand(static_cast<unsigned>(time(0)));
@@ -174,7 +185,7 @@ void Level::moveRight(Ref* sender)
     }
     GameStart = true;
     god->setZombieStartTime();
-    god->initCar(this);
+    //god->initCar(this);
     update(0);//先手动调用一次
     this->schedule(schedule_selector(Level::update), 7.0f);
     this->schedule(schedule_selector(Level::CheckEveryMin), 0.1f);

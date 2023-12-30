@@ -510,7 +510,8 @@ void God::Win() {
 	currentScene->addChild(newLayer);//创建半透明层
 	//出现戴夫
 	auto sprite = Sprite::create("/market/dave.png");
-
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/winmusic.mp3");
 	sprite->setPosition(Vec2(origin.x, visibleSize.height / 3 + origin.y));
 	sprite->setScale(2.5);
 	newLayer->addChild(sprite, 0);
@@ -538,6 +539,8 @@ void God::Win() {
 	// 创建旋转动作
 	auto rotateBy = RotateBy::create(0.7, 360);
 	cocos2d::ScaleTo* scaleTo = ScaleTo::create(0.5, 1.5);
+	invitation->runAction(rotateBy);
+	invitation->runAction(scaleTo);
 
 	// 创建 Label
 	auto label = Label::createWithTTF("你收到了僵尸的新邀请", "fonts/arial.ttf", 11);
@@ -561,7 +564,7 @@ void God::Lose() {
 	const Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//获取可视范围
 	auto newLayer = LayerColor::create(Color4B(0, 0, 0, 128));
-	currentScene->addChild(newLayer);//创建半透明层
+	currentScene->addChild(newLayer,4);//创建半透明层
 	//僵尸吃掉了脑子
 	auto sprite = Sprite::create("/level/2.png");
 
@@ -574,7 +577,9 @@ void God::Lose() {
 
 	// 执行动作
 	sprite->runAction(scaleTo2);
-
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/chomp.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/scream.mp3");
 	///////////////////////////////此处播放恐怖音效
 	auto delay = DelayTime::create(5.0f);
 	auto callFunc = cocos2d::CallFunc::create(CC_CALLBACK_0(God::returnToMainMenu, this));
