@@ -34,7 +34,7 @@ void God::gameEnd()
 	for (int i = 0; i < waiting.size(); i++) {
 		if (waiting[i]->getCondition() == DEAD) {
 			totaldeath++;
-			if (totaldeath == 1) {
+			if (totaldeath == 15) {
 				Win();
 				currentScene->unscheduleAllSelectors();
 			}
@@ -56,12 +56,14 @@ void God::updateZombies(int level)
 	int newsZ = 0;
 	//根据关卡的不同设置不同数量的僵尸
 	if (level == 1) {
+		normZ = 10;
+		coneZ = 4;
+		newsZ = 1;
+	}
+	else if(level ==2){
 		normZ = 1;
 		coneZ = 0;
 		newsZ = 0;
-	}
-	else {
-
 	}
 
 
@@ -152,7 +154,6 @@ void God::setZombieStartTime()
 
 void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 {
-
 	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEASHOOTER,_sun, dayOrNight));
 	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower", "/plant/sunflower/SunFlower1.png", scene, SUNFLOWER, _sun, dayOrNight));
 	cards.push_back(new Card(492, 1108, 1.95, "/card/nut", "/plant/nut/zz1.png", scene,NUT,_sun, dayOrNight));
@@ -164,8 +165,6 @@ void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 	
 	cards.push_back(new Card(1164, 1108, 1.05, "/card/shovel", "/card/shovel.png", scene, SHOVEL, _sun, dayOrNight));
 }
-
-
 
 void God::initCar(Scene* scene)
 {
@@ -236,7 +235,8 @@ void God::checkEat()
 						plants[i]->setEatCondition(BEINGEATEN);
 
 						waiting[j]->healthyEating(waiting[j]->getIdv());
-						//plants[i]->getHurt(waiting[j]->getAttack());///////////////////////////////////////////////////////具体数值需要再斟酌
+						//plants[i]->getHurt(waiting[j]->getAttack());
+						///////////////////////////////////////具体数值需要再斟酌
 					}
 				}
 			}
@@ -366,6 +366,8 @@ void God::checkJalapenoBomb() {
 void God::checkSunflower()
 {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
+
+
 		if ((plants[i]->getName() == SUNFLOWER|| plants[i]->getName() == SUN_SHROOM) &&
 			plants[i]->getCondition() != DEAD &&plants[i]->getCondition() != SLEEP && plants[i]->canCreateSun()) {//是太阳花且没有死且没睡觉
 			
@@ -387,10 +389,9 @@ void God::checkSunflower()
 				}
 			}
 			plants[i]->setCondition(HEALTHY);
-			auto delay = DelayTime::create(5.0f);//十秒产一次阳光
+			auto delay = DelayTime::create(3.0f);//十秒产一次阳光
 			auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 				plants[i]->setCanCreateSun();//设为能产阳光
-
 				}), nullptr);
 			plants[i]->getIdv()->runAction(sequence);
 			

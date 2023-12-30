@@ -6,6 +6,5 @@ public:
     FumeShroom(int x, int y, double scale, Scene* scene,int isNight);
 
     void waitingAnimation();
-    void dieAnimation();
     void attackAnimation();
 };

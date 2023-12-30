@@ -146,32 +146,17 @@ void Main_menu::menuCloseCallback(Ref* pSender)
 }
 //其他按钮的回调函数并没有单独给出，而是直接用匿名函数嵌套到了creat的参数列表中。
 
-//
+
 void Main_menu::startGameCallback(Ref* pSender)
 {
     // 获取最新关卡进度，这里假设使用UserDefault保存了关卡进度
-    int latestLevel = UserDefault::getInstance()->getIntegerForKey("LatestLevel", 1);
-
+    int latestLevel = GameDataManager::getLevelProgress();
     // 进入对应的最新游戏场景
-    GoToWhichScene(latestLevel);
+    auto level = Level::createWithLevelNumber(latestLevel);
+    // 将 Level 对象添加到场景中
+    Director::getInstance()->replaceScene(level);
 
 }
-
-void Main_menu::GoToWhichScene(int latestLevel) {
-    switch (latestLevel) {
-        case 1: {
-            auto level = Level::createWithLevelNumber(1);
-            // 将 Level 对象添加到场景中
-            Director::getInstance()->replaceScene(level);
-            break;
-        }
-    case 2:
-
-    default:
-            break;
-    }
-}
-
 
 void Main_menu::gotoMarket(Ref* pSender)
 {

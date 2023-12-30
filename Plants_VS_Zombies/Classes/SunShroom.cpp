@@ -57,8 +57,6 @@ void SunShroom::littleAnimation() {
 	//animation->setRestoreOriginalFrame(true);动画播放完后定格在第一帧
 	auto animate = Animate::create(animation);//创建动画动作
 	this->getIdv()->runAction(animate);//将动画动作应用到精灵上，并运行动画
-	//this->getScene()->schedule(schedule_selector(Sunflower::createLittleSun), 15.0f);
-	///////////////////////////////////////////////////////////错误
 }
 
 //大阳光菇工作中(
@@ -80,12 +78,7 @@ void SunShroom::bigAnimation() {
 	this->getIdv()->runAction(animate);//将动画动作应用到精灵上，并运行动画
 }
 
-//植物死亡：消失
-void SunShroom::dieAnimation() {
-	this->setCondition(DEAD);
-	getIdv()->setVisible(false);
-	//this->getIdv()->removeFromParent();//让植物立刻消失在画面中
-}
+
 
 
 void  SunShroom::growUp() {

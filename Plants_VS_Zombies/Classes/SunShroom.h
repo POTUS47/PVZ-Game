@@ -8,17 +8,12 @@ public:
     void waitingAnimation();
     void littleAnimation();
     void bigAnimation();
-    void dieAnimation();
 
     Scene* getScene() { return theScencePlantIn; }
-    Label* getCurrentLevelSunLabel() { return currentLevelSunLabel; }
 
     void growUp();
     bool isBig = false;//标记是否长大，初设为否
 
 private:
     Scene* theScencePlantIn;
-    Label* currentLevelSunLabel;
-
-
 };

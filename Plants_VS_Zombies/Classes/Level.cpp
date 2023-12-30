@@ -79,8 +79,8 @@ void Level::setBackground() {
     const Vec2 origin = Director::getInstance()->getVisibleOrigin();
     if (levelNum == 1)
         background = Sprite::create("/level1/bg.jpg");
-    else {
-
+    else if(levelNum == 2){
+        background = Sprite::create("/level/3.jpg");
     }//////其他关卡
     background->setPosition(Vec2(visibleSize.width * 0.73 + origin.x, visibleSize.height / 2 + origin.y));
     background->setScale(2.47, 2.13);
@@ -170,3 +170,63 @@ void Level::CheckEveryTwoSec(float dt)
     god->checkAttack();
 }
 
+/*在关卡中建立返回菜单的label
+#include "cocos2d.h"
+
+class MainMenuScene : public cocos2d::Scene {
+public:
+    virtual bool init() override {
+        if (!Scene::init()) {
+            return false;
+        }
+
+        // 创建返回按钮的Label
+        auto backButtonLabel = cocos2d::Label::createWithTTF("Back to Main Menu", "fonts/arial.ttf", 24);
+        auto backButton = cocos2d::MenuItemLabel::create(backButtonLabel, CC_CALLBACK_1(MainMenuScene::menuBackCallback, this));
+
+        backButton->setPosition(cocos2d::Director::getInstance()->getVisibleSize() / 2);
+
+        // 创建菜单，并将返回按钮添加到菜单中
+        auto menu = cocos2d::Menu::create(backButton, nullptr);
+        menu->setPosition(cocos2d::Vec2::ZERO);
+        this->addChild(menu, 1);
+
+        // 启用触摸监听
+        auto touchListener = cocos2d::EventListenerTouchOneByOne::create();
+        touchListener->setSwallowTouches(true);
+        touchListener->onTouchBegan = CC_CALLBACK_2(MainMenuScene::onTouchBegan, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
+        return true;
+    }
+
+    // 返回按钮点击事件处理函数
+    void menuBackCallback(cocos2d::Ref* pSender) {
+        // 切换到主菜单场景
+        cocos2d::Director::getInstance()->replaceScene(MainMenuScene::create());
+    }
+
+    // 触摸事件处理函数
+    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
+        // 判断触摸点是否在按钮范围内
+        auto target = static_cast<Node*>(event->getCurrentTarget());
+        Point locationInNode = target->convertToNodeSpace(touch->getLocation());
+        Size s = target->getContentSize();
+        Rect rect = Rect(0, 0, s.width, s.height);
+
+        if (rect.containsPoint(locationInNode)) {
+            // 如果触摸点在按钮范围内，执行按钮点击事件处理函数
+            menuBackCallback(target);
+            return true;
+        }
+        return false;
+    }
+
+    CREATE_FUNC(MainMenuScene);
+};
+
+// 在游戏关卡中使用该按钮
+// 在你的关卡场景中，通过以下代码创建并添加返回按钮
+// auto backToMainMenuLabel = BackToMainMenuLabel::create();
+// this->addChild(backToMainMenuLabel);
+*/

@@ -8,5 +8,4 @@ public:
     void onAnimationFinished(Node* sender);
 
     void working();
-    void dieAnimation();
 };

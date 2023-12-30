@@ -23,7 +23,6 @@ Sunflower::Sunflower(int x, int y, double scale, Scene* scene,int isNight):theSc
 
 //植物的空闲摇摆动画
 void Sunflower::waitingAnimation() {
-	this->setCondition(SLEEP);
     auto animation = Animation::create();
     char nameSize[50] = { 0 };
     for (int i = 1; i < 9; i++)
@@ -60,9 +59,3 @@ void Sunflower::attackAnimation() {
 	
 }
 
-//植物死亡：消失
-void Sunflower::dieAnimation() {
-	this->setCondition(DEAD);
-
-   this->getIdv()->setVisible(false);//让植物立刻消失在画面中
-}
