@@ -6,11 +6,6 @@ std::vector<Card*>randCards;//随机卡片种子雨
 std::vector<Car*>littleCar;
 /*正在等待的僵尸*/
 std::vector<Zombie*>waiting;
-/*出场的僵尸*/
-std::vector<Zombie*>walking;
-/*死了的僵尸*/
-std::vector<Zombie*>dead;
-
 
 /*当前关卡的所有植物*/
 std::vector<Plant*>plants;
@@ -27,6 +22,64 @@ God::God(int isNight, Scene* CurrentScene, int LevelNum):dayOrNight(isNight),cur
 ,levelNum(LevelNum){
 }
 
+void God::cleanup() {//管理内存
+	for (auto node : cards) {
+		// 释放节点内存
+		if (node) {
+			node->getIdv()->removeFromParentAndCleanup(true);
+			delete node;
+		}
+	}
+	cards.clear();
+
+	for (auto node : randCards) {
+		// 释放节点内存
+		if (node) {
+			node->getIdv()->removeFromParentAndCleanup(true);
+			delete node;
+		}
+	}
+	randCards.clear();
+
+
+	for (auto node : littleCar) {
+		// 释放节点内存
+		if (node) {
+			node->getIdv()->removeFromParentAndCleanup(true);
+			delete node;
+		}
+	}
+	littleCar.clear();
+
+
+	for (auto node : waiting) {
+		// 释放节点内存
+		if (node) {
+			node->getIdv()->removeFromParentAndCleanup(true);
+			delete node;
+		}
+	}
+	waiting.clear();
+
+	for (auto node : plants) {
+		// 释放节点内存
+		if (node) {
+			node->getIdv()->removeFromParentAndCleanup(true);
+			delete node;
+		}
+	}
+	plants.clear();
+
+	for (auto node : bullets) {
+		// 释放节点内存
+		if (node) {
+			node->getIdv()->removeFromParentAndCleanup(true);
+			delete node;
+		}
+	}
+	bullets.clear();
+}
+
 //调度器每隔0.1秒调用该函数
 void God::gameEnd()
 {
@@ -34,16 +87,20 @@ void God::gameEnd()
 	for (int i = 0; i < waiting.size(); i++) {
 		if (waiting[i]->getCondition() == DEAD) {
 			totaldeath++;
-			if (totaldeath == 15) {
+			if (totaldeath == 1) {
+				currentScene->unscheduleAllSelectors();//暂停所有计数器
+				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				Win();
-				currentScene->unscheduleAllSelectors();
+				cleanup();
 			}
 		}
 		else {
 			Vec2 currentPosition = waiting[i]->getIdv()->getPosition();
 			if (currentPosition.x <= 0) {
+				currentScene->unscheduleAllSelectors();//暂停所有计数器
+				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				Lose();
-				currentScene->unscheduleAllSelectors();
+				cleanup();
 			}
 		}	
 	}
@@ -443,9 +500,8 @@ void God::randomCardInit(Sun* _sun)
 	
 }
 
-
 void God::Win() {
-	GameDataManager::saveLevelProgress(levelNum);//储存当前关卡进度
+	GameDataManager::saveLevelProgress(levelNum+1);//储存当前关卡进度
 
 	const auto visibleSize = Director::getInstance()->getVisibleSize();
 	const Vec2 origin = Director::getInstance()->getVisibleOrigin();

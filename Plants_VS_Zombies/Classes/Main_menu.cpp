@@ -76,7 +76,7 @@ bool Main_menu::init()
     //2.冒险模式按钮
     auto adventure_mode = MenuItemImage::create(
         "/main_menu/adventure1.png",
-        "/main_menu/adventure2.png", CC_CALLBACK_1(Main_menu::gotoLevel1, this)
+        "/main_menu/adventure2.png", CC_CALLBACK_1(Main_menu::startGameCallback, this)
         );////////////////////////////此处需要调用一个进入冒险模式最新关卡的函数，记得修改按钮图片
     ///////我们假定使用了UserDefault::getInstance()->setIntegerForKey("LatestLevel", 5);形式存储进度
     if (adventure_mode == nullptr ||
@@ -164,12 +164,6 @@ void Main_menu::gotoMarket(Ref* pSender)
     Director::getInstance()->replaceScene(Market::createScene());
 }
 
-void Main_menu::gotoLevel1(Ref* pSender)
-{
-    auto level = Level::createWithLevelNumber(1);
-    // 将 Level 对象添加到场景中
-    Director::getInstance()->replaceScene(level);
-}
 
 void Main_menu::gotoMiniGame(Ref* pSender)
 {

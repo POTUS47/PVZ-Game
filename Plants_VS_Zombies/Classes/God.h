@@ -35,6 +35,7 @@ private:
 public:
 	//构造函数
 	God(int isNight, Scene* currentScene, int LevelNum);
+	void cleanup();
 	//检测游戏是否结束
 	void gameEnd();
 	//检测僵尸是否碰到小推车

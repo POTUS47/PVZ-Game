@@ -9,6 +9,7 @@
 #include<vector>
 #include"Sun.h"
 #include"User.h"
+#include"PromptScene.h"
 
 class God;
 class Level : public cocos2d::Scene
