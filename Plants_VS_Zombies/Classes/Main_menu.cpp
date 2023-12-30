@@ -35,11 +35,10 @@ bool Main_menu::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     //1：结束按钮
-   /* auto closeItem = MenuItemImage::create(
-        "zombietest.png",
-        "zombietest.png",
+    auto closeItem = MenuItemImage::create(
+        "quit.png",
+        "quit.png",
         CC_CALLBACK_1(Main_menu::menuCloseCallback, this));
-    ////////////////修改退出框按钮图片
     if (closeItem == nullptr ||
         closeItem->getContentSize().width <= 0 ||
         closeItem->getContentSize().height <= 0)
@@ -48,16 +47,14 @@ bool Main_menu::init()
     }
     else
     {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
-        float y = origin.y + closeItem->getContentSize().height / 2;
+        float x = visibleSize.width*0.9;
+        float y = visibleSize.height * 0.15;
         closeItem->setPosition(Vec2(x, y));
-        ////////////修改退出框按钮的相对位置
+        closeItem->setScale(2.5);
     }
-    //基于第一个退出按钮，我们创建菜单menu
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-    */
+
+   
+    
     // 添加主界面图片（以精灵形式）
     auto sprite = Sprite::create("/main_menu/background.png");
     if (sprite == nullptr)
@@ -131,7 +128,7 @@ bool Main_menu::init()
  
 
 
-        auto menu = Menu::create(adventure_mode, mini_game_mode,market, NULL);
+        auto menu = Menu::create(adventure_mode, mini_game_mode,market,closeItem, NULL);
         menu->setPosition(Vec2::ZERO);
         this->addChild(menu, 0);
 
