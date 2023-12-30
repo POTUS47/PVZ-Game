@@ -21,12 +21,11 @@
 #include"PuffShroom.h"
 #include"FumeShroom.h"
 
-
-
 /*调度器放在这里，检测游戏是否结束等等*/
 class God :public Node
 {
 private:
+	int isMiniGame;//如果是小游戏，将不储存关卡进度
 	int levelNum;
 	int dayOrNight;//0是白天，1是黑夜
 	Scene* currentScene;//GOD管理的当前场景指针
@@ -34,7 +33,7 @@ private:
 
 public:
 	//构造函数
-	God(int isNight, Scene* currentScene, int LevelNum);
+	God(int isNight, Scene* currentScene, int LevelNum, int IsMiniGame);
 	void cleanup();
 	//检测游戏是否结束
 	void gameEnd();
@@ -75,7 +74,6 @@ public:
 	void checkCard();
 	//种子雨
 	void randomCardInit( Sun* _sun);
-
 
 	void setSun(Sun* _sun) {
 		sun = _sun;

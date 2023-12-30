@@ -3,6 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "Main_menu.h"
 #include "MarketScene.h"
+#include"MiniGameLevel.h"
 #include <string>
 
 class MiniGame : public cocos2d::Scene

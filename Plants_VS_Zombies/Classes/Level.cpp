@@ -29,7 +29,7 @@ bool Level::initWithLevelNumber(int levelNumber) {
         return 1;
     }
     /////////////////////////////////////////////////需要再添加小游戏
-    god = new God(isNight, this, levelNumber);
+    god = new God(isNight, this, levelNumber,0);
     if (!Scene::init())
     {
         return false;
@@ -168,6 +168,7 @@ void Level::update(float dt)
 //按下游戏后转回菜单场景
 void Level::goBackMain(Ref* pSender)
 {
+    god->cleanup();
     Director::getInstance()->replaceScene(Main_menu::createScene());
 }
 

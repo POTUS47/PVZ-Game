@@ -14,7 +14,8 @@
 class God;
 class Level : public cocos2d::Scene
 {
-private:
+protected:
+
     int levelNum;//储存当前是何关卡
     God* god; //上帝的实例化
     Sun* sun;
@@ -26,13 +27,13 @@ public:
     // 创建 Level 对象的静态函数，接受一个整数参数
     static Level* createWithLevelNumber(int levelNumber);
     virtual bool initWithLevelNumber(int levelNumber);// 初始化函数
-    void setBackground();
+    virtual void setBackground();
 
 
     CREATE_FUNC(Level);// 使用宏定义创建 Level 对象
 
     static cocos2d::Scene* createScene();
-    void update(float dt);
+    virtual void update(float dt);//掉落阳光
     void CheckEveryMin(float dt);
     void goBackMain(cocos2d::Ref* pSender);
     void CheckEveryTwoSec(float dt);
@@ -41,16 +42,13 @@ public:
 
     virtual void onMoveByFinished();//小游戏需要重新写
     virtual void startChoose();//小游戏需要重新写
-
-    //新写的函数
-
 };
 
 
 /*备注：
 * Level类的使用方法：
-* Level* level = Level::createWithLevelNumber(levelNumber);
-* 不知道能不能auto level= Level::createWithLevelNumber(levelNumber);
+
+* auto level= Level::createWithLevelNumber(levelNumber);
 // 将 Level 对象添加到场景中
 Director::getInstance()->replaceScene(level);
 */
