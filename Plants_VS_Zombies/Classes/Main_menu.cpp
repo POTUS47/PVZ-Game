@@ -4,6 +4,7 @@
 #include "MarketScene.h"
 #include "Level.h"
 #include "MiniGame.h"
+#include"achievement.h"
 //图片比例3:2
 ///////多条斜线是提醒修改的意思
 USING_NS_CC;
@@ -113,26 +114,35 @@ bool Main_menu::init()
         mini_game_mode->setPosition(Vec2(x, y));
         mini_game_mode->setScale(2.0);
     }
- 
-    
+
     //4.商店按钮
     auto market = MenuItemImage::create(
         "/main_menu/shopbutton1.png", "/main_menu/shopbutton2.png",
         CC_CALLBACK_1(Main_menu::gotoMarket, this)
-        );////////////////////////////此处需要调用一个进入商店场景的函数，记得修改按钮图片
+    );////////////////////////////此处需要调用一个进入商店场景的函数，记得修改按钮图片
 
-        float x = origin.x + visibleSize.width / 3*2;
-        float y = origin.y + visibleSize.height / 4-50;
-        market->setPosition(Vec2(x, y));
-        market->setScale(2.5);
+    float x1 = origin.x + visibleSize.width / 3 * 2;
+    float y1 = origin.y + visibleSize.height / 4 - 50;
+    market->setPosition(Vec2(x1, y1));
+    market->setScale(2.5);
+//5.成就按钮
+    auto achievement = MenuItemImage::create(
+        "/main_menu/1.png", "/main_menu/2.png",
+        CC_CALLBACK_1(Main_menu::gotoAchievement, this)
+    );////////////////////////////此处需要调用一个进入商店场景的函数，记得修改按钮图片
+
+    float x = origin.x + visibleSize.width / 4;
+    float y = origin.y + visibleSize.height / 4*1.2 ;///////////////////////
+    achievement->setPosition(Vec2(x, y));
+    achievement->setScale(2.65);
+
+    //创建菜单
+    auto menu = Menu::create(adventure_mode, mini_game_mode, market, closeItem, achievement,NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 0);
+
+    return true;
  
-
-
-        auto menu = Menu::create(adventure_mode, mini_game_mode,market,closeItem, NULL);
-        menu->setPosition(Vec2::ZERO);
-        this->addChild(menu, 0);
-
-        return true;
 }
 
 //菜单按钮1：结束按钮的回调函数
@@ -169,6 +179,12 @@ void Main_menu::gotoMarket(Ref* pSender)
 
 void Main_menu::gotoMiniGame(Ref* pSender)
 {
-    //按下开始游戏后转入菜单场景
+    //按下开始游戏后转入主菜单场景
     Director::getInstance()->replaceScene(MiniGame::createScene());
+}
+
+void Main_menu::gotoAchievement(Ref* pSender)
+{
+    //按下开始游戏后转入成就场景
+    Director::getInstance()->replaceScene(AchievementScene::createScene());
 }
