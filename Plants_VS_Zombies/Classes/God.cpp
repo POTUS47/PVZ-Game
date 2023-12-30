@@ -6,11 +6,6 @@ std::vector<Card*>randCards;//随机卡片种子雨
 std::vector<Car*>littleCar;
 /*正在等待的僵尸*/
 std::vector<Zombie*>waiting;
-/*出场的僵尸*/
-std::vector<Zombie*>walking;
-/*死了的僵尸*/
-std::vector<Zombie*>dead;
-
 
 /*当前关卡的所有植物*/
 std::vector<Plant*>plants;
@@ -23,8 +18,66 @@ float Statime[2][3][10] = { 15,25,40,45,67,80,89,88,90,105,45,50,75,78,90,35,70,
 
 
 //God的构造函数
-God::God(int isNight, Scene* CurrentScene, int LevelNum):dayOrNight(isNight),currentScene(CurrentScene)
-,levelNum(LevelNum){
+God::God(int isNight, Scene* CurrentScene, int LevelNum,int IsMiniGame):dayOrNight(isNight),currentScene(CurrentScene)
+,levelNum(LevelNum),isMiniGame(IsMiniGame){
+}
+
+void God::cleanup() {//管理内存
+	for (auto node : cards) {
+		// 释放节点内存
+		if (node->getIdv())
+			node->getIdv()->removeFromParentAndCleanup(true);
+		if (node)
+			delete node;
+	}
+	cards.clear();
+
+	for (auto node : randCards) {
+		// 释放节点内存
+		if(node->getIdv())
+			node->getIdv()->removeFromParentAndCleanup(true);
+		if (node) 
+			delete node;
+	}
+	randCards.clear();
+
+
+	for (auto node : littleCar) {
+		// 释放节点内存
+		if (node->getIdv())
+			node->getIdv()->removeFromParentAndCleanup(true);
+		if (node)
+			delete node;
+	}
+	littleCar.clear();
+
+
+	for (auto node : waiting) {
+		// 释放节点内存
+		if (node->getIdv())
+			node->getIdv()->removeFromParentAndCleanup(true);
+		if (node)
+			delete node;
+	}
+	waiting.clear();
+
+	for (auto node : plants) {
+		// 释放节点内存
+		if (node->getIdv())
+			node->getIdv()->removeFromParentAndCleanup(true);
+		if (node)
+			delete node;
+	}
+	plants.clear();
+
+	for (auto node : bullets) {
+		// 释放节点内存
+		if (node->getIdv())
+			node->getIdv()->removeFromParentAndCleanup(true);
+		if (node)
+			delete node;
+	}
+	bullets.clear();
 }
 
 //调度器每隔0.1秒调用该函数
@@ -35,15 +88,19 @@ void God::gameEnd()
 		if (waiting[i]->getCondition() == DEAD) {
 			totaldeath++;
 			if (totaldeath == 1) {
+				currentScene->unscheduleAllSelectors();//暂停所有计数器
+				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				Win();
-				currentScene->unscheduleAllSelectors();
+				cleanup();
 			}
 		}
 		else {
 			Vec2 currentPosition = waiting[i]->getIdv()->getPosition();
 			if (currentPosition.x <= 0) {
+				currentScene->unscheduleAllSelectors();//暂停所有计数器
+				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				Lose();
-				currentScene->unscheduleAllSelectors();
+				cleanup();
 			}
 		}	
 	}
@@ -300,7 +357,7 @@ void God::checkAttack() {
 						}
 						else if (isNight&&plants[i]->getName() == PUFF_SHROOM&&
 							waiting[j]->getIdv()->getPosition().x - plants[i]->getX() <= 550) {
-							bullets.push_back(new puffShroomBullet(1,plantRow, currentP.x + 250, currentP.y-5 , plants[i]->getAttackDamage(), currentScene));
+							bullets.push_back(new puffShroomBullet(1,plantRow, currentP.x + 230, currentP.y-5 , plants[i]->getAttackDamage(), currentScene));
 						     }
 						else if (isNight && plants[i]->getName() == FUME_SHROOM &&
 							waiting[j]->getIdv()->getPosition().x - plants[i]->getX() <= 750) {
@@ -362,7 +419,6 @@ void God::checkJalapenoBomb() {
 	}
 }
 
-//写新函数：
 
 //检查太阳花是不是该产生太阳了
 void God::checkSunflower()
@@ -443,9 +499,9 @@ void God::randomCardInit(Sun* _sun)
 	
 }
 
-
 void God::Win() {
-	GameDataManager::saveLevelProgress(levelNum);//储存当前关卡进度
+	if(!isMiniGame)
+	    GameDataManager::saveLevelProgress(levelNum+1);//储存当前关卡进度
 
 	const auto visibleSize = Director::getInstance()->getVisibleSize();
 	const Vec2 origin = Director::getInstance()->getVisibleOrigin();

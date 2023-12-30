@@ -55,7 +55,8 @@ bool MiniGame::init()
 
 void MiniGame::gotoGameCallback(Ref* pSender)
 {
-    //minigame游戏开始处
+    auto level = MiniGameLevel::createWithLevelNumber(1);//进入迷你小游戏第一关
+    Director::getInstance()->replaceScene(level);
 }
 
 void MiniGame::backtoMain(cocos2d::Ref* pSender)

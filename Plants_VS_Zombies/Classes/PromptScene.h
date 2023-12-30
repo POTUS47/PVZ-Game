@@ -3,10 +3,9 @@
 #include "SimpleAudioEngine.h"
 #include "Main_menu.h"
 #include "MarketScene.h"
-#include"MiniGameLevel.h"
 #include <string>
 
-class MiniGame : public cocos2d::Scene
+class PromptScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
@@ -15,5 +14,5 @@ public:
     void gotoGameCallback(Ref* pSender);
     void backtoMain(cocos2d::Ref* pSender);
 
-    CREATE_FUNC(MiniGame);
+    CREATE_FUNC(PromptScene);
 };
