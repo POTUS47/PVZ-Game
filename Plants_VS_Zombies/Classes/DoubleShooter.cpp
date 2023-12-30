@@ -37,9 +37,3 @@ void DoubleShooter::waitingAnimation() {
     this->getIdv()->runAction(animate);//将动画动作应用到精灵上，并运行动画
 }
 
-//植物死亡：消失
-void DoubleShooter::dieAnimation() {
-    this->setCondition(DEAD);
-    getIdv()->setVisible(false);
-    //this->getIdv()->removeFromParent();//让植物立刻消失在画面中
-}

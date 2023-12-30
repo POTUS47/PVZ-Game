@@ -22,16 +22,19 @@
 #include"FumeShroom.h"
 
 
+
 /*调度器放在这里，检测游戏是否结束等等*/
 class God :public Node
 {
 private:
+	int levelNum;
 	int dayOrNight;//0是白天，1是黑夜
 	Scene* currentScene;//GOD管理的当前场景指针
 	Sun* sun;
+
 public:
 	//构造函数
-	God(int isNight, Scene* currentScene);
+	God(int isNight, Scene* currentScene, int LevelNum);
 	//检测游戏是否结束
 	void gameEnd();
 	//检测僵尸是否碰到小推车
@@ -76,5 +79,10 @@ public:
 	void setSun(Sun* _sun) {
 		sun = _sun;
 	}
+
+	void Win();//胜利场景
+	void Lose();//失败场景
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+	void returnToMainMenu();
 
 };

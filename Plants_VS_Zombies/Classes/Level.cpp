@@ -6,7 +6,13 @@ bool Level::initWithLevelNumber(int levelNumber) {
     // 在这里进行场景的初始化，可以根据 levelNumber 做不同的处理
     levelNum = levelNumber;
     srand(static_cast<unsigned>(time(0)));
-    god = new God(1, this);
+    int isNight;
+    if (levelNumber == 1)
+        isNight = 0;
+    else if (levelNumber == 2)
+        isNight = 1;
+    /////////////////////////////////////////////////需要再添加
+    god = new God(isNight, this, levelNumber);
     if (!Scene::init())
     {
         return false;
@@ -73,8 +79,8 @@ void Level::setBackground() {
     const Vec2 origin = Director::getInstance()->getVisibleOrigin();
     if (levelNum == 1)
         background = Sprite::create("/level1/bg.jpg");
-    else {
-
+    else if(levelNum == 2){
+        background = Sprite::create("/level/3.jpg");
     }//////其他关卡
     background->setPosition(Vec2(visibleSize.width * 0.73 + origin.x, visibleSize.height / 2 + origin.y));
     background->setScale(2.47, 2.13);
@@ -163,34 +169,64 @@ void Level::CheckEveryTwoSec(float dt)
 {
     god->checkAttack();
 }
-/*
 
-void Level::Win() {
-    const auto visibleSize = Director::getInstance()->getVisibleSize();
-    const Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    //戴夫
-    auto sprite = Sprite::create("/market/dave.png");
+/*在关卡中建立返回菜单的label
+#include "cocos2d.h"
 
-    sprite->setPosition(Vec2(visibleSize.width / 5 + origin.x, visibleSize.height / 3 + origin.y));
-    sprite->setScale(2.5);
-    ->addChild(sprite, 0);
+class MainMenuScene : public cocos2d::Scene {
+public:
+    virtual bool init() override {
+        if (!Scene::init()) {
+            return false;
+        }
 
-    //---------------------------------------------------------------------------------
-    //返回菜单的按钮
-    auto back = MenuItemImage::create(
-        "/market/backbutton1.png", "/market/backbutton2.png",
-        CC_CALLBACK_1(Market::goBackMain, this)
-    );////////////////////////////此处需要调用一个进入商店场景的函数，记得修改按钮图片
+        // 创建返回按钮的Label
+        auto backButtonLabel = cocos2d::Label::createWithTTF("Back to Main Menu", "fonts/arial.ttf", 24);
+        auto backButton = cocos2d::MenuItemLabel::create(backButtonLabel, CC_CALLBACK_1(MainMenuScene::menuBackCallback, this));
 
-    float x = origin.x + visibleSize.width * 0.55;
-    float y = origin.y + visibleSize.height * 0.2;
-    back->setPosition(Vec2(x, y));
-    back->setScale(2.0);
+        backButton->setPosition(cocos2d::Director::getInstance()->getVisibleSize() / 2);
 
+        // 创建菜单，并将返回按钮添加到菜单中
+        auto menu = cocos2d::Menu::create(backButton, nullptr);
+        menu->setPosition(cocos2d::Vec2::ZERO);
+        this->addChild(menu, 1);
 
+        // 启用触摸监听
+        auto touchListener = cocos2d::EventListenerTouchOneByOne::create();
+        touchListener->setSwallowTouches(true);
+        touchListener->onTouchBegan = CC_CALLBACK_2(MainMenuScene::onTouchBegan, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-    auto menu = Menu::create(back, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 0);
-}
+        return true;
+    }
+
+    // 返回按钮点击事件处理函数
+    void menuBackCallback(cocos2d::Ref* pSender) {
+        // 切换到主菜单场景
+        cocos2d::Director::getInstance()->replaceScene(MainMenuScene::create());
+    }
+
+    // 触摸事件处理函数
+    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
+        // 判断触摸点是否在按钮范围内
+        auto target = static_cast<Node*>(event->getCurrentTarget());
+        Point locationInNode = target->convertToNodeSpace(touch->getLocation());
+        Size s = target->getContentSize();
+        Rect rect = Rect(0, 0, s.width, s.height);
+
+        if (rect.containsPoint(locationInNode)) {
+            // 如果触摸点在按钮范围内，执行按钮点击事件处理函数
+            menuBackCallback(target);
+            return true;
+        }
+        return false;
+    }
+
+    CREATE_FUNC(MainMenuScene);
+};
+
+// 在游戏关卡中使用该按钮
+// 在你的关卡场景中，通过以下代码创建并添加返回按钮
+// auto backToMainMenuLabel = BackToMainMenuLabel::create();
+// this->addChild(backToMainMenuLabel);
 */

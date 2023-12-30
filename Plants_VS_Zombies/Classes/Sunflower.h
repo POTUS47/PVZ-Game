@@ -8,16 +8,9 @@ public:
     Sunflower(int x, int y, double scale, Scene* scene,int isNight);
     void waitingAnimation();
     void attackAnimation();
-    void dieAnimation();
-
-    void createSun(int x,int y);
 
     Scene* getScene() { return theScencePlantIn; }
-    Label* getCurrentLevelSunLabel() {return currentLevelSunLabel;}
-
-   
 private:
     Scene* theScencePlantIn;
-    Label* currentLevelSunLabel;
     
 };

@@ -7,5 +7,4 @@ public:
 
     void waitingAnimation();
     void attackAnimation();
-    void dieAnimation();
 };

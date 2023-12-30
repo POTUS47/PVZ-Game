@@ -57,12 +57,6 @@ void FumeShroom::attackAnimation() {
 
 }
 
-//植物死亡：消失
-void FumeShroom::dieAnimation() {
-    this->setCondition(DEAD);//给god标签，让其删除植物
-    getIdv()->setVisible(false);
-    //this->getIdv()->removeFromParent();//让植物立刻消失在画面中
-}
 
 
 

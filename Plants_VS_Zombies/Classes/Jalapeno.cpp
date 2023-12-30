@@ -38,12 +38,6 @@ void Jalapeno::working() {
     this->getIdv()->runAction(sequence);//将动画动作应用到精灵上，并运行动画
 }
 
-//植物死亡：消失 注意火爆消失的逻辑在god中通过bomb检测
-void Jalapeno::dieAnimation() {
-    this->setCondition(DEAD);
-    getIdv()->setVisible(false);
-    //this->getIdv()->removeFromParent();//让植物立刻消失在画面中
-}
 
 void Jalapeno::onAnimationFinished(Node* sender){
     this->setCondition(BOMB);

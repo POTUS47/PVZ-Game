@@ -23,7 +23,8 @@ float Statime[2][3][10] = { 15,25,40,45,67,80,89,88,90,105,45,50,75,78,90,35,70,
 
 
 //God的构造函数
-God::God(int isNight, Scene* CurrentScene):dayOrNight(isNight),currentScene(CurrentScene) {
+God::God(int isNight, Scene* CurrentScene, int LevelNum):dayOrNight(isNight),currentScene(CurrentScene)
+,levelNum(LevelNum){
 }
 
 //调度器每隔0.1秒调用该函数
@@ -33,16 +34,16 @@ void God::gameEnd()
 	for (int i = 0; i < waiting.size(); i++) {
 		if (waiting[i]->getCondition() == DEAD) {
 			totaldeath++;
-			if (totaldeath == 18) {
-				//赢了
-				exit(2);
+			if (totaldeath == 15) {
+				Win();
+				currentScene->unscheduleAllSelectors();
 			}
 		}
 		else {
 			Vec2 currentPosition = waiting[i]->getIdv()->getPosition();
 			if (currentPosition.x <= 0) {
-				//输了
-				exit(1);
+				Lose();
+				currentScene->unscheduleAllSelectors();
 			}
 		}	
 	}
@@ -56,11 +57,13 @@ void God::updateZombies(int level)
 	//根据关卡的不同设置不同数量的僵尸
 	if (level == 1) {
 		normZ = 10;
-		coneZ = 5;
-		newsZ = 3;
+		coneZ = 4;
+		newsZ = 1;
 	}
-	else {
-
+	else if(level ==2){
+		normZ = 1;
+		coneZ = 0;
+		newsZ = 0;
 	}
 
 
@@ -151,7 +154,6 @@ void God::setZombieStartTime()
 
 void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 {
-
 	cards.push_back(new Card(268, 1108, 1.95, "/card/peashooter", "/plant/peashooter/Peashooter1.png", scene,PEASHOOTER,_sun, dayOrNight));
 	cards.push_back(new Card(380, 1108, 1.95, "/card/sunflower", "/plant/sunflower/SunFlower1.png", scene, SUNFLOWER, _sun, dayOrNight));
 	cards.push_back(new Card(492, 1108, 1.95, "/card/nut", "/plant/nut/zz1.png", scene,NUT,_sun, dayOrNight));
@@ -163,8 +165,6 @@ void God::showCardinSeedBank(Scene* scene,Sun* _sun)
 	
 	cards.push_back(new Card(1164, 1108, 1.05, "/card/shovel", "/card/shovel.png", scene, SHOVEL, _sun, dayOrNight));
 }
-
-
 
 void God::initCar(Scene* scene)
 {
@@ -236,7 +236,8 @@ void God::checkEat()
 						plants[i]->setEatCondition(BEINGEATEN);
 
 						waiting[j]->healthyEating(waiting[j]->getIdv());
-						//plants[i]->getHurt(waiting[j]->getAttack());///////////////////////////////////////////////////////具体数值需要再斟酌
+						//plants[i]->getHurt(waiting[j]->getAttack());
+						///////////////////////////////////////具体数值需要再斟酌
 					}
 				}
 			}
@@ -367,6 +368,8 @@ void God::checkJalapenoBomb() {
 void God::checkSunflower()
 {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
+
+
 		if ((plants[i]->getName() == SUNFLOWER|| plants[i]->getName() == SUN_SHROOM) &&
 			plants[i]->getCondition() != DEAD &&plants[i]->getCondition() != SLEEP && plants[i]->canCreateSun()) {//是太阳花且没有死且没睡觉
 			
@@ -388,10 +391,9 @@ void God::checkSunflower()
 				}
 			}
 			plants[i]->setCondition(HEALTHY);
-			auto delay = DelayTime::create(5.0f);//十秒产一次阳光
+			auto delay = DelayTime::create(3.0f);//十秒产一次阳光
 			auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 				plants[i]->setCanCreateSun();//设为能产阳光
-
 				}), nullptr);
 			plants[i]->getIdv()->runAction(sequence);
 			
@@ -439,4 +441,94 @@ void God::randomCardInit(Sun* _sun)
 	auto sequence = Sequence::create(delayAction, checkClickCallback, nullptr);
 	current->runAction(sequence);
 	
+}
+
+
+void God::Win() {
+	GameDataManager::saveLevelProgress(levelNum);//储存当前关卡进度
+
+	const auto visibleSize = Director::getInstance()->getVisibleSize();
+	const Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	//获取可视范围
+	auto newLayer = LayerColor::create(Color4B(0, 0, 0, 128));
+	currentScene->addChild(newLayer);//创建半透明层
+	//出现戴夫
+	auto sprite = Sprite::create("/market/dave.png");
+
+	sprite->setPosition(Vec2(origin.x, visibleSize.height / 3 + origin.y));
+	sprite->setScale(2.5);
+	newLayer->addChild(sprite, 0);
+	// 创建从侧面滑入的动作
+	auto moveBy = MoveBy::create(1.5, Vec2(visibleSize.width / 2, 0));
+
+	// 创建放大动作
+	auto scaleTo0 = ScaleTo::create(0.5, 3.5);  // 在1秒内从当前大小放大到1.5倍
+
+	// 使用 EaseOut 缓动效果，使得滑入动作在结束时逐渐减速
+	auto easeOut = EaseOut::create(moveBy, 1.5);
+
+	// 创建一个顺序动作，先执行滑入动作，再执行放大动作
+	auto sequence = Sequence::create(easeOut, scaleTo0, nullptr);
+
+	// 执行整个顺序动作
+	sprite->runAction(sequence);
+
+	//纸条出现
+	auto invitation = Sprite::create("/level/1.png");
+
+	invitation->setPosition(Vec2(origin.x + visibleSize.width / 4 * 3, visibleSize.height / 3 * 2 + origin.y));
+	invitation->setScale(0.8);
+	newLayer->addChild(invitation, 0);
+	// 创建旋转动作
+	auto rotateBy = RotateBy::create(0.7, 360);
+	cocos2d::ScaleTo* scaleTo = ScaleTo::create(0.5, 1.5);
+
+	// 创建 Label
+	auto label = Label::createWithTTF("你收到了僵尸的新邀请", "fonts/arial.ttf", 11);
+	label->setPosition(Vec2(visibleSize.width / 4 * 3 + origin.x, visibleSize.height / 4 * 3 + origin.y));
+
+	// 添加触摸事件监听器
+	auto touchListener = EventListenerTouchOneByOne::create();
+	touchListener->onTouchBegan = CC_CALLBACK_2(God::onTouchBegan, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, invitation);
+}
+
+bool God::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
+	Director::getInstance()->replaceScene(Main_menu::createScene());
+	//进入下一关,这里先用了返回菜单
+	return true;
+}
+
+void God::Lose() {
+
+	const auto visibleSize = Director::getInstance()->getVisibleSize();
+	const Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	//获取可视范围
+	auto newLayer = LayerColor::create(Color4B(0, 0, 0, 128));
+	currentScene->addChild(newLayer);//创建半透明层
+	//僵尸吃掉了脑子
+	auto sprite = Sprite::create("/level/2.png");
+
+	sprite->setPosition(Vec2(origin.x + visibleSize.width / 2, visibleSize.height / 2 + origin.y));
+	sprite->setScale(0.5);
+	newLayer->addChild(sprite, 0);
+
+	// 创建放大动作
+	auto* scaleTo2 = ScaleTo::create(1.5, 2.5);  // 在1秒内从当前大小放大到1.5倍
+
+	// 执行动作
+	sprite->runAction(scaleTo2);
+
+	///////////////////////////////此处播放恐怖音效
+	auto delay = DelayTime::create(5.0f);
+	auto callFunc = cocos2d::CallFunc::create(CC_CALLBACK_0(God::returnToMainMenu, this));
+	auto sequence = cocos2d::Sequence::create(delay, callFunc, NULL);
+	sprite->runAction(sequence);
+
+
+}
+
+void God::returnToMainMenu() {
+	// 处理延迟后的逻辑
+	Director::getInstance()->replaceScene(Main_menu::createScene());
 }

@@ -3,7 +3,6 @@
 extern std::vector<Card*>cards;
 extern std::vector<Plant*>plants;
 extern std::vector<Card*>randCards;
-
 int howMuch(int type);
 float setTime(int type);
 
@@ -114,7 +113,11 @@ void Card::addListener()
 							int minus = getMoney();
 							sun->setSunValue(currentSun -= minus);
 							sun->updateSun();
-							auto delay = DelayTime::create(sleepTime);/////////////////////////////////////////此处有问题，不恢复了
+							auto delay = DelayTime::create(sleepTime);
+							
+							
+							
+							/////////////////////////此处有问题，不恢复了
 							condition = SLEEP;
 							changeApperence(0);
 							getIdv()->setTexture(waitCardPath);

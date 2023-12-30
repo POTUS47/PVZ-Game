@@ -51,7 +51,6 @@ public:
     //几种动画:每种植物必须写
     virtual void waitingAnimation(){};//空闲
     virtual void attackAnimation() {};//工作
-    virtual void dieAnimation() {};//死亡
 
     virtual void growUp(){}//用于特殊植物的生长
 
@@ -64,6 +63,13 @@ public:
 
     void setName(int n) { name = n; }
     int getName() { return name; }
+
+    //植物死亡：消失
+    void dieAnimation() {
+        this->setCondition(DEAD);
+        getIdv()->setVisible(false);
+        //this->getIdv()->removeFromParent();//让植物立刻消失在画面中
+    }
 
 private:
     bool CanCreateSun = 1;//针对能产阳光的特殊植物
