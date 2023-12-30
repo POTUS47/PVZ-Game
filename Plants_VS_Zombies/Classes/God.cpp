@@ -23,6 +23,7 @@ God::God(int isNight, Scene* CurrentScene, int LevelNum,int IsMiniGame):dayOrNig
 }
 
 void God::cleanup() {//管理内存
+	currentScene->stopAllActions();
 	for (auto node : cards) {
 		// 释放节点内存
 		if (node->getIdv())
@@ -55,6 +56,7 @@ void God::cleanup() {//管理内存
 	for (auto node : waiting) {
 		// 释放节点内存
 		if (node->getIdv())
+			node->getIdv()->stopAllActions();
 			//node->getIdv()->removeFromParentAndCleanup(true);
 		if (node)
 			delete node;
@@ -93,6 +95,8 @@ void God::gameEnd()
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				cleanup();
 				Win();
+				
+				return;
 			}
 		}
 		else {
@@ -102,7 +106,7 @@ void God::gameEnd()
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				cleanup();
 				Lose();
-
+				return;
 			}
 		}	
 	}
@@ -404,7 +408,7 @@ void God::checkJalapenoBomb() {
 			plants[i]->dieAnimation();
 			new Flame(plants[i]->getRow(), plants[i]->getX(), plants[i]->getY(), plants[i]->getAttackDamage(), currentScene);
 			for (int j = 0; j < waiting.size(); j++) {
-				if (waiting[j]->getCol() == plants[i]->getRow()) {
+				if (waiting[j]->getCol() == plants[i]->getRow()&&waiting[j]->getCondition()!=WAIT && waiting[j]->getCondition() != DEAD) {
 					waiting[j]->setCondition(DEAD);
 					waiting[j]->burning();
 					//死了的动画播放完了就把这个死了的僵尸从vector里删掉

@@ -3,12 +3,12 @@
 
 Sun::Sun(Scene* scene)
 {
-	sunLightLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 30);
+	sunLightLabel = Label::createWithTTF("50", "fonts/Marker Felt.ttf", 30);
 	sunLightLabel->setPosition(Vec2(115, 1038));  // 设置Label的位置
 	sunLightLabel->setTextColor(Color4B::BLACK);  // 设置字体颜色为黑色
 	scene->addChild(sunLightLabel, 2);  // 将Label添加到场景中
 	currentScene = scene;//存下了当前的场景以后可以用
-	sunValue = 0;
+	sunValue = 50;
 }
 
 void Sun::updateSun()

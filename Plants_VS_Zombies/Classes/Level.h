@@ -15,7 +15,7 @@ class God;
 class Level : public cocos2d::Scene
 {
 protected:
-
+    int isNight;
     int levelNum;//储存当前是何关卡
     God* god; //上帝的实例化
     Sun* sun;

@@ -17,17 +17,11 @@ bool Level::initWithLevelNumber(int levelNumber) {
     // 在这里进行场景的初始化，可以根据 levelNumber 做不同的处理
     levelNum = levelNumber;
     srand(static_cast<unsigned>(time(0)));
-    int isNight;
+    
     if (levelNumber == 1)
         isNight = 0;
     else if (levelNumber == 2)
         isNight = 1;
-    else if (levelNumber == 3) {
-        GameDataManager::saveLevelProgress(1);//储存当前关卡进度
-        auto newScene = PromptScene::createScene(); // 替换成提示场景
-        Director::getInstance()->replaceScene(newScene);
-        return 1;
-    }
     /////////////////////////////////////////////////需要再添加小游戏
     god = new God(isNight, this, levelNumber,0);
     if (!Scene::init())
@@ -163,6 +157,9 @@ void Level::onMoveByFinished()
 
 void Level::update(float dt)
 {
+    if (isNight) {
+        return;
+    }
     sun->createSun();
 }
 
@@ -198,7 +195,6 @@ void Level::moveRight(Ref* sender)
 
 void Level::CheckEveryMin(float dt)
 {
-    god->gameEnd();
     god->hitByCar();
     god->checkCrush();
     god->checkEat();
@@ -208,6 +204,7 @@ void Level::CheckEveryMin(float dt)
     god->checkSunflower();
     god->checkCard();
     god->sunShroomGrowUp();
+    god->gameEnd();
 }
 
 void Level::CheckEveryTwoSec(float dt)

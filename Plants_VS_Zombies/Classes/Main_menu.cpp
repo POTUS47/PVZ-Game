@@ -151,6 +151,11 @@ void Main_menu::startGameCallback(Ref* pSender)
 {
     // 获取最新关卡进度，这里假设使用UserDefault保存了关卡进度
     int latestLevel = GameDataManager::getLevelProgress();
+    if (latestLevel > 2) {
+        GameDataManager::saveLevelProgress(1);//储存当前关卡进度为1
+        Director::getInstance()->replaceScene(PromptScene::createScene());
+        return;
+    }
     // 进入对应的最新游戏场景
     auto level = Level::createWithLevelNumber(latestLevel);
     // 将 Level 对象添加到场景中
