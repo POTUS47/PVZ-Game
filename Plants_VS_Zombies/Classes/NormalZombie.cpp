@@ -15,7 +15,7 @@ normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
     normalzombie->setPosition(x, y);
     normalzombie->setScale(scale);
     //添加到当前层
-    scene->addChild(normalzombie, 2);
+    scene->addChild(normalzombie, 7);
     setIdv(normalzombie);//将精灵指针存入idv
 }
 
