@@ -15,4 +15,5 @@ void Car::carRun()
 {
 	MoveBy* run = MoveBy::create(3, Vec2(2500, 0));
 	getIdv()->runAction(run);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/lawnmower.mp3");
 }

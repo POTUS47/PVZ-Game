@@ -206,6 +206,7 @@ void God::checkCrush() {
 					if (bulletRow == zombieRow) {
 						bullets[i]->explodeAnimation();//子弹爆炸特效，停留0.4秒后将子弹精灵从parent移除，然后标记为要从vector删除
 						if (bullets[i]->condition == 0) {
+							CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/splat1.mp3");
 							int currentHP = waiting[j]->getHP();
 							int minus = bullets[i]->getDamgeVlue();
 							waiting[j]->setHP(currentHP -= minus);
@@ -249,6 +250,7 @@ void God::checkEat()
 					else if (plants[i]->getEatCondition() == BEINGEATEN) {//植物是被吃状态要扣血
 						int attack = waiting[j]->getAttack();
 						plants[i]->getHurt(attack);
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/chompsoft.mp3");
 						if (plants[i]->getCondition() == DEAD)
 							continue;
 						plants[i]->setEatCondition(NOT_EATEN);//一次只吃一次，扣完血变回健康状态

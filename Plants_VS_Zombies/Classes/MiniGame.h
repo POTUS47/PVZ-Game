@@ -10,8 +10,9 @@ class MiniGame : public cocos2d::Scene
 public:
     static cocos2d::Scene* createScene();
 
-    void onExit();
     virtual bool init();
+    void gotoGameCallback(Ref* pSender);
+    void backtoMain(cocos2d::Ref* pSender);
 
     CREATE_FUNC(MiniGame);
 };

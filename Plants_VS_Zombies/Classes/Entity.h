@@ -1,5 +1,6 @@
 #pragma once
 #include"cocos2d.h"
+#include "SimpleAudioEngine.h"
 #define WAIT 0//在等候区
 #define WALKING 1//在向前走
 #define EATING 2//在吃植物

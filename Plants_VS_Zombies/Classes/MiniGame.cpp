@@ -6,11 +6,6 @@ Scene* MiniGame::createScene()
     return MiniGame::create();
 }
 
-void MiniGame::onExit() {
-    // 停止BGM
-    CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-}
-
 bool MiniGame::init()
 {
 
@@ -36,7 +31,35 @@ bool MiniGame::init()
     sprite->setScale(2.26);
     this->addChild(sprite, 0);
 
+    auto option = MenuItemImage::create(
+        "/minigame/option.jpg",
+        "/minigame/option.jpg",
+        CC_CALLBACK_1(MiniGame::gotoGameCallback, this));
+    option->setPosition(Vec2(300, 850));
+    option->setScale(0.6);
+
+    auto back = MenuItemImage::create(
+        "/minigame/1.png", "/minigame/2.png",
+        CC_CALLBACK_1(MiniGame::backtoMain, this)
+    );
+    back->setPosition(900,200);
+    back->setScale(2.0);
+
+    //1.2.菜单 
+    auto menu = Menu::create(option,back, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
+
     return true;
 }
 
+void MiniGame::gotoGameCallback(Ref* pSender)
+{
+    //minigame游戏开始处
+}
 
+void MiniGame::backtoMain(cocos2d::Ref* pSender)
+{
+    CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+    Director::getInstance()->replaceScene(Main_menu::createScene());
+}

@@ -61,6 +61,7 @@ void newspaperZombie::healthyEating(Sprite* who)
     animation->setRestoreOriginalFrame(true);//动画结束后恢复到第一帧
     auto anim = Animate::create(animation);
     who->runAction(anim);
+    //CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/newspaper.mp3");
 }
 
 /**
@@ -93,6 +94,7 @@ void newspaperZombie::moveForward(Sprite* who)
             animation->addSpriteFrameWithFile(nameSize);
         }
         setSpeed(70);
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/newspaper.mp3");
         auto moveBy = MoveBy::create(2100 / this->getSpeed(), Vec2(-2100, 0));
         who->runAction(moveBy);
     }

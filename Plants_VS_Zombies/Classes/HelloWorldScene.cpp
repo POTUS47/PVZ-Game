@@ -43,7 +43,6 @@ bool HelloWorld::init()
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     sprite->setScale(1.07);
     this->addChild(sprite, 0);
-
     return true;
 }
 

@@ -3,7 +3,7 @@
 extern std::vector<Card*>cards;
 extern std::vector<Plant*>plants;
 extern std::vector<Card*>randCards;
-extern bool isNight;
+
 int howMuch(int type);
 float setTime(int type);
 
@@ -101,6 +101,7 @@ void Card::addListener()
 								if (boundingBox.containsPoint(clickLocation)) {
 									plants[i]->setCondition(DEAD);
 									plants[i]->getIdv()->setVisible(false);
+									CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/plant1.mp3");
 								}
 							}
 						}
@@ -108,6 +109,7 @@ void Card::addListener()
 					else {
 						
 							createPlant(real);
+							CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/plant1.mp3");
 							int currentSun = sun->getSunValue();
 							int minus = getMoney();
 							sun->setSunValue(currentSun -= minus);
@@ -215,6 +217,7 @@ void Card::addMINIListener()
 					}
 					else {
 						createPlant(real);
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/plant1.mp3");
 						getIdv()->removeFromParent();
 					}
 				}

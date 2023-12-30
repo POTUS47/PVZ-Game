@@ -59,7 +59,7 @@ void Sun::createSun()
 			// 阳光被点击，执行消失逻辑
 			sunValue+=25;
 			updateSun();
-
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/points.mp3");
 			sun->stopAllActions();
 			auto moveTo = MoveTo::create(0.5, Vec2(120, 1130));
 			sun->runAction(moveTo);
@@ -136,7 +136,7 @@ void Sun::flowerSun(Vec2 position, int kind)
 				sunValue += 15;
 			}
 			updateSun();
-
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/points.mp3");
 			sun->stopAllActions();
 			auto moveTo = MoveTo::create(0.5, Vec2(120, 1130));
 			sun->runAction(moveTo);

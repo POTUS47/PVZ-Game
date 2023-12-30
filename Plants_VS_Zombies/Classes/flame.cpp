@@ -26,4 +26,5 @@ Flame::Flame(int row, int startX, int startY, int bulletDamage, Scene* scene) :B
         bullet->removeFromParent(); // 移动完成后移除子弹
         }), nullptr);
     bullet->runAction(sequence);
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("BGM/jalapeno.mp3");
 }
