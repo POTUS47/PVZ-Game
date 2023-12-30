@@ -25,25 +25,25 @@ bool PromptScene::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     //背景图
-    std::string tt = "/main_menu/chooseminigame.jpg";
-    auto sprite = Sprite::create(tt);
-    sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-    sprite->setScale(2.26);
-    this->addChild(sprite, 1);
-
-    auto back = MenuItemImage::create(
-        "/minigame/1.png", "/minigame/2.png",
-        CC_CALLBACK_1(PromptScene::backtoMain, this)
-    );
-    back->setPosition(900, 200);
-    back->setScale(2.0);
-
+    std::string t9t = "/main_menu/chooseminigame.png";
+    auto sprite1 = Sprite::create(t9t);
+    sprite1->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    sprite1->setScale(2.26);
+    this->addChild(sprite1, 1);
+    
     // 创建 Label
-    auto label = Label::createWithTTF("Back to Menu", "fonts/Marker Felt.ttf", 24);
-    // 设置 Label 的位置
+    auto label = Label::createWithTTF("Click here Back to Menu", "fonts/Marker Felt.ttf", 34);
     label->setPosition(900,200);
+    label->setTextColor(Color4B::BLACK);  // 设置字体颜色为黑色
+    this->addChild(label,7);
+    // 创建 Label
+    auto label2 = Label::createWithTTF("To Be Continued...", "fonts/Marker Felt.ttf", 96);
+    // 设置 Label 的位置
+    label2->setPosition(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y);
+    label2->setTextColor(Color4B::BLACK);
     // 将 Label 添加到场景中
-    this->addChild(label);
+    this->addChild(label2,7);
+
 
     // 添加触摸事件监听器
     auto touchListener = cocos2d::EventListenerTouchOneByOne::create();
@@ -62,21 +62,8 @@ bool PromptScene::init()
 
     // 将触摸事件监听器添加到事件分发器
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, label);
-
     return true;
-    // 创建 Label
-    auto label2 = Label::createWithTTF("To Be Continued...", "fonts/Marker Felt.ttf", 24);
-    // 设置 Label 的位置
-    label2->setPosition(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y);
-    // 将 Label 添加到场景中
-    this->addChild(label2);
-
-    //1.2.菜单 
-    auto menu = Menu::create(back, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-
-    return true;
+    
 }
 
 

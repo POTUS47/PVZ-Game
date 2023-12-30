@@ -24,7 +24,7 @@ bool Level::initWithLevelNumber(int levelNumber) {
         isNight = 1;
     else if (levelNumber == 3) {
         GameDataManager::saveLevelProgress(1);//储存当前关卡进度
-        auto newScene = PromptScene::create(); // 替换成提示场景
+        auto newScene = PromptScene::createScene(); // 替换成提示场景
         Director::getInstance()->replaceScene(newScene);
         return 1;
     }

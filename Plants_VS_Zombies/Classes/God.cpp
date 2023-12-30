@@ -58,10 +58,7 @@ void God::cleanup() {//管理内存
 			//node->getIdv()->removeFromParentAndCleanup(true);
 		if (node)
 			delete node;
-		if (plants.size() == 0) {///////////////////////
-			int a;
-
-		}
+		
 	}
 	waiting.clear();
 
@@ -94,8 +91,8 @@ void God::gameEnd()
 			if (totaldeath == 1) {
 				currentScene->unscheduleAllSelectors();//暂停所有计数器
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
-				Win();
 				cleanup();
+				Win();
 			}
 		}
 		else {
@@ -103,8 +100,9 @@ void God::gameEnd()
 			if (currentPosition.x <= 0) {
 				currentScene->unscheduleAllSelectors();//暂停所有计数器
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
-				Lose();
 				cleanup();
+				Lose();
+
 			}
 		}	
 	}
