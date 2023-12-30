@@ -35,7 +35,7 @@ void God::cleanup() {//管理内存
 	for (auto node : randCards) {
 		// 释放节点内存
 		if(node->getIdv())
-			node->getIdv()->removeFromParentAndCleanup(true);
+			//node->getIdv()->removeFromParentAndCleanup(true);
 		if (node) 
 			delete node;
 	}
@@ -55,9 +55,13 @@ void God::cleanup() {//管理内存
 	for (auto node : waiting) {
 		// 释放节点内存
 		if (node->getIdv())
-			node->getIdv()->removeFromParentAndCleanup(true);
+			//node->getIdv()->removeFromParentAndCleanup(true);
 		if (node)
 			delete node;
+		if (plants.size() == 0) {///////////////////////
+			int a;
+
+		}
 	}
 	waiting.clear();
 

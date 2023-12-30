@@ -55,6 +55,7 @@ bool Level::initWithLevelNumber(int levelNumber) {
     touchListener->onTouchBegan = [=](cocos2d::Touch* touch, cocos2d::Event* event) {
         if (label->getBoundingBox().containsPoint(touch->getLocation())) {
             // 在点击 Label 区域内时执行返回主菜单的操作
+            god->cleanup();
             CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
             Director::getInstance()->replaceScene(Main_menu::createScene());
             return true;
