@@ -56,7 +56,7 @@ void God::cleanup() {//管理内存
 	for (auto node : waiting) {
 		// 释放节点内存
 		if (node->getIdv())
-			node->getIdv()->stopAllActions();
+			//node->getIdv()->stopAllActions();
 			//node->getIdv()->removeFromParentAndCleanup(true);
 		if (node)
 			delete node;
@@ -90,7 +90,7 @@ void God::gameEnd()
 	for (int i = 0; i < waiting.size(); i++) {
 		if (waiting[i]->getCondition() == DEAD) {
 			totaldeath++;
-			if (totaldeath == 1) {
+			if (totaldeath == 15) {
 				currentScene->unscheduleAllSelectors();//暂停所有计数器
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				cleanup();
@@ -124,9 +124,9 @@ void God::updateZombies(int level)
 		newsZ = 1;
 	}
 	else if(level ==2){
-		normZ = 1;
-		coneZ = 0;
-		newsZ = 0;
+		normZ = 5;
+		coneZ = 3;
+		newsZ = 2;
 	}
 
 
@@ -168,6 +168,10 @@ void God::updateZombies(int level)
 
 void God::dead()
 {
+	std::vector<Zombie*> waiting_copy(waiting.size());
+	for (int i = 0; i < waiting.size(); i++) {
+		waiting_copy[i] = waiting[i];
+	}
 	//检查是否有僵尸死亡
 	for (int i = 0; i < waiting.size(); i++) {
 		if (waiting[i]->getCondition() != DEAD) {//僵尸没死再检测
@@ -177,10 +181,10 @@ void God::dead()
 				//死了的动画播放完了就把这个死了的僵尸从vector里删掉
 				auto delay = DelayTime::create(1.5f);
 				auto sequence = Sequence::create(delay, CallFunc::create([=]() {
-					waiting[i]->getIdv()->removeFromParent(); //僵尸死了不移除
+					waiting_copy[i]->getIdv()->removeFromParent(); //僵尸死了不移除
 					//waiting.erase(waiting.begin() + i);
 					}), nullptr);
-				waiting[i]->getIdv()->runAction(sequence);
+				waiting_copy[i]->getIdv()->runAction(sequence);
 			}
 			else if (waiting[i]->getHP() <= 60) {
 				if (waiting[i]->getWeapen() == true) {

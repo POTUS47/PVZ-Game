@@ -5,14 +5,15 @@ extern std::vector<Zombie*>waiting;//考虑把vector变成god的一个内置成员
 bool Level::initWithLevelNumber(int levelNumber) {
 
     CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-    if (levelNum == 1) {
+    if (levelNumber == 1) {
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGM/Level1.mp3");
-        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/Level1.mp3");
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/Level1.mp3", true);
     }
-    else if (levelNum == 2) {
+    else if (levelNumber == 2) {
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGM/night.mp3");
-        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/night.mp3");
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/night.mp3", true);
     }
+
    
     // 在这里进行场景的初始化，可以根据 levelNumber 做不同的处理
     levelNum = levelNumber;
@@ -189,7 +190,8 @@ void Level::moveRight(Ref* sender)
     this->schedule(schedule_selector(Level::update), 7.0f);
     this->schedule(schedule_selector(Level::CheckEveryMin), 0.1f);
     this->schedule(schedule_selector(Level::CheckEveryTwoSec), 2.0f);
-
+    //进度条
+ 
 
 }
 

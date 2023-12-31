@@ -3,9 +3,10 @@
 bool MiniGameLevel::initWithLevelNumber(int levelNumber) {
 
     CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-    if (levelNum == 1) {
+    if (levelNumber == 1) {
+
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGM/Level1.mp3");
-        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/Level1.mp3");
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/Level1.mp3", true);
     }
     else if (levelNum == 2) {
         /////////////////////////////´ıÌí¼Ó

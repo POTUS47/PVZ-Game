@@ -14,10 +14,6 @@ bool MiniGame::init()
         return false;
     }
 
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGM/mini.mp3");
-
-    // 播放背景音乐
-    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGM/mini.mp3", true);
 
     //获取可视区域范围
     auto visibleSize = Director::getInstance()->getVisibleSize();
