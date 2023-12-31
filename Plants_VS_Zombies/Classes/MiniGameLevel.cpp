@@ -48,6 +48,7 @@ bool MiniGameLevel::initWithLevelNumber(int levelNumber) {
         if (label->getBoundingBox().containsPoint(touch->getLocation())) {
             // 在点击 Label 区域内时执行返回主菜单的操作
             CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+            god->cleanup();
             Director::getInstance()->replaceScene(Main_menu::createScene());
             return true;
         }

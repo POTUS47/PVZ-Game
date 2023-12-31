@@ -76,7 +76,7 @@ void God::cleanup() {//管理内存
 	for (auto node : bullets) {
 		// 释放节点内存
 		if (node->getIdv())
-			node->getIdv()->removeFromParentAndCleanup(true);
+			//node->getIdv()->removeFromParentAndCleanup(true);
 		if (node)
 			delete node;
 	}
@@ -93,7 +93,7 @@ void God::gameEnd()
 			if (totaldeath == 15) {
 				currentScene->unscheduleAllSelectors();//暂停所有计数器
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
-				cleanup();
+				//cleanup();
 				Win();
 				
 				return;
@@ -124,8 +124,8 @@ void God::updateZombies(int level)
 		newsZ = 1;
 	}
 	else if(level ==2){
-		normZ = 5;
-		coneZ = 3;
+		normZ = 4;
+		coneZ = 9;
 		newsZ = 2;
 	}
 
@@ -154,7 +154,7 @@ void God::updateZombies(int level)
 	for (int i = 0; i < waiting.size(); i++) {
 		int col = rand() % 5 + 1;
 		waiting[i]->standBy(waiting[i]->getIdv());
-		waiting[i]->setStartTime(Statime[level-1][1-1][i]);//设置出发时间
+		waiting[i]->setStartTime(Statime[0][0][i]);//设置出发时间
 		waiting[i]->setCol(col);//设置出发赛道
 	}
 
@@ -457,7 +457,7 @@ void God::checkSunflower()
 				}
 			}
 			plants[i]->setCondition(HEALTHY);
-			auto delay = DelayTime::create(3.0f);//十秒产一次阳光
+			auto delay = DelayTime::create(20.0f);//二十秒产一次阳光
 			auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 				plants[i]->setCanCreateSun();//设为能产阳光
 				}), nullptr);
@@ -563,6 +563,7 @@ void God::Win() {
 }
 
 bool God::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
+	cleanup();
 	Director::getInstance()->replaceScene(Main_menu::createScene());
 	//进入下一关,这里先用了返回菜单
 	return true;

@@ -158,15 +158,15 @@ void Card::addMINIListener()
 			return false;
 		if (!isFollowingMouse && canClick == true)
 		{
-			int randplant = rand() % 7 + 1;
+			int randplant = rand() % 5 + 1;
 			switch (randplant) {
 				case 1:
 					plantPath = "/plant/peashooter/Peashooter1.png";
 					type = PEASHOOTER;
 					break;
 				case 2:
-					plantPath = "/plant/sunflower/SunFlower1.png";
-					type = SUNFLOWER;
+					plantPath = "/plant/fumeshroom/s (1).png";
+					type = FUME_SHROOM;
 					break;
 				case 3:
 					plantPath = "/plant/nut/zz1.png";
@@ -177,20 +177,14 @@ void Card::addMINIListener()
 					type = DOUBLESHOOTER;
 					break;
 				case 5:
-					plantPath = "/plant/sunshroom/b0.png";
-					type = SUN_SHROOM;
+					plantPath = "/plant/puffshroom/w (1).png";
+					type = PUFF_SHROOM;
 					break;
 				case 6:
 					plantPath = "/plant/jalapeno/j (1).png";
 					type = JALAPENO;
 					break;
-				case 7:
-					plantPath = "/plant/fumeshroom/s (1).png";
-					type = FUME_SHROOM;
-					break;
-				case 8:
-					plantPath = "/plant/puffshroom/w (1).png";
-					type = PUFF_SHROOM;
+				default:
 					break;
 			}
 			Point clickLocation = touch->getLocation();

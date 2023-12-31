@@ -48,8 +48,8 @@ bool Main_menu::init()
     }
     else
     {
-        float x = visibleSize.width*0.9;
-        float y = visibleSize.height * 0.15;
+        float x = visibleSize.width*0.94;
+        float y = visibleSize.height * 0.09;
         closeItem->setPosition(Vec2(x, y));
         closeItem->setScale(2.5);
     }
