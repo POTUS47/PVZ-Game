@@ -21,7 +21,7 @@ bool MiniGame::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     //±³¾°Í¼
-    std::string tt = "/main_menu/chooseminigame.jpg";
+    std::string tt = "/main_menu/chooseminigame.png";
     auto sprite = Sprite::create(tt);
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     sprite->setScale(2.26);
