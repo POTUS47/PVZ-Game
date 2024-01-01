@@ -14,8 +14,8 @@ std::vector<Bullet*>bullets;//子弹的数组
 bool isIntersecting(Sprite* spriteA, Sprite* spriteB);//函数声明
 
 /*数组储存出场时间*/
-float Statime[2][3][10] = { 15,25,40,45,67,80,89,88,90,105,45,50,75,78,90,35,70,75,87};//level type number
-
+float Statime[2][3][10] = { 5,9,13,45,67,80,89,88,90,105,45,50,75,78,90,35,70,75,87};//level type number
+                                                 //正常版：15 20 40
 
 //God的构造函数
 God::God(int isNight, Scene* CurrentScene, int LevelNum,int IsMiniGame):dayOrNight(isNight),currentScene(CurrentScene)
@@ -90,7 +90,7 @@ void God::gameEnd()
 	for (int i = 0; i < waiting.size(); i++) {
 		if (waiting[i]->getCondition() == DEAD) {
 			totaldeath++;
-			if (totaldeath == 15) {
+			if (totaldeath == 3) {//正常版15
 				currentScene->unscheduleAllSelectors();//暂停所有计数器
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				//cleanup();
@@ -117,15 +117,15 @@ void God::updateZombies(int level)
 	int coneZ = 0;
 	int newsZ = 0;
 	//根据关卡的不同设置不同数量的僵尸
-	if (level == 1) {
-		normZ = 10;
-		coneZ = 4;
+	if (level == 1) {//正常版：10 4 1
+		normZ = 1;
+		coneZ = 1;
 		newsZ = 1;
 	}
-	else if(level ==2){
-		normZ = 4;
-		coneZ = 9;
-		newsZ = 2;
+	else if(level ==2){//正常版 4 9 2
+		normZ = 1;
+		coneZ = 1;
+		newsZ = 1;
 	}
 
 
@@ -397,7 +397,7 @@ void God::sunShroomGrowUp() {
 	for (int i = 0; i < plants.size(); i++) {//遍历植物
 		if (plants[i]->getName() == SUN_SHROOM && plants[i]->IsAdolescent()) {
 			long long int now = time(0);
-			if (now - plants[i]->getPlantTime() >= 9) {
+			if (now - plants[i]->getPlantTime() >= 4) {//正常版本9
 				plants[i]->growUp();
 			}//90s长大
 		}
@@ -456,7 +456,7 @@ void God::checkSunflower()
 				}
 			}
 			plants[i]->setCondition(HEALTHY);
-			auto delay = DelayTime::create(20.0f);//二十秒产一次阳光
+			auto delay = DelayTime::create(3.0f);//正常版：二十秒产一次阳光
 			auto sequence = Sequence::create(delay, CallFunc::create([=]() {
 				plants[i]->setCanCreateSun();//设为能产阳光
 				}), nullptr);

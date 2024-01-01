@@ -5,7 +5,7 @@ USING_NS_CC;
 //传入起始位置 缩放大小
 normalZombie::normalZombie(int x, int y, double scale, Scene* scene)
 {
-    setSpeed(20);
+    setSpeed(80);//正常版20
     setWeapen(false);//普通僵尸没有武器
     setCondition(WAIT);
     setHP(100);

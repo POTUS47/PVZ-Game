@@ -185,7 +185,7 @@ void Level::moveRight(Ref* sender)
     }
     GameStart = true;
     god->setZombieStartTime();
-    //god->initCar(this);
+    god->initCar(this);
     update(0);//先手动调用一次
     this->schedule(schedule_selector(Level::update), 7.0f);
     this->schedule(schedule_selector(Level::CheckEveryMin), 0.1f);
