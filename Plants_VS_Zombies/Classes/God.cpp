@@ -95,7 +95,6 @@ void God::gameEnd()
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 				//cleanup();
 				Win();
-				
 				return;
 			}
 		}
@@ -104,7 +103,7 @@ void God::gameEnd()
 			if (currentPosition.x <= 0) {
 				currentScene->unscheduleAllSelectors();//暂停所有计数器
 				Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
-				cleanup();
+				//cleanup();
 				Lose();
 				return;
 			}
@@ -602,5 +601,6 @@ void God::Lose() {
 
 void God::returnToMainMenu() {
 	// 处理延迟后的逻辑
+	cleanup();
 	Director::getInstance()->replaceScene(Main_menu::createScene());
 }
